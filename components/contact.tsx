@@ -42,15 +42,15 @@ export default function ContactSection() {
                     action=""
                     className="border px-4 py-12 lg:px-0 lg:py-24">
                     <Card className="mx-auto max-w-lg p-8 sm:p-16">
-                        <h3 className="text-xl font-semibold">Lets get you to the right place</h3>
-                        <p className="mt-4 text-sm">Reach out to our sales team! Were eager to learn more about how you plan to use our application.</p>
+                        <h3 className="text-xl font-semibold">Cuéntanos en qué podemos ayudarte </h3>
+                        <p className="mt-4 text-sm">Envíanos tus datos y te responderemos en menos de 24h.</p>
 
                         <div className="**:[&>label]:block mt-12 space-y-6 *:space-y-3">
                             <div>
                                 <Label
                                     htmlFor="name"
                                     className="space-y-2">
-                                    Full name
+                                    Nombre completo
                                 </Label>
                                 <Input
                                     type="text"
@@ -62,7 +62,7 @@ export default function ContactSection() {
                                 <Label
                                     htmlFor="email"
                                     className="space-y-2">
-                                    Work Email
+                                    Correo electrónico
                                 </Label>
                                 <Input
                                     type="email"
@@ -74,11 +74,11 @@ export default function ContactSection() {
                                 <Label
                                     htmlFor="country"
                                     className="space-y-2">
-                                    Country/Region
+                                    País
                                 </Label>
                                 <Select>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select a country" />
+                                        <SelectValue placeholder="Seleccionar país" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="1">DR Congo</SelectItem>
@@ -91,7 +91,7 @@ export default function ContactSection() {
                                 <Label
                                     htmlFor="website"
                                     className="space-y-2">
-                                    Company Website
+                                    Sitio web de la empresa
                                 </Label>
                                 <Input
                                     type="url"
@@ -102,11 +102,11 @@ export default function ContactSection() {
                                 <Label
                                     htmlFor="job"
                                     className="space-y-2">
-                                    Job function
+                                    Cargo
                                 </Label>
                                 <Select>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select a job function" />
+                                        <SelectValue placeholder="Seleccionar cargo" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="1">Finance</SelectItem>
@@ -120,14 +120,14 @@ export default function ContactSection() {
                                 <Label
                                     htmlFor="msg"
                                     className="space-y-2">
-                                    Message
+                                    Mensaje
                                 </Label>
                                 <Textarea
                                     id="msg"
                                     rows={3}
                                 />
                             </div>
-                            <Button>Submit</Button>
+                            <Button>Enviar</Button>
                         </div>
                     </Card>
                 </form>

@@ -2,6 +2,7 @@ import React from 'react'
 import { Button } from '@/components/ui/button'
 import { TextEffect } from '@/components/ui/text-effect'
 import { AnimatedGroup } from '@/components/ui/animated-group'
+import { AsesoriaDrawer } from "@/components/forms/AsesoriaDrawer"
 import { HeroHeader } from './header'
 import Link from 'next/link'
 
@@ -69,21 +70,12 @@ export default function HeroSection() {
                                     className="mx-auto max-w-sm">
 
                                     <div className="mt-12 flex flex-wrap justify-center gap-4">
-                                        <Button
-                                            asChild
-                                            size="lg"
-                                            className="bg-purple-900 hover:bg-purple-800 text-white"
-                                        >
-
-                                            <Link href="/">
-                                                <span>Solicita tu asesoría</span>
-                                            </Link>
-                                        </Button>
+                                        <AsesoriaDrawer/>
                                         <Button
                                             asChild
                                             size="lg"
                                             className="bg-sky-500 hover:bg-sky-400 text-white">
-                                            <Link href="/">
+                                            <Link href="/contacto">
                                                 <span>Cotiza con nosotros</span>
                                             </Link>
                                         </Button>
@@ -120,7 +112,7 @@ const AppComponent = () => {
         <div className="relative space-y-3 rounded-[1rem] bg-white/5 p-4">
             <div className="flex items-center gap-1.5 text-orange-400">
                 <img
-                    src="/huming.jpg"  // Asegúrate de tener esta imagen en /public
+                    src="/Huming.jpg"  // Asegúrate de tener esta imagen en /public
                     alt="HumIng Icono"
                     className="w-6 h-6"
                 />
