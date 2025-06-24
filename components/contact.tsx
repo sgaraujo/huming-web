@@ -10,7 +10,7 @@ export default function ContactSection() {
     return (
         <section className="py-32">
             <div className="mx-auto max-w-4xl px-4 lg:px-0">
-                <h1 className="mb-12 text-center text-4xl font-semibold lg:text-5xl">contáctanos</h1>
+                <h1 className="mb-12 text-center text-4xl font-semibold lg:text-5xl">contactanos</h1>
 
                 <div className="grid divide-y border md:grid-cols-2 md:gap-4 md:divide-x md:divide-y-0">
                     <div className="flex flex-col justify-between space-y-8 p-6 sm:p-12">
@@ -42,8 +42,8 @@ export default function ContactSection() {
                     action=""
                     className="border px-4 py-12 lg:px-0 lg:py-24">
                     <Card className="mx-auto max-w-lg p-8 sm:p-16">
-                        <h3 className="text-xl font-semibold">Let's get you to the right place</h3>
-                        <p className="mt-4 text-sm">Reach out to our sales team! We’re eager to learn more about how you plan to use our application.</p>
+                        <h3 className="text-xl font-semibold">Lets get you to the right place</h3>
+                        <p className="mt-4 text-sm">Reach out to our sales team! Were eager to learn more about how you plan to use our application.</p>
 
                         <div className="**:[&>label]:block mt-12 space-y-6 *:space-y-3">
                             <div>
