@@ -50,7 +50,7 @@ export function AsesoriaDrawer() {
   return isDesktop ? (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-purple-700 text-white hover:bg-purple-800 transition-colors">Solicita tu asesoría</Button>
+        <Button size="lg" className="bg-purple-700 text-white hover:bg-purple-800 transition-colors">Solicita tu asesoría</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
@@ -64,8 +64,8 @@ export function AsesoriaDrawer() {
     </Dialog>
   ) : (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button variant="secondary">Solicita tu asesoría</Button>
+      <DrawerTrigger asChild >
+        <Button size="lg"  className="bg-purple-700 text-white hover:bg-purple-800 transition-colors siz-lg">Solicita tu asesoría</Button>
       </DrawerTrigger>
       <DrawerContent>{content}</DrawerContent>
     </Drawer>
