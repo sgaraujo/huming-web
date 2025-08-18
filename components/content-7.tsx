@@ -5,11 +5,11 @@ export default function ContentSection() {
     return (
         <section >
             <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-16">
-                <h2 className="relative z-10 max-w-xl text-4xl font-bold lg:text-5xl">¿Por qué elegir HumIng SAS?</h2>
+                <h2 className="relative z-10 max-w-xl text-4xl font-bold lg:text-5xl">¿Por qué elegir HumanIA?</h2>
                 <div className="grid gap-6 sm:grid-cols-2 md:gap-12 lg:gap-24">
                     <div className="relative space-y-4">
                         <p className="text-black">
-                            En HumIng SAS desarrollamos soluciones a la medida
+                            En HumanIA desarrollamos soluciones a la medida
                             para la implementación, auditoría y mejora de sistemas de
                             gestión bajo normas ISO y legislación vigente. Nuestro
                             enfoque combina experiencia técnica con acompañamiento

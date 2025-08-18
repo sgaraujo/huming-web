@@ -1,127 +1,80 @@
-'use client'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
-import { GraduationCap, ShieldCheck, SearchCheck, Activity  } from 'lucide-react'
-import Image from 'next/image'
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
-import { BorderBeam } from '@/components/magicui/border-beam'
+// app/components/services-section.tsx
+import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
+import Features06Page from "./features-06/features-06";
 
-export default function Features() {
-    type ImageKey = 'item-1' | 'item-2' | 'item-3' | 'item-4'
-    const [activeItem, setActiveItem] = useState<ImageKey>('item-1')
+const services = [
+{
+  title: "Sistema de Gestión de Seguridad y Salud en el Trabajo (SG-SST)",
+  image: "/img/service1.jpg",
+  link: "#",
+},
+  {
+    title: "Riesgo Psicosocial",
+    image: "/img/service7.jpg",
+    link: "#",
+  },
+  {
+    title: "Teletrabajo: Implementación Legal y Estratégica",
+    image: "/img/service3.jpg",
+    link: "#",
+  },
+  {
+    title: "Plan Estratégico de Seguridad Vial (PESV)",
+    image: "/img/service4.jpg",
+    link: "#",
+  },
+  {
+    title: "Asesoría Jurídica Laboral",
+    image: "/img/service5.jpg",
+    link: "#",
+  },
+  {
+    title: "Desarrollo Tecnológico",
+    image: "/img/service6.jpg",
+    link: "#",
+  },
+];
 
-    const images = {
-        'item-1': {
-            image: '/normas-iso.jpg',
-            alt: 'Implementación de Normas ISO',
-        },
-        'item-2': {
-            image: '/auditoria.jpg',
-            alt: 'Security authentication',
-        },
-        'item-3': {
-            image: '/SeguridadEnTrabajo.jpg',
-            alt: 'Identity management',
-        },
-        'item-4': {
-            image: '/SeguridadEnTrabajo.jpg',
-            alt: 'Analytics dashboard',
-        },
-    }
+export default function ServicesSection() {
+  return (
+    <section className="px-4 py-25 sm:px-6 lg:px-8 bg-white">
+      <div className="max-w-7xl mx-auto text-center mb-12">
+        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+          Servicios
+        </h2>
+        <p className="mt-4 text-gray-500 max-w-2xl mx-auto">
+          En HumanIA ofrecemos soluciones integrales diseñadas para fortalecer la gestión empresarial. 
+          Desde la implementación de sistemas normativos hasta la asesoría legal estratégica, acompañamos a tu 
+          organización en el cumplimiento y mejora continua de sus procesos clave.
+        </p>
+      </div>
 
-    return (
-        <section className="py-12 md:py-20 lg:py-32">
-            <div className="bg-linear-to-b absolute inset-0 -z-10 sm:inset-6 sm:rounded-b-3xl dark:block dark:to-[color-mix(in_oklab,var(--color-zinc-900)_75%,var(--color-background))]"></div>
-            <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-16 lg:space-y-20 dark:[--color-border:color-mix(in_oklab,var(--color-white)_10%,transparent)]">
-                <div className="relative z-10 mx-auto max-w-2xl space-y-6 text-center">
-                    <h2 className="text-balance text-4xl font-semibold lg:text-6xl">Servicios</h2>
-                    <p>En HumIng SAS acompañamos a las organizaciones en su camino hacia la excelencia operativa, mediante servicios técnicos altamente especializados y adaptados a su realidad.</p>
-                </div>
-
-                <div className="grid gap-12 sm:px-12 md:grid-cols-2 lg:gap-20 lg:px-0">
-                    <Accordion
-                        type="single"
-                        value={activeItem}
-                        onValueChange={(value) => setActiveItem(value as ImageKey)}
-                        className="w-full">
-                        <AccordionItem value="item-1">
-                            <AccordionTrigger>
-                                <div className="flex items-center gap-2 text-base">
-                                    <ShieldCheck className="size-4" />
-                                    Implementación de Normas ISO
-                                </div>
-                            </AccordionTrigger>
-                            <AccordionContent>
-                                <ul className="list-disc list-inside space-y-2">
-                                    <li>
-                                        <strong>ISO 9001:2015 – Gestión de la Calidad</strong>                                    </li>
-                                    <li>
-                                        <strong>ISO 14001:2015 – Gestión Ambiental</strong>
-                                    </li>
-                                    <li>
-                                        <strong>ISO 45001:2018 – Seguridad y Salud en el Trabajo (SG-SST)</strong>                                  </li>
-                                
-                                </ul>
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="item-2">
-                            <AccordionTrigger>
-                                <div className="flex items-center gap-2 text-base">
-                                    <SearchCheck className="size-4" />
-                                    Auditorías internas
-                                </div>
-                            </AccordionTrigger>
-                            <AccordionContent>Ejecución de auditorías independientes, objetivas y estratégicas para identificar no conformidades, prevenir riesgos y mejorar los procesos.</AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="item-3">
-                            <AccordionTrigger>
-                                <div className="flex items-center gap-2 text-base">
-                                    <Activity className="size-4" />
-                                    Gestión en Seguridad y Salud en el Trabajo (SG-SST)
-                                </div>
-                            </AccordionTrigger>
-                            <AccordionContent>Asesoramos en la implementación, documentación, seguimiento y mejora del SG-SST conforme al Decreto 1072 de 2015.</AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="item-4">
-                            <AccordionTrigger>
-                                <div className="flex items-center gap-2 text-base">
-                                    <GraduationCap className="size-4" />
-                                    Capacitación empresarial
-                                </div>
-                            </AccordionTrigger>
-                            <AccordionContent>Formamos a los equipos de trabajo en gestión del riesgo, liderazgo, cultura organizacional y normativas ISO mediante talleres prácticos</AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-
-                    <div className="bg-background relative flex overflow-hidden rounded-3xl border p-2">
-                        <div className="w-15 absolute inset-0 right-0 ml-auto border-l bg-[repeating-linear-gradient(-45deg,var(--color-border),var(--color-border)_1px,transparent_1px,transparent_8px)]"></div>
-                        <div className="aspect-76/59 bg-background relative w-[calc(3/4*100%+3rem)] rounded-2xl">
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={`${activeItem}-id`}
-                                    initial={{ opacity: 0, y: 6, scale: 0.98 }}
-                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    exit={{ opacity: 0, y: 6, scale: 0.98 }}
-                                    transition={{ duration: 0.2 }}
-                                    className="size-full overflow-hidden rounded-2xl border bg-zinc-900 shadow-md">
-                                    <Image
-                                        src={images[activeItem].image}
-                                        className="size-full object-cover object-left-top dark:mix-blend-lighten"
-                                        alt={images[activeItem].alt}
-                                        width={1207}
-                                        height={929}
-                                    />
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-                        <BorderBeam
-                            duration={6}
-                            size={200}
-                            className="from-transparent via-yellow-700 to-transparent dark:via-white/50"
-                        />
-                    </div>
-                </div>
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {services.map((service) => (
+          <a
+            key={service.title}
+            href={service.link}
+            className="relative rounded-xl overflow-hidden shadow hover:shadow-lg transition group"
+          >
+            <Image 
+              src={service.image}
+              alt={service.title}
+              width={400}
+              height={240}
+              className="w-full h-60 object-cover group-hover:scale-105 transition-transform"
+            />
+        
+            <div className="absolute bottom-4 left-4 text-white">
+              <h3 className="text-lg font-semibold">{service.title}</h3>
             </div>
-        </section>
-    )
+            <div className="absolute top-4 right-4 text-white">
+              <ArrowUpRight className="w-5 h-5" />
+            </div>
+          </a>
+        ))}
+      </div>
+      <Features06Page/>
+    </section>
+  );
 }

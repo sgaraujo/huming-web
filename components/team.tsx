@@ -30,7 +30,7 @@ export default function TeamSection() {
                         <h2 className="text-3xl font-bold sm:text-4xl">Nuestro equipo</h2>
                     </div>
                     <div className="mt-6 sm:mt-0">
-                        <p>En HumIng SAS contamos con un equipo multidisciplinario conformado por profesionales 
+                        <p>En HumanIA contamos con un equipo multidisciplinario conformado por profesionales 
                             altamente capacitados en ingeniería, salud ocupacional, calidad, medio ambiente, 
                             riesgos laborales y normativa ISO.
                             Nuestro talento humano combina conocimiento técnico, experiencia en campo y 
