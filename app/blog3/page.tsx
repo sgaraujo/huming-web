@@ -1,8 +1,6 @@
 import WhatsappButton from "@/components/ui/WhatsappButton"
-
-import { Hero7 } from "@/components/hero7"
-import { Feature17 } from "@/components/feature17"
 import { HeroHeader } from "@/components/header"
+import TeletrabajoSection from "@/components/teletrabajo-section"
 
 export default function blog1() {
     return (
@@ -23,8 +21,7 @@ export default function blog1() {
                 </div>
 
                 {/* Secciones del sitio */}
-                <Hero7 />
-                <Feature17 />
+                <TeletrabajoSection />
             </main>
 
             <footer className="bg-muted text-center text-sm py-4">

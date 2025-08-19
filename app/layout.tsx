@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HumIng Ingeniería Humana",
+  title: "HumanIA",
   description: "Salud y Seguridad en el Trabajo, Sistemas de Gestión",
   icons: "/favicon.ico", 
 };

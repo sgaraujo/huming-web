@@ -28,7 +28,7 @@ export default function Home() {
           {/* Aquí puedes insertar más secciones como <Servicios /> */}
       </main>
       <footer className="bg-muted text-center text-sm py-4">
-        © {new Date().getFullYear()} HumIng SAS. Todos los derechos reservados.
+        © {new Date().getFullYear()} HumanIA. Todos los derechos reservados.
       </footer>
       <WhatsappButton />
     </div>

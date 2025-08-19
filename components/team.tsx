@@ -23,7 +23,7 @@ const members = [
 
 export default function TeamSection() {
     return (
-        <section className="bg-gray-50 py-16 md:py-32 dark:bg-transparent">
+        <section className="bg-gray-50 pt-32 dark:bg-transparent">
             <div className="mx-auto max-w-5xl border-t px-6">
                 <div className="mt-12 gap-4 sm:grid sm:grid-cols-2 md:mt-24">
                     <div className="sm:w-2/5">

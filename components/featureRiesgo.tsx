@@ -18,42 +18,40 @@ interface Feature17Props {
   features?: Feature[];
 }
 
-const Feature17 = ({
+const FeatureRiesgo = ({
   features = [
     {
-      title: "Etapa de Organización y Diagnóstico",
+      title: "Batería de Riesgo Psicosocial",
       description: (
         <ul className="list-disc pl-5 space-y-1 text-black">
-          <li>Evaluación inicial del SG-SST con base en estándares mínimos.</li>
-          <li>Diseño y revisión de políticas generales.</li>
-          <li>Implementación y acompañamiento a los comités COPASST y Comité de Convivencia Laboral (CCL).</li>
+          <li>Aplicación de la batería de riesgo psicosocial para el bienestar laboral de la organización (Resolución 2764 de 2022).</li>
+          <li>Diseño y ejecución de planes de acción según los resultados.</li>
+          <li>Resultados por área y según la necesidad de la organización basados en la batería de Riesgo Psicosocial.</li>
         </ul>
       ),
       icon: <Timer className="size-4 md:size-6 text-purple-900" />,
       className: "text-purple-900"
     },{
-      title: "Planeación y Ejecución",
+      title: "Gestión del Riesgo Psicosocial",
       description: (
         <ul className="list-disc pl-5 space-y-1 text-black">
-          <li>Diseño de cronogramas de capacitación según la matriz de peligros.</li>
-          <li>Desarrollo de gestión del cambio y cultura preventiva.</li>
-          <li>Revisión y actualización de las matrices de riesgos y matriz legal.</li>
-          <li>Gestión documental y codificación del SG-SST.</li>
-          <li>Diseño del plan de trabajo anual, programas de emergencia, y subprogramas de medicina del trabajo e higiene industrial.</li>
+          <li>Gestión del autocuidado emocional.</li>
+          <li>Gestión de la escucha y comunicación asertiva.</li>
+          <li>Gestión del trabajo en equipo.</li>
+          <li>Gestión del estrés.</li>
+          <li>Gestión del equilibrio trabajo–familia.</li>
+          <li>Gestión de la administración del tiempo.</li>
         </ul>
       ),
       icon: <Zap className="size-4 md:size-6 text-blue-600" />,
       className: "text-blue-600" // 👈 agregado
     },
     {
-      title: "Evaluación y Mejora Continua",
+      title: "Acompañamiento",
       description: (
         <ul className="list-disc pl-5 space-y-1 text-black">
-          <li>Seguimiento a accidentalidad y ausentismo laboral.</li>
-          <li>Diseño de estrategias de intervención preventiva.</li>
-          <li>Auditorías internas al SG-SST y acompañamiento ante auditorías de entes de control (ARL, Ministerio de Trabajo, Secretaría de Salud).</li>
-          <li>Rendición de cuentas del sistema ante dirección o juntas.</li>
-          <li>Reporte de estándares mínimos ante el Ministerio del Trabajo.</li>
+          <li>Estrategias de afrontamiento y resolución de conflictos.</li>
+          <li>Identificación y gestión del desgaste profesional (Burnout).</li>
         </ul>
       ),
       icon: <ZoomIn className="size-4 md:size-6 text-red-500" />,
@@ -63,8 +61,12 @@ const Feature17 = ({
       title: "Educación y Formación",
       description: (
         <ul className="list-disc pl-5 space-y-1 text-black">
-          <li>Capacitaciones especializadas a COPASST, CCL y colaboradores.</li>
-          <li>Programas formativos sobre riesgos, salud ocupacional, seguridad vial, y sistemas de gestión integrados.</li>
+          <li>Capacitación en calidad del sueño y descanso.</li>
+          <li>Capacitación en autocuidado mental.</li>
+          <li>Capacitación en comunicación asertiva.</li>
+          <li>Capacitación en inteligencia emocional.</li>
+          <li>Capacitación en manejo del estrés.</li>
+          <li>Capacitación en resolución de conflictos.</li>
         </ul>
       ),
       icon: <PersonStanding className="size-4 md:size-6 text-emerald-600" />,
@@ -97,4 +99,4 @@ const Feature17 = ({
   );
 };
 
-export { Feature17 };
+export { FeatureRiesgo};

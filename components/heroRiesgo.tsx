@@ -9,9 +9,9 @@ type Hero7Props = {
   };
 };
 
-export const Hero7 = ({
-  heading = "Diseño, Implementación y Mejora del Sistema de Gestión de Seguridad y Salud en el Trabajo (SG-SST)",
-  description = "Acompañamos a las organizaciones en todas las fases del SG-SST, conforme al Decreto 1072 de 2015, la Resolución 0312 de 2019 y la norma ISO 45001:2018, garantizando el cumplimiento normativo y la promoción del bienestar laboral.",
+export const HeroRiesgo = ({
+  heading = "Gestión Integral del Riesgo Psicosocial",
+  description = "Acompañamos a las organizaciones en la identificación, prevención y manejo de los riesgos psicosociales, promoviendo el bienestar emocional, la comunicación asertiva y la salud mental en el trabajo. Implementamos baterías de evaluación, estrategias de afrontamiento y programas de capacitación que fortalecen el equilibrio laboral y personal de los colaboradores.",
   button = {
     text: "Volver a Servicios",
     url: "/servicios",

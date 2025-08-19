@@ -60,7 +60,7 @@ function waLink(nombre: string) {
 }
 
 export const metadata = {
-  title: "Productos de Emergencia | HumIng SAS",
+  title: "Productos de Emergencia | HumanIA",
   description:
     "Suministro de botiquines, extintores, luces de emergencia, detectores de humo y señalización. Venta, instalación y mantenimiento.",
 }
