@@ -38,7 +38,7 @@ export const HeroCarousel = () => {
       <CarouselContent>
         {images.map((img, index) => (
           <CarouselItem key={index}>
-            <div className="relative w-full h-[500px]">
+            <div className="relative w-full h-[220px] sm:h-[300px] lg:h-[400px]">
               <Image
                 src={img.src}
                 alt={`Slide ${index + 1}`}
@@ -47,8 +47,8 @@ export const HeroCarousel = () => {
                 priority
               />
               <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-end pr-12 text-white text-right">
-                <h2 className="text-4xl font-bold">{img.title}</h2>
-                <p className="text-lg mt-2">{img.subtitle}</p>
+                <h2 className="text-2xl md:text-3xl font-bold">{img.title}</h2>
+                <p className="text-sm md:text-base mt-1">{img.subtitle}</p>
               </div>
             </div>
           </CarouselItem>

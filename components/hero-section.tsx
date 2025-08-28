@@ -8,7 +8,7 @@ export default function HeroSection() {
     return (
         <>
             <HeroHeader />
-            <div className="flex flex-col items-center justify-center text-center space-y-6 px-6 pt-24 pb-12">
+            <div className="flex flex-col items-center justify-center text-center space-y-6 px-6 pt-32 pb-12">
                 <HeroCarousel />
             </div>
 

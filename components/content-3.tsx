@@ -4,7 +4,7 @@ export default function ContentSection() {
         <section className="py-16 md:py-10">
             <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-12">
                 <img
-                    className="rounded-(--radius)"
+                    className="rounded-lg mx-auto w-48 sm:w-64 md:w-80 lg:w-[600px]"
                     src="/img/sst-grupo.jpg"
                     alt="team image"
                     height=""

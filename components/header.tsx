@@ -10,6 +10,7 @@ const menuItems = [
     { name: 'Inicio', href: '/' },
     { name: 'Quiénes somos', href: '/quienes-somos' },
     { name: 'Servicios', href: '/servicios' },
+    { name: 'Productos', href: '/productos' },
     { name: 'Contacto', href: '/contacto' },
 ]
 

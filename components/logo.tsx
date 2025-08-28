@@ -5,8 +5,8 @@ export const Logo = ({ className }: { className?: string }) => {
     <Image
       src="/HumanIa-logo.png" // Asegúrate de tener esta imagen en /public
       alt="Logo HumIng"
-      width={60}
-      height={60}
+      width={100}
+      height={100}
       className={className}
     />
   )
