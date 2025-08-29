@@ -69,7 +69,7 @@ export default function ProductosPage() {
   return (
 
    <><HeroHeader />
-   <main className="relative pt-10 pl-4 pr-4 sm:pl-6 sm:pr-6 lg:pl-8 lg:pr-8">
+   <main className="relative pt-15 pl-4 pr-4 sm:pl-6 sm:pr-6 lg:pl-8 lg:pr-8">
           {/* Fondo suave */}
           <div className="absolute inset-0 -z-10 opacity-30">
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_30%,rgba(59,130,246,0.15),transparent_70%)]" />

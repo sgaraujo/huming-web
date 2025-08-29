@@ -6,7 +6,7 @@ export default function QuienesSomosPage() {
   return (
     <div className="flex min-h-screen flex-col">
       <HeroHeader />
-      <main className="flex-1">
+      <main className="flex-1 pt-5">
         <Features />
 
         {/* Aquí puedes insertar más secciones como <Servicios /> */}

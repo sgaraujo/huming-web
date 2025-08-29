@@ -8,7 +8,7 @@ export default function QuienesSomosPage() {
   return (
     <div className="flex min-h-screen flex-col">
       <HeroHeader />
-      <main className="flex-1">
+      <main className="flex-1 ">
         <TeamSection />
         <Features />
        < StatsSection />
