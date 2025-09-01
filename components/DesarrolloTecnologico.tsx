@@ -4,10 +4,10 @@ import Link from "next/link"
 
 export default function DesarrolloTecnologico() {
   return (
-    <section className="py-20 bg-gradient-to-b from-indigo-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+    <section className="py-20  bg-gradient-to-b from-purple-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
       <div className="container mx-auto max-w-6xl px-6 text-center">
         {/* Título */}
-        <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-indigo-700 dark:text-indigo-400">
+        <h2 className="text-4xl pt-20 md:text-5xl font-extrabold mb-6 text-purple-700 dark:text-purple-400">
           Desarrollo Tecnológico
         </h2>
 
@@ -21,8 +21,8 @@ export default function DesarrolloTecnologico() {
         {/* Grid de features */}
         <div className="grid gap-8 md:grid-cols-2 text-left">
           {/* Programación */}
-          <div className="p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition">
-            <h3 className="font-semibold text-xl text-indigo-700 mb-2">
+          <div className="p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition border-l-4 border-purple-500">
+            <h3 className="font-semibold text-xl text-purple-700 dark:text-purple-300 mb-2">
               Desarrollo de software (Programación)
             </h3>
             <p className="text-gray-600 dark:text-gray-300 mb-3">
@@ -36,8 +36,8 @@ export default function DesarrolloTecnologico() {
           </div>
 
           {/* Mantenimiento */}
-          <div className="p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition">
-            <h3 className="font-semibold text-xl text-indigo-700 mb-2">
+          <div className="p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition border-l-4 border-purple-500">
+            <h3 className="font-semibold text-xl text-purple-700 dark:text-purple-300 mb-2">
               Mantenimiento y actualización
             </h3>
             <p className="text-gray-600 dark:text-gray-300 mb-3">
@@ -51,8 +51,8 @@ export default function DesarrolloTecnologico() {
           </div>
 
           {/* Soporte / solución de problemas */}
-          <div className="p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition">
-            <h3 className="font-semibold text-xl text-indigo-700 mb-2">
+          <div className="p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition border-l-4 border-purple-500">
+            <h3 className="font-semibold text-xl text-purple-700 dark:text-purple-300 mb-2">
               Solución de problemas y soporte
             </h3>
             <p className="text-gray-600 dark:text-gray-300 mb-3">
@@ -66,8 +66,8 @@ export default function DesarrolloTecnologico() {
           </div>
 
           {/* Creación (web/plataformas) */}
-          <div className="p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition">
-            <h3 className="font-semibold text-xl text-indigo-700 mb-2">
+          <div className="p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition border-l-4 border-purple-500">
+            <h3 className="font-semibold text-xl text-purple-700 dark:text-purple-300 mb-2">
               Creación de sitios web y plataformas
             </h3>
             <p className="text-gray-600 dark:text-gray-300 mb-3">
@@ -85,13 +85,13 @@ export default function DesarrolloTecnologico() {
         <div className="mt-16 flex items-center justify-center gap-4">
           <Link
             href="/servicios"
-            className="inline-block px-8 py-3 bg-indigo-600 text-white font-medium text-lg rounded-full shadow-md hover:bg-indigo-700 transition"
+            className="inline-block px-8 py-3 bg-purple-600 text-white font-medium text-lg rounded-full shadow-md hover:bg-purple-700 transition"
           >
-            ← Volver a Servicios
+            Volver a Servicios
           </Link>
           <Link
             href="/contacto"
-            className="inline-block px-8 py-3 border border-indigo-300 text-indigo-700 dark:text-indigo-300 font-medium text-lg rounded-full hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition"
+            className="inline-block px-8 py-3 border border-purple-300 text-purple-700 dark:text-purple-300 font-medium text-lg rounded-full hover:bg-purple-50 dark:hover:bg-purple-900/30 transition"
           >
             Solicitar propuesta
           </Link>

@@ -81,12 +81,12 @@ export default function GestionAmbiental() {
 
         {/* Botón para volver */}
         <div className="mt-16">
-          <Link
-            href="/servicios"
-            className="inline-block px-8 py-3 bg-green-600 text-white font-medium text-lg rounded-full shadow-md hover:bg-green-700 transition"
-          >
-            ← Volver a Servicios
-          </Link>
+          <Link href="/servicios" className="ml-4">
+              <button className="group relative rounded-2xl bg-gradient-to-r from-green-500 to-green-600 px-12 py-5 text-white font-bold hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-red-200/50 hover:-translate-y-1 text-lg">
+                <span className="relative z-10">Volver a Servicios</span>
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </button>
+            </Link>
         </div>
       </div>
     </section>

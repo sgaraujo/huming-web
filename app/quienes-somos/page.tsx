@@ -8,7 +8,7 @@ export default function QuienesSomosPage() {
   return (
     <div className="flex min-h-screen flex-col">
       <HeroHeader />
-      <main className="flex-1 ">
+      <main className="flex-1 pt-5">
         <TeamSection />
         <Features />
        < StatsSection />
@@ -16,7 +16,7 @@ export default function QuienesSomosPage() {
 
         {/* Aquí puedes insertar más secciones como <Servicios /> */}
       </main>
-      <footer className="bg-muted text-center text-sm py-4">
+      <footer className="text-center text-sm py-4 pt-10">
         © {new Date().getFullYear()} HumanIA. Todos los derechos reservados.
       </footer>
       <WhatsappButton />

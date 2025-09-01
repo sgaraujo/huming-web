@@ -1,7 +1,7 @@
 // components/ui/QuickActions.tsx
 "use client"
 
-import { Plus, ShoppingCart, FileText, MessageCircle } from "lucide-react"
+import {ShoppingCart, FileText, MessageCircle, Headset } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
@@ -31,7 +31,7 @@ export default function QuickActions() {
             )}
             aria-label="Acciones rápidas"
           >
-            <Plus className="h-6 w-6 text-white" />
+            <Headset className="h-6 w-6 text-white" />
           </Button>
         </DropdownMenuTrigger>
 
@@ -47,7 +47,7 @@ export default function QuickActions() {
               </span>
               <div>
                 <div className="text-sm font-medium">Productos</div>
-                <div className="text-xs text-muted-foreground">Ver catálogo disponible</div>
+                <div className="text-xs text-muted-foreground">Solicita los precios </div>
               </div>
             </Link>
           </DropdownMenuItem>
@@ -76,7 +76,7 @@ export default function QuickActions() {
               </span>
               <div>
                 <div className="text-sm font-medium">WhatsApp</div>
-                <div className="text-xs text-muted-foreground">Respuesta rápida</div>
+                <div className="text-xs text-muted-foreground">Comunícate con HumanIA</div>
               </div>
             </a>
           </DropdownMenuItem>

@@ -18,20 +18,20 @@ export const HeroRiesgo = ({
   },
 }: Hero7Props) => {
   return (
-    <section className="pt-32 text-center">
-      <div className="container">
-        <div className="mx-auto flex max-w-5xl flex-col gap-6">
-          <h1 className="text-3xl font-bold lg:text-5xl text-black">{heading}</h1>
-          <p className="text-balance lg:text-lg pt-10">{description}</p>
-
-          {/* Botón para volver a servicios */}
-          <div className="pt-6">
-            <Link href={button.url}>
-              <button className="rounded-lg bg-orange-600 px-6 py-3 text-white font-medium hover:bg-orange-700 transition">
-                {button.text}
-              </button>
-            </Link>
-          </div>
+    <section className="pt-36 pb-16 text-center relative">
+      {/* Fondo específico del hero */}
+      <div className="absolute inset-0 bg-gradient-to-br from-pink-50/50 via-transparent to-rose-50/30" />
+      
+      <div className="container relative z-10">
+        <div className="mx-auto flex max-w-5xl flex-col gap-8">
+          <h1 className="text-3xl font-bold lg:text-5xl">
+            <span className="bg-gradient-to-r from-pink-600 via-rose-500 to-pink-700 bg-clip-text text-transparent">
+              {heading}
+            </span>
+          </h1>
+          <p className="text-balance lg:text-lg text-slate-700 leading-relaxed max-w-4xl mx-auto">
+            {description}
+          </p>
         </div>
       </div>
     </section>

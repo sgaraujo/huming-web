@@ -13,6 +13,7 @@ const features = [
       "Apoyamos a tu empresa en el diseño, ejecución, evaluación y mejora continua del Sistema de Gestión de Seguridad y Salud en el Trabajo (SG-SST), cumpliendo con la normatividad vigente y promoviendo ambientes laborales seguros y saludables.",
     tutorialLink: "/blog",
     image: "/img/service1.jpg",
+    buttonColor: "bg-orange-600 hover:bg-orange-700", // SST – Naranja
   },
   {
     slug: "riesgo-psicosocial",
@@ -22,6 +23,7 @@ const features = [
       "Brindamos herramientas para evaluar, gestionar y reducir los riesgos psicosociales en el entorno laboral. Implementamos la batería de riesgo psicosocial según la Resolución 2764 de 2022, acompañamos en la gestión emocional y del estrés, y ofrecemos programas de educación en autocuidado, comunicación asertiva e inteligencia emocional. Todo orientado a fortalecer la salud mental, el equilibrio trabajo-familia y la productividad de tu organización.",
     tutorialLink: "/blog2",
     image: "/img/service7.jpg",
+    buttonColor: "bg-pink-300 hover:bg-pink-400", // PSICOSOCIAL – Rosa suave
   },
   {
     slug: "teletrabajo",
@@ -32,6 +34,7 @@ const features = [
       "Ofrecemos un servicio completo para la implementación del teletrabajo conforme al Decreto 1072 de 2015 y la Circular Externa 0027 de 2019. Incluye la identificación de modalidades de teletrabajo, visitas técnicas, elaboración de informes, diseño de planes y cronogramas de capacitación. Además, realizamos la evaluación continua y planes de mejora, garantizando eficiencia, bienestar laboral y cumplimiento legal.",
     tutorialLink: "/blog3",
     image: "/img/service3.jpg",
+    buttonColor: "bg-sky-400 hover:bg-sky-500", // TELETRABAJO – Azul Claro
   },
   {
     slug: "pesv",
@@ -42,23 +45,26 @@ const features = [
       "Acompañamos a las organizaciones en la implementación del PESV según la Resolución 40595 de 2022 y la norma ISO 39001, adaptado al tamaño y misionalidad de cada empresa. Nuestro enfoque incluye la planificación, ejecución, control y mejora continua de las fases, con acciones concretas para mitigar riesgos viales y fortalecer la seguridad de los trabajadores.",
     tutorialLink: "/blog4",
     image: "/img/service4.jpg",
+    buttonColor: "bg-red-600 hover:bg-red-700", // Seguridad Vial – Rojo
   },
   {
     slug: "gestion-ambiental",
     category: "Gestión ambiental, salud ocupacional y seguridad industrial.",
-    title: "Asesoría en Seguridad y Salud en el Trabajo (SST) y Medio Ambiente",
+    title: "Asesoría en Sistemas de Gestión Ambiental (SGA)",
     details:
       "Diseñamos e implementamos estrategias para reducir impactos, optimizar recursos y cumplir la normativa ambiental. Alineamos tus procesos con buenas prácticas de sostenibilidad y economía circular.",
     tutorialLink: "/blog5",
     image: "/img/service2.jpg",
+    buttonColor: "bg-green-600 hover:bg-green-700", // Ambiental – Verde
   },
   {
     slug: "asesoria-juridica-laboral",
     category: "Orientación legal práctica para empresas y trabajadores.",
     title: "Asesoría Jurídica Laboral",
     details:
-      "Brindamos acompañamiento especializado en legislación laboral, abarcando conceptos básicos, casos médicos ocupacionales y actualizaciones normativas. Además, apoyamos en el diseño y revisión del reglamento interno de trabajo, garantizando el cumplimiento legal y la seguridad jurídica de la organización.",
+      "Brindamos acompañamiento especializado en legislación laboral, abarcando conceptos básicos, garantizando el cumplimiento legal y la seguridad jurídica de la organización.",
     image: "/img/service5.jpg",
+    buttonColor: "bg-yellow-500 hover:bg-yellow-600", // Jurídico - Dorado
   },
   {
     slug: "desarrollo-tecnologico",
@@ -69,6 +75,7 @@ const features = [
       "Brindamos apoyo en programación, mantenimiento de software, resolución de problemas técnicos y creación de plataformas digitales. Nuestro objetivo es potenciar la productividad de tu organización mediante soluciones tecnológicas personalizadas y eficientes.",
     tutorialLink: "/blog6",
     image: "/img/service6.jpg",
+    buttonColor: "bg-purple-600 hover:bg-purple-700", // Desarrollo Tecnológico - Morado
   },
 ];
 
@@ -106,7 +113,7 @@ const Features06Page = () => {
                     "Orientación legal práctica para empresas y trabajadores." && (
                     <Button
                       asChild
-                      className="mt-6 rounded-full min-w-40 text-[15px] bg-orange-600 hover:bg-orange-700 text-white"
+                      className={`mt-6 rounded-full min-w-40 text-[15px] ${feature.buttonColor} text-white`}
                     >
                       <Link href={feature.tutorialLink}>
                         Más información <ArrowRight />

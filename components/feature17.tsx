@@ -128,8 +128,18 @@ const Feature17 = ({
               size="lg" 
               className="relative bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 px-8 py-3 text-base font-semibold rounded-xl border-0"
             >
-              <Link href={button.url} className="flex items-center gap-2">
+              <Link href={button.url} className="flex items-center gap-2 ">
                 {button.text}
+                <div className="w-1 h-1 rounded-full bg-white/50 group-hover:w-2 transition-all duration-300"></div>
+              </Link>
+            </Button>
+             <Button 
+              asChild 
+              size="lg" 
+              className="relative bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 px-8 py-3 text-base font-semibold rounded-xl border-0"
+            >
+              <Link href= "/contacto" className="flex items-center gap-2 ml-4">
+                Solicita tu autoevaluación
                 <div className="w-1 h-1 rounded-full bg-white/50 group-hover:w-2 transition-all duration-300"></div>
               </Link>
             </Button>
