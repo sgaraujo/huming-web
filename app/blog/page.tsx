@@ -63,9 +63,8 @@ export default function blog1() {
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent" />
                 <div className="relative z-10 text-center py-8">
                     <div className="flex items-center justify-center gap-2 mb-2">
-                        <div className="w-2 h-2 rounded-full bg-gradient-to-r from-purple-500 to-blue-500" />
+    
                         <span className="text-sm font-medium text-slate-600">HumanIA</span>
-                        <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-500 to-emerald-500" />
                     </div>
                     <p className="text-sm text-slate-500">
                         © {new Date().getFullYear()} HumanIA. Todos los derechos reservados.

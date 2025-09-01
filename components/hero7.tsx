@@ -15,7 +15,7 @@ export const Hero7 = ({
   button,
 }: Hero7Props) => {
   return (
-    <section className="relative pt-20 pb-16 md:pt-32 md:pb-24 text-center overflow-hidden">
+    <section className="relative pt-36 pb-16 md:pt-36 md:pb-24 text-center overflow-hidden">
       {/* Background with gradient and subtle pattern */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-blue-50/30"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.05),transparent_50%)]"></div>

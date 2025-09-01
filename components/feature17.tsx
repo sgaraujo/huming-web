@@ -94,13 +94,13 @@ const Feature17 = ({
             >
               {/* Decorative gradient background */}
               <div className="absolute inset-0 bg-gradient-to-br from-white to-slate-50/30 rounded-2xl"></div>
-              
+
               {/* Content container */}
               <div className="relative z-10">
                 <div className="mb-6 flex size-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200/50 shadow-sm group-hover:shadow-md transition-all duration-300 md:size-16">
                   {feature.icon}
                 </div>
-                
+
                 <div>
                   <h3
                     className={`font-bold text-lg md:text-xl mb-4 ${feature.className || ""} group-hover:scale-[1.02] transition-transform duration-300`}
@@ -112,7 +112,7 @@ const Feature17 = ({
                   </div>
                 </div>
               </div>
-              
+
               {/* Subtle hover border effect */}
               <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-emerald-500/10"></div>
             </div>
@@ -120,34 +120,42 @@ const Feature17 = ({
         </div>
 
         {/* Enhanced button section */}
-        <div className="mt-16 flex justify-center">
+        <div className="mt-16 flex flex-col sm:flex-row justify-center gap-4">
+          {/* Botón 1 */}
           <div className="relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl blur-sm opacity-25 group-hover:opacity-40 transition duration-300"></div>
-            <Button 
-              asChild 
-              size="lg" 
+            <Button
+              asChild
+              size="lg"
               className="relative bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 px-8 py-3 text-base font-semibold rounded-xl border-0"
             >
-              <Link href={button.url} className="flex items-center gap-2 ">
+              <Link href={button.url} className="flex items-center gap-2">
                 {button.text}
                 <div className="w-1 h-1 rounded-full bg-white/50 group-hover:w-2 transition-all duration-300"></div>
               </Link>
             </Button>
-             <Button 
-              asChild 
-              size="lg" 
+          </div>
+
+          {/* Botón 2 */}
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl blur-sm opacity-25 group-hover:opacity-40 transition duration-300"></div>
+            <Button
+              asChild
+              size="lg"
               className="relative bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 px-8 py-3 text-base font-semibold rounded-xl border-0"
             >
-              <Link href= "/contacto" className="flex items-center gap-2 ml-4">
+              <Link href="/contacto" className="flex items-center gap-2">
                 Solicita tu autoevaluación
                 <div className="w-1 h-1 rounded-full bg-white/50 group-hover:w-2 transition-all duration-300"></div>
               </Link>
             </Button>
           </div>
         </div>
+
       </div>
     </section>
   );
 };
 
 export { Feature17 };
+

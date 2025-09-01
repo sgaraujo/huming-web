@@ -10,7 +10,7 @@ export default function PesvSection() {
       <section className="pt-36 pb-16 text-center relative">
         {/* Fondo específico del hero */}
         <div className="absolute inset-0 bg-gradient-to-br from-red-50/50 via-transparent to-rose-50/30" />
-        
+
         <div className="container relative z-10">
           <div className="mx-auto flex max-w-6xl flex-col gap-8">
             <h1 className="text-3xl font-bold lg:text-5xl">
@@ -33,7 +33,7 @@ export default function PesvSection() {
       <section className="px-6 py-16 relative">
         {/* Fondo específico de features */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-red-50/20 to-rose-50/30" />
-        
+
         <div className="mx-auto max-w-6xl relative z-10">
           {/* Grid de fases */}
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -151,20 +151,32 @@ export default function PesvSection() {
           </div>
 
           {/* Botón principal al final */}
-          <div className="pt-16 text-center">
-            <Link href="/contacto">
-              <button className="group relative rounded-2xl bg-gradient-to-r from-red-500 to-rose-600 px-12 py-5 text-white font-bold hover:from-red-600 hover:to-rose-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-red-200/50 hover:-translate-y-1 text-lg">
-                <span className="relative z-10">Solicita tu diagnóstico PESV</span>
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </button>
-            </Link>
-             <Link href="/servicios" className="ml-4">
-              <button className="group relative rounded-2xl bg-gradient-to-r from-red-500 to-rose-600 px-12 py-5 text-white font-bold hover:from-red-600 hover:to-rose-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-red-200/50 hover:-translate-y-1 text-lg">
-                <span className="relative z-10">Volver a Servicios</span>
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </button>
-            </Link>
+          <div className="pt-16">
+            <div className="mx-auto max-w-3xl flex flex-col gap-4 sm:flex-row sm:justify-center">
+              {/* Volver a Servicios */}
+              <Link href="/servicios" className="w-full sm:w-auto">
+                <button className="w-full sm:w-auto group relative rounded-2xl bg-gradient-to-r from-red-500 to-rose-600 px-12 py-5 text-white font-bold 
+                         hover:from-red-600 hover:to-rose-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-red-200/50 
+                         hover:-translate-y-1 text-lg">
+                  <span className="relative z-10">Volver a Servicios</span>
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/10 to-transparent opacity-0 
+                        group-hover:opacity-100 transition-opacity duration-300" />
+                </button>
+              </Link>
+
+              {/* Solicita tu diagnóstico */}
+              <Link href="/contacto" className="w-full sm:w-auto">
+                <button className="w-full sm:w-auto group relative rounded-2xl bg-gradient-to-r from-red-500 to-rose-600 px-12 py-5 text-white font-bold 
+                         hover:from-red-600 hover:to-rose-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-red-200/50 
+                         hover:-translate-y-1 text-lg">
+                  <span className="relative z-10">Solicita tu diagnóstico PESV</span>
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/10 to-transparent opacity-0 
+                        group-hover:opacity-100 transition-opacity duration-300" />
+                </button>
+              </Link>
+            </div>
           </div>
+
         </div>
       </section>
     </>
