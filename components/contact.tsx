@@ -1,13 +1,56 @@
+'use client'
+
 import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Mail, Phone, MapPin, Send, Users, Clock } from 'lucide-react'
+import { Mail, Phone, MapPin, MessageCircle, Users, Clock, Instagram, Facebook } from 'lucide-react'
 import Link from 'next/link'
 
 export default function ContactSection() {
+  const socialLinks = [
+    {
+      name: 'Instagram',
+      url: 'https://www.instagram.com/human_ia_co?igsh=MWt1MjNzdW52NzVwdg==',
+      icon: Instagram,
+      color: 'from-pink-500 to-purple-600',
+      hoverColor: 'hover:from-pink-600 hover:to-purple-700'
+    },
+    {
+      name: 'Facebook',
+      url: 'https://www.facebook.com/share/17H68FUwVy/',
+      icon: Facebook,
+      color: 'from-blue-600 to-blue-700',
+      hoverColor: 'hover:from-blue-700 hover:to-blue-800'
+    },
+    {
+      name: 'TikTok',
+      url: 'https://www.tiktok.com/@humania1725?_t=ZS-8zeXUYY0Mie&_r=1',
+      icon: () => (
+        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+        </svg>
+      ),
+      color: 'from-gray-800 to-red-600',
+      hoverColor: 'hover:from-gray-900 hover:to-red-700'
+    },
+    {
+      name: 'Twitter/X',
+      url: 'https://x.com/HumanIA2025?t=mIGyXxJv0hTZ86afYNAkNw&s=09',
+      icon: () => (
+        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      ),
+      color: 'from-gray-700 to-gray-900',
+      hoverColor: 'hover:from-gray-800 hover:to-black'
+    }
+  ];
+
+  const handleWhatsAppClick = () => {
+    const message = encodeURIComponent("¡Hola! Me interesa conocer más sobre los servicios de HumanIA. ¿Podrían brindarme información?");
+    const whatsappUrl = `https://wa.me/573102365931?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   return (
     <section className="py-24 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-950 dark:to-indigo-950 relative overflow-hidden">
       {/* Elementos decorativos de fondo */}
@@ -83,164 +126,74 @@ export default function ContactSection() {
           </Card>
         </div>
 
-        {/* Formulario mejorado */}
-        <Card className="mx-auto max-w-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-0 shadow-2xl">
-          <div className="p-8 sm:p-12">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                Cuéntanos en qué podemos ayudarte
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Déjanos tus datos y te responderemos en menos de 24 horas.
-              </p>
+        {/* Botón de WhatsApp como card horizontal */}
+        <Card className="mx-auto max-w-4xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-0 shadow-xl mb-12">
+          <div className="p-6 flex flex-col md:flex-row items-center gap-6">
+            
+            {/* Ícono y contenido */}
+            <div className="flex items-center gap-4 flex-1">
+              <div className="flex-shrink-0 w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                <MessageCircle className="w-8 h-8 text-white" />
+              </div>
+              <div className="text-center md:text-left">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
+                  ¡Hablemos por WhatsApp!
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Contacta directamente con nuestro equipo para asesoría inmediata
+                </p>
+              </div>
             </div>
 
-            <form className="space-y-6">
-              <div className="grid gap-6 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Nombre completo *
-                  </Label>
-                  <Input 
-                    type="text" 
-                    id="name" 
-                    placeholder="Tu nombre y apellidos" 
-                    required 
-                    className="h-12 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Correo electrónico *
-                  </Label>
-                  <Input 
-                    type="email" 
-                    id="email" 
-                    placeholder="tucorreo@empresa.com" 
-                    required 
-                    className="h-12 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400"
-                  />
-                </div>
-              </div>
-
-              <div className="grid gap-6 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    País
-                  </Label>
-                  <Select>
-                    <SelectTrigger className="h-12 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400">
-                      <SelectValue placeholder="Selecciona tu país" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="co">🇨🇴 Colombia</SelectItem>
-                      <SelectItem value="us">🇺🇸 Estados Unidos</SelectItem>
-                      <SelectItem value="mx">🇲🇽 México</SelectItem>
-                      <SelectItem value="pe">🇵🇪 Perú</SelectItem>
-                      <SelectItem value="ec">🇪🇨 Ecuador</SelectItem>
-                      <SelectItem value="other">🌍 Otro</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Cargo
-                  </Label>
-                  <Select>
-                    <SelectTrigger className="h-12 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400">
-                      <SelectValue placeholder="Selecciona tu cargo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="gerencia">👔 Gerencia</SelectItem>
-                      <SelectItem value="compras">🛒 Compras</SelectItem>
-                      <SelectItem value="talento">👥 Talento humano</SelectItem>
-                      <SelectItem value="sst">🦺 SST</SelectItem>
-                      <SelectItem value="juridico">⚖️ Jurídico</SelectItem>
-                      <SelectItem value="it">💻 Tecnología</SelectItem>
-                      <SelectItem value="otro">📋 Otro</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="company" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Empresa
-                </Label>
-                <Input 
-                  type="text" 
-                  id="company" 
-                  placeholder="Nombre de tu empresa"
-                  className="h-12 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="website" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Sitio web de la empresa
-                </Label>
-                <Input 
-                  type="url" 
-                  id="website" 
-                  placeholder="https://tusitio.com"
-                  className="h-12 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Servicio de interés
-                </Label>
-                <Select>
-                  <SelectTrigger className="h-12 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400">
-                    <SelectValue placeholder="¿Qué servicio te interesa?" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="sst">🟠 SG-SST (Seguridad y Salud en el Trabajo)</SelectItem>
-                    <SelectItem value="psicosocial">🌸 Riesgo Psicosocial</SelectItem>
-                    <SelectItem value="teletrabajo">🔵 Teletrabajo</SelectItem>
-                    <SelectItem value="vial">🔴 Seguridad Vial (PESV)</SelectItem>
-                    <SelectItem value="ambiental">🟢 Gestión Ambiental</SelectItem>
-                    <SelectItem value="juridico">🟡 Asesoría Jurídica Laboral</SelectItem>
-                    <SelectItem value="tecnologia">🟣 Desarrollo Tecnológico</SelectItem>
-                    <SelectItem value="multiple">🎯 Múltiples servicios</SelectItem>
-                    <SelectItem value="consulta">💬 Consulta general</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="msg" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Mensaje *
-                </Label>
-                <Textarea 
-                  id="msg" 
-                  rows={4} 
-                  placeholder="Escribe brevemente tu solicitud, objetivos o dudas que tengas sobre nuestros servicios..."
-                  required
-                  className="border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400 resize-none"
-                />
-              </div>
-
+            {/* Botón */}
+            <div className="flex-shrink-0">
               <Button 
-                type="submit" 
-                className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                onClick={handleWhatsAppClick}
+                className="px-8 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                <Send className="w-5 h-5 mr-2" />
-                Enviar mensaje
+                <MessageCircle className="w-5 h-5 mr-2" />
+                Escribir ahora
               </Button>
-
-              <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-4">
-                Al enviar este formulario aceptas nuestra política de privacidad y el tratamiento de tus datos.
-              </p>
-            </form>
+            </div>
+          </div>
+          
+          {/* Horario */}
+          <div className="px-6 pb-4 text-center">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              +57 310 236 5931 • Lunes a viernes, 8:00 AM - 6:00 PM
+            </p>
           </div>
         </Card>
 
+        {/* Redes Sociales */}
+        <div className="text-center mb-10">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+            Síguenos en nuestras redes sociales
+          </h3>
+          <div className="flex justify-center gap-3">
+            {socialLinks.map((social) => (
+              <Link
+                key={social.name}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group"
+              >
+                <div className={`w-12 h-12 bg-gradient-to-r ${social.color} ${social.hoverColor} rounded-full flex items-center justify-center shadow-md transition-all duration-300 transform group-hover:scale-110 group-hover:shadow-lg`}>
+                  {social.icon === Instagram || social.icon === Facebook ? (
+                    <social.icon className="w-5 h-5 text-white" />
+                  ) : (
+                    <social.icon />
+                  )}
+                </div>
+                <span className="sr-only">{social.name}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
         {/* Información adicional */}
-        <div className="mt-16 text-center">
+        <div className="text-center">
           <div className="inline-flex items-center gap-2 px-6 py-3 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full">
             <MapPin className="w-4 h-4" />
             <span className="text-sm font-medium">Bogotá, Colombia - Servicios a nivel nacional</span>
