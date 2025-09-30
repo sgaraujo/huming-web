@@ -13,7 +13,7 @@ const features = [
       "Apoyamos a tu empresa en el diseño, ejecución, evaluación y mejora continua del Sistema de Gestión de Seguridad y Salud en el Trabajo (SG-SST), cumpliendo con la normatividad vigente y promoviendo ambientes laborales seguros y saludables.",
     tutorialLink: "/blog",
     image: "/img/service1.jpg",
-    buttonColor: "bg-orange-600 hover:bg-orange-700", // SST – Naranja
+    buttonColor: "bg-orange-600 hover:bg-orange-700",
   },
   {
     slug: "riesgo-psicosocial",
@@ -23,7 +23,7 @@ const features = [
       "Brindamos herramientas para evaluar, gestionar y reducir los riesgos psicosociales en el entorno laboral. Implementamos la batería de riesgo psicosocial según la Resolución 2764 de 2022, acompañamos en la gestión emocional y del estrés, y ofrecemos programas de educación en autocuidado, comunicación asertiva e inteligencia emocional. Todo orientado a fortalecer la salud mental, el equilibrio trabajo-familia y la productividad de tu organización.",
     tutorialLink: "/blog2",
     image: "/img/service7.jpg",
-    buttonColor: "bg-pink-300 hover:bg-pink-400", // PSICOSOCIAL – Rosa suave
+    buttonColor: "bg-pink-300 hover:bg-pink-400",
   },
   {
     slug: "teletrabajo",
@@ -34,7 +34,7 @@ const features = [
       "Ofrecemos un servicio completo para la implementación del teletrabajo conforme al Decreto 1072 de 2015 y la Circular Externa 0027 de 2019. Incluye la identificación de modalidades de teletrabajo, visitas técnicas, elaboración de informes, diseño de planes y cronogramas de capacitación. Además, realizamos la evaluación continua y planes de mejora, garantizando eficiencia, bienestar laboral y cumplimiento legal.",
     tutorialLink: "/blog3",
     image: "/img/service3.jpg",
-    buttonColor: "bg-sky-400 hover:bg-sky-500", // TELETRABAJO – Azul Claro
+    buttonColor: "bg-sky-400 hover:bg-sky-500",
   },
   {
     slug: "pesv",
@@ -45,7 +45,7 @@ const features = [
       "Acompañamos a las organizaciones en la implementación del PESV según la Resolución 40595 de 2022 y la norma ISO 39001, adaptado al tamaño y misionalidad de cada empresa. Nuestro enfoque incluye la planificación, ejecución, control y mejora continua de las fases, con acciones concretas para mitigar riesgos viales y fortalecer la seguridad de los trabajadores.",
     tutorialLink: "/blog4",
     image: "/img/service4.jpg",
-    buttonColor: "bg-red-600 hover:bg-red-700", // Seguridad Vial – Rojo
+    buttonColor: "bg-red-600 hover:bg-red-700",
   },
   {
     slug: "gestion-ambiental",
@@ -55,7 +55,7 @@ const features = [
       "Diseñamos e implementamos estrategias para reducir impactos, optimizar recursos y cumplir la normativa ambiental. Alineamos tus procesos con buenas prácticas de sostenibilidad y economía circular.",
     tutorialLink: "/blog5",
     image: "/img/service2.jpg",
-    buttonColor: "bg-green-600 hover:bg-green-700", // Ambiental – Verde
+    buttonColor: "bg-green-600 hover:bg-green-700",
   },
   {
     slug: "asesoria-juridica-laboral",
@@ -63,8 +63,9 @@ const features = [
     title: "Asesoría Jurídica Laboral",
     details:
       "Brindamos acompañamiento especializado en legislación laboral, abarcando conceptos básicos, garantizando el cumplimiento legal y la seguridad jurídica de la organización.",
+    tutorialLink: "/blog7", // ← AGREGADO
     image: "/img/service5.jpg",
-    buttonColor: "bg-yellow-500 hover:bg-yellow-600", // Jurídico - Dorado
+    buttonColor: "bg-yellow-500 hover:bg-yellow-600",
   },
   {
     slug: "desarrollo-tecnologico",
@@ -75,7 +76,7 @@ const features = [
       "Brindamos apoyo en programación, mantenimiento de software, resolución de problemas técnicos y creación de plataformas digitales. Nuestro objetivo es potenciar la productividad de tu organización mediante soluciones tecnológicas personalizadas y eficientes.",
     tutorialLink: "/blog6",
     image: "/img/service6.jpg",
-    buttonColor: "bg-purple-600 hover:bg-purple-700", // Desarrollo Tecnológico - Morado
+    buttonColor: "bg-purple-600 hover:bg-purple-700",
   },
 ];
 
@@ -87,7 +88,7 @@ const Features06Page = () => {
           {features.map((feature) => (
             <div
               key={feature.slug}
-              id={feature.slug} // <-- ancla por id para scroll desde las cards
+              id={feature.slug}
               className="scroll-mt-24 flex flex-col md:flex-row items-center gap-x-20 gap-y-6 md:odd:flex-row-reverse"
             >
               <div className="relative w-full aspect-[6/4] rounded-xl border border-border/50 basis-1/2 overflow-hidden">
@@ -108,18 +109,16 @@ const Features06Page = () => {
                 <p className="text-muted-foreground text-[17px]">
                   {feature.details}
                 </p>
-                {feature.tutorialLink &&
-                  feature.category !==
-                    "Orientación legal práctica para empresas y trabajadores." && (
-                    <Button
-                      asChild
-                      className={`mt-6 rounded-full min-w-40 text-[15px] ${feature.buttonColor} text-white`}
-                    >
-                      <Link href={feature.tutorialLink}>
-                        Más información <ArrowRight />
-                      </Link>
-                    </Button>
-                  )}
+                {feature.tutorialLink && (
+                  <Button
+                    asChild
+                    className={`mt-6 rounded-full min-w-40 text-[15px] ${feature.buttonColor} text-white`}
+                  >
+                    <Link href={feature.tutorialLink}>
+                      Más información <ArrowRight />
+                    </Link>
+                  </Button>
+                )}
               </div>
             </div>
           ))}

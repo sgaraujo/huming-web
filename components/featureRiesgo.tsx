@@ -83,7 +83,7 @@ const FeatureRiesgo = ({
         <div className="mx-auto grid gap-x-8 gap-y-10 md:grid-cols-2 lg:gap-x-12">
           {features.map((feature, idx) => (
             <div 
-              className="group flex gap-6 rounded-2xl md:block md:p-8 bg-white/70 backdrop-blur-sm border border-pink-100/50 shadow-lg hover:shadow-xl hover:shadow-pink-100/30 transition-all duration-300 hover:bg-white/85 hover:-translate-y-1" 
+              className="group flex gap-6 rounded-2xl md:block md:p-8 bg-white/70 backdrop-blur-sm border-2 border-pink-300/60 shadow-lg hover:shadow-xl hover:shadow-pink-100/30 transition-all duration-300 hover:bg-white/85 hover:-translate-y-1 hover:border-pink-400/80" 
               key={idx}
             >
               <span className="mb-6 flex size-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-pink-100 to-rose-100 border border-pink-200/50 md:size-14 shadow-sm group-hover:shadow-md transition-all duration-300">
@@ -101,12 +101,32 @@ const FeatureRiesgo = ({
           ))}
         </div>
         
-        {/* Botón para volver a servicios al final */}
-        <div className="pt-16 text-center">
-          <Link href="/servicios">
+        {/* Botones de acción */}
+        <div className="pt-16 flex flex-col sm:flex-row gap-4 justify-center items-center">
+          {/* Botón Solicitar Valoración */}
+          <Link href="/contacto">
             <button className="group relative rounded-2xl bg-gradient-to-r from-pink-500 to-rose-600 px-10 py-4 text-white font-semibold hover:from-pink-600 hover:to-rose-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-pink-200/50 hover:-translate-y-1 text-lg">
-              <span className="relative z-10">Volver a Servicios</span>
+              <span className="relative z-10 flex items-center gap-2 justify-center">
+                Solicitar Valoración
+                <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                  <polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </span>
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </button>
+          </Link>
+
+          {/* Botón Volver a Servicios */}
+          <Link href="/servicios">
+            <button className="group relative rounded-2xl bg-white border-2 border-pink-300 px-10 py-4 text-pink-600 font-semibold hover:bg-pink-50 hover:border-pink-400 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-pink-200/50 hover:-translate-y-1 text-lg">
+              <span className="relative z-10 flex items-center gap-2 justify-center">
+                <svg className="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="19" y1="12" x2="5" y2="12"/>
+                  <polyline points="12 19 5 12 12 5"/>
+                </svg>
+                Volver a Servicios
+              </span>
             </button>
           </Link>
         </div>

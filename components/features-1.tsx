@@ -1,6 +1,5 @@
 "use client";
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { ReactNode } from 'react'
+import { Card, CardContent } from '@/components/ui/card'
 
 export default function Features() {
     return (
@@ -17,119 +16,85 @@ export default function Features() {
                     </h2>
                 </div>
                 
-                <div className="@min-4xl:max-w-full @min-4xl:grid-cols-2 @min-6xl:grid-cols-4 mx-auto grid max-w-sm gap-8 *:text-center md:gap-6">
-                    <Card className="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm border border-pink-100/50 shadow-lg hover:shadow-xl hover:shadow-pink-100/20 transition-all duration-300 hover:-translate-y-1">
-                        <div className="absolute inset-0 bg-gradient-to-br from-white to-pink-50/30 rounded-2xl" />
-                        <CardHeader className="relative z-10 pb-3">
-                            <CardDecorator variant="pink">
-                                <img
-                                    src="/Cercania.jpg"
-                                    alt="Cercanía - Personas trabajando juntas"
-                                    className="w-full h-full object-cover rounded-xl shadow-sm group-hover:scale-105 transition-transform duration-300"
-                                />
-                            </CardDecorator>
-                            <h3 className="mt-6 font-bold text-lg text-slate-900 group-hover:text-pink-600 transition-colors">
+                <div className="@min-4xl:max-w-full @min-4xl:grid-cols-2 @min-6xl:grid-cols-4 mx-auto grid max-w-sm gap-8 md:gap-6">
+                    {/* Cercanía */}
+                    <Card className="group relative overflow-hidden rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-80">
+                        {/* Imagen de fondo */}
+                        <img
+                            src="/Cercania.jpg"
+                            alt="Cercanía"
+                            className="absolute inset-0 w-full h-full object-cover"
+                        />
+                        
+                        {/* Overlay oscuro */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 group-hover:from-pink-900/90 group-hover:via-pink-800/60 transition-all duration-300" />
+                        
+                        {/* Contenido */}
+                        <CardContent className="relative z-10 h-full flex flex-col justify-end p-6">
+                            <h3 className="text-2xl font-bold text-white mb-3 group-hover:scale-105 transition-transform duration-300">
                                 Cercanía
                             </h3>
-                        </CardHeader>
-                        <CardContent className="relative z-10">
-                            <p className="text-sm text-slate-600 leading-relaxed">
+                            <p className="text-sm text-white/90 leading-relaxed">
                                 Escuchamos y adaptamos nuestras soluciones según la realidad de cada empresa.
                             </p>
                         </CardContent>
-                        <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-pink-500/5 via-transparent to-pink-500/5" />
                     </Card>
 
-                    <Card className="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm border border-green-100/50 shadow-lg hover:shadow-xl hover:shadow-green-100/20 transition-all duration-300 hover:-translate-y-1">
-                        <div className="absolute inset-0 bg-gradient-to-br from-white to-green-50/30 rounded-2xl" />
-                        <CardHeader className="relative z-10 pb-3">
-                            <CardDecorator variant="green">
-                                <img
-                                    src="/Compromiso.jpg"
-                                    alt="Compromiso - Apretón de manos profesional"
-                                    className="w-full h-full object-cover rounded-xl shadow-sm group-hover:scale-105 transition-transform duration-300"
-                                />
-                            </CardDecorator>
-                            <h3 className="mt-6 font-bold text-lg text-slate-900 group-hover:text-green-600 transition-colors">
+                    {/* Compromiso */}
+                    <Card className="group relative overflow-hidden rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-80">
+                        <img
+                            src="/Compromiso.jpg"
+                            alt="Compromiso"
+                            className="absolute inset-0 w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 group-hover:from-green-900/90 group-hover:via-green-800/60 transition-all duration-300" />
+                        <CardContent className="relative z-10 h-full flex flex-col justify-end p-6">
+                            <h3 className="text-2xl font-bold text-white mb-3 group-hover:scale-105 transition-transform duration-300">
                                 Compromiso
                             </h3>
-                        </CardHeader>
-                        <CardContent className="relative z-10">
-                            <p className="text-sm text-slate-600 leading-relaxed">
+                            <p className="text-sm text-white/90 leading-relaxed">
                                 Acompañamos a nuestros clientes desde el diagnóstico hasta la mejora continua.
                             </p>
                         </CardContent>
-                        <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-green-500/5 via-transparent to-green-500/5" />
                     </Card>
 
-                    <Card className="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm border border-blue-100/50 shadow-lg hover:shadow-xl hover:shadow-blue-100/20 transition-all duration-300 hover:-translate-y-1">
-                        <div className="absolute inset-0 bg-gradient-to-br from-white to-blue-50/30 rounded-2xl" />
-                        <CardHeader className="relative z-10 pb-3">
-                            <CardDecorator variant="blue">
-                                <img
-                                    src="/Transparencia.jpg"
-                                    alt="Transparencia - Documentos y lupa"
-                                    className="w-full h-full object-cover rounded-xl shadow-sm group-hover:scale-105 transition-transform duration-300"
-                                />
-                            </CardDecorator>
-                            <h3 className="mt-6 font-bold text-lg text-slate-900 group-hover:text-blue-600 transition-colors">
+                    {/* Transparencia */}
+                    <Card className="group relative overflow-hidden rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-80">
+                        <img
+                            src="/Transparencia.jpg"
+                            alt="Transparencia"
+                            className="absolute inset-0 w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 group-hover:from-blue-900/90 group-hover:via-blue-800/60 transition-all duration-300" />
+                        <CardContent className="relative z-10 h-full flex flex-col justify-end p-6">
+                            <h3 className="text-2xl font-bold text-white mb-3 group-hover:scale-105 transition-transform duration-300">
                                 Transparencia
                             </h3>
-                        </CardHeader>
-                        <CardContent className="relative z-10">
-                            <p className="text-sm text-slate-600 leading-relaxed">
+                            <p className="text-sm text-white/90 leading-relaxed">
                                 Actuamos con ética, claridad y responsabilidad en cada proceso.
                             </p>
                         </CardContent>
-                        <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-blue-500/5 via-transparent to-blue-500/5" />
                     </Card>
 
-                    <Card className="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm border border-orange-100/50 shadow-lg hover:shadow-xl hover:shadow-orange-100/20 transition-all duration-300 hover:-translate-y-1">
-                        <div className="absolute inset-0 bg-gradient-to-br from-white to-orange-50/30 rounded-2xl" />
-                        <CardHeader className="relative z-10 pb-3">
-                            <CardDecorator variant="orange">
-                                <img
-                                    src="/seguridad.jpg"
-                                    alt="Seguridad - Trabajador con casco y equipo de protección"
-                                    className="w-full h-full object-cover rounded-xl shadow-sm group-hover:scale-105 transition-transform duration-300"
-                                />
-                            </CardDecorator>
-                            <h3 className="mt-6 font-bold text-lg text-slate-900 group-hover:text-orange-700 transition-colors">
+                    {/* Seguridad */}
+                    <Card className="group relative overflow-hidden rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-80">
+                        <img
+                            src="/seguridad.jpg"
+                            alt="Seguridad"
+                            className="absolute inset-0 w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 group-hover:from-orange-900/90 group-hover:via-orange-800/60 transition-all duration-300" />
+                        <CardContent className="relative z-10 h-full flex flex-col justify-end p-6">
+                            <h3 className="text-2xl font-bold text-white mb-3 group-hover:scale-105 transition-transform duration-300">
                                 Seguridad
                             </h3>
-                        </CardHeader>
-                        <CardContent className="relative z-10">
-                            <p className="text-sm text-slate-600 leading-relaxed">
+                            <p className="text-sm text-white/90 leading-relaxed">
                                 La seguridad trasciende la norma: es el compromiso que asumimos contigo.
                             </p>
                         </CardContent>
-                        <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-orange-500/5 via-transparent to-orange-500/5" />
                     </Card>
                 </div>
             </div>
         </section>
-    )
-}
-
-const CardDecorator = ({ children, variant }: { children: ReactNode, variant?: string }) => {
-    const variants = {
-        orange: "from-orange-100 to-orange-50 border-orange-200/50",
-        pink: "from-pink-100 to-pink-50 border-pink-200/50",
-        green: "from-green-100 to-green-50 border-green-200/50",
-        blue: "from-blue-100 to-blue-50 border-blue-200/50",
-        red: "from-red-100 to-red-50 border-red-200/50",
-        yellow: "from-yellow-100 to-yellow-50 border-yellow-200/50",
-        purple: "from-purple-100 to-purple-50 border-purple-200/50"
-    }
-    
-    const colorClass = variants[variant as keyof typeof variants] || variants.orange
-    
-    return (
-        <div className={`relative mx-auto w-28 h-28 rounded-xl border shadow-sm group-hover:shadow-md transition-all duration-300 overflow-hidden`}>
-            <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent rounded-xl z-10" />
-            <div className="relative w-full h-full flex items-center justify-center">
-                {children}
-            </div>
-        </div>
     )
 }

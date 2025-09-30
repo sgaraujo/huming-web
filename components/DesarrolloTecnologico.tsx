@@ -4,7 +4,7 @@ import Link from "next/link"
 
 export default function DesarrolloTecnologico() {
   return (
-    <section className="py-20  bg-gradient-to-b from-purple-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+    <section className="py-20 bg-gradient-to-b from-purple-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
       <div className="container mx-auto max-w-6xl px-6 text-center">
         {/* Título */}
         <h2 className="text-4xl pt-20 md:text-5xl font-extrabold mb-6 text-purple-700 dark:text-purple-400">
@@ -78,6 +78,49 @@ export default function DesarrolloTecnologico() {
               <li>Plataformas internas según tu proceso.</li>
               <li>SEO técnico y buenas métricas de performance.</li>
             </ul>
+          </div>
+
+          {/* NUEVO: Protección de datos y cumplimiento */}
+          <div className="p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition border-l-4 border-purple-500 md:col-span-2">
+            <h3 className="font-semibold text-xl text-purple-700 dark:text-purple-300 mb-2">
+              Protección de datos y cumplimiento
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">
+              Incluimos el componente de cumplimiento para asegurar el manejo responsable de la
+              información personal en tus soluciones tecnológicas.
+            </p>
+
+            {/* Dos bloques clave que pediste */}
+            <div className="grid gap-6 md:grid-cols-2">
+              {/* Política de protección de datos */}
+              <div>
+                <h4 className="font-semibold text-purple-700 dark:text-purple-300 mb-2">
+                  1. Política de protección de datos
+                </h4>
+                <ul className="list-disc pl-6 space-y-1 text-gray-600 dark:text-gray-300">
+                  <li>Redacción, publicación y actualización de la política.</li>
+                  <li>Aviso de privacidad y finalidades del tratamiento.</li>
+                  <li>Roles y responsabilidades (responsable/encargado).</li>
+                  <li>Procedimiento para atención de consultas y reclamos.</li>
+                  <li>Gestión de incidentes y violaciones de seguridad.</li>
+                </ul>
+              </div>
+
+              {/* Documentos y formatos */}
+              <div>
+                <h4 className="font-semibold text-purple-700 dark:text-purple-300 mb-2">
+                  2. Documentos y formatos para formalización
+                </h4>
+                <ul className="list-disc pl-6 space-y-1 text-gray-600 dark:text-gray-300">
+                  <li>Formato de autorización de tratamiento de datos.</li>
+                  <li>Aviso de privacidad y cláusulas informadas.</li>
+                  <li>Inventario/registro de bases de datos y finalidades.</li>
+                  <li>Contrato/Anexo de encargado de tratamiento (proveedores).</li>
+                  <li>Cláusulas de confidencialidad y política de cookies.</li>
+                  <li>Procedimientos: PQRS de datos y gestión de incidentes.</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
 
