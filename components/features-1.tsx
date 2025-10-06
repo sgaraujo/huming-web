@@ -15,20 +15,20 @@ export default function Features() {
                         </span>
                     </h2>
                 </div>
-                
+
                 <div className="@min-4xl:max-w-full @min-4xl:grid-cols-2 @min-6xl:grid-cols-4 mx-auto grid max-w-sm gap-8 md:gap-6">
                     {/* Cercanía */}
                     <Card className="group relative overflow-hidden rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-80">
                         {/* Imagen de fondo */}
                         <img
-                            src="/Cercania.jpg"
+                            src="/Cercania.webp"
                             alt="Cercanía"
                             className="absolute inset-0 w-full h-full object-cover"
                         />
-                        
+
                         {/* Overlay oscuro */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 group-hover:from-pink-900/90 group-hover:via-pink-800/60 transition-all duration-300" />
-                        
+
                         {/* Contenido */}
                         <CardContent className="relative z-10 h-full flex flex-col justify-end p-6">
                             <h3 className="text-2xl font-bold text-white mb-3 group-hover:scale-105 transition-transform duration-300">
@@ -43,7 +43,7 @@ export default function Features() {
                     {/* Compromiso */}
                     <Card className="group relative overflow-hidden rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-80">
                         <img
-                            src="/Compromiso.jpg"
+                            src="/Compromiso.webp"
                             alt="Compromiso"
                             className="absolute inset-0 w-full h-full object-cover"
                         />
@@ -61,7 +61,7 @@ export default function Features() {
                     {/* Transparencia */}
                     <Card className="group relative overflow-hidden rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-80">
                         <img
-                            src="/Transparencia.jpg"
+                            src="/Transparencia.webp"
                             alt="Transparencia"
                             className="absolute inset-0 w-full h-full object-cover"
                         />
@@ -79,7 +79,7 @@ export default function Features() {
                     {/* Seguridad */}
                     <Card className="group relative overflow-hidden rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-80">
                         <img
-                            src="/seguridad.jpg"
+                            src="/seguridad.webp"
                             alt="Seguridad"
                             className="absolute inset-0 w-full h-full object-cover"
                         />

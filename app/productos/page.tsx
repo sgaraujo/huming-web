@@ -17,7 +17,7 @@ const productos = [
     descripcion:
       "Suministro de botiquines tipo A según Resolución 0705 de 2007. Opciones para oficina, industria y vehículos.",
     bullets: ["Tipo A – normativo", "Reposiciones", "Versión portátil"],
-    imagen: "/products/botiquines12.jpg", // Imagen de botiquín vacío sin medicamentos
+    imagen: "/products/botiquines12.webp", // Imagen de botiquín vacío sin medicamentos
   },
   {
     slug: "extintores",
@@ -25,7 +25,7 @@ const productos = [
     descripcion:
       "Venta, mantenimiento de extintores multipropósito, CO2, Agua a presión y Solkaflam.",
     bullets: ["Multipropósito (ABC)", "CO₂", "Agua a presión / Solkaflam"],
-    imagen: "/products/extintor.jpg",
+    imagen: "/products/extintor.webp",
   },
   {
     slug: "luces-emergencia",
@@ -33,7 +33,7 @@ const productos = [
     descripcion:
       "Suministro de luces de emergencia según especificaciones técnicas de los entes de control.",
     bullets: ["LED alta eficiencia", "Autonomía certificada", "Mantenimiento"],
-    imagen: "/products/luces.jpg",
+    imagen: "/products/luces.webp",
   },
   {
     slug: "detectores-humo",
@@ -41,7 +41,7 @@ const productos = [
     descripcion:
       "Detectores según requisitos técnicos para protección de áreas críticas.",
     bullets: ["Fotoeléctricos / térmicos", "Red cableada o autónomos", "Integración con panel"],
-    imagen: "/products/detectores.jpg",
+    imagen: "/products/detectores.webp",
   },
   {
     slug: "senalizacion",
@@ -49,7 +49,7 @@ const productos = [
     descripcion:
       "Señales fotoluminiscentes y normativas para evacuación, equipos contra incendio y rutas de escape.",
     bullets: ["Fotoluminiscente", "PVC / Aluminio", "Acorde a normativa"],
-    imagen: "/products/senalizacion.jpg",
+    imagen: "/products/senalizacion.webp",
   },
 ]
 
@@ -75,13 +75,13 @@ export default function ProductosPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-orange-50/30" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_1200px_600px_at_20%_30%,rgba(251,146,60,0.08),transparent_70%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_800px_400px_at_80%_70%,rgba(251,146,60,0.06),transparent_70%)]" />
-          
+
           {/* Decorative elements */}
           <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-br from-orange-200/20 to-transparent rounded-full blur-2xl" />
           <div className="absolute bottom-32 right-24 w-40 h-40 bg-gradient-to-br from-orange-300/15 to-transparent rounded-full blur-3xl" />
-          
+
           {/* Subtle grid pattern */}
-          <div 
+          <div
             className="absolute inset-0 opacity-[0.02]"
             style={{
               backgroundImage: `linear-gradient(rgba(251,146,60,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(251,146,60,0.1) 1px, transparent 1px)`,
@@ -104,7 +104,7 @@ export default function ProductosPage() {
                     Emergencia
                   </span>
                 </h1>
-                
+
                 <div className="max-w-2xl mx-auto space-y-2">
                   <p className="text-lg md:text-xl text-slate-600 font-medium">
                     Suministro, mantenimiento conforme a la normativa vigente.
@@ -125,7 +125,7 @@ export default function ProductosPage() {
                 >
                   {/* Gradient background overlay */}
                   <div className="absolute inset-0 bg-gradient-to-br from-white to-orange-50/30 rounded-2xl" />
-                  
+
                   <div className="relative z-10">
                     <div className="relative aspect-[4/3] overflow-hidden rounded-t-2xl">
                       <Image
@@ -149,7 +149,7 @@ export default function ProductosPage() {
                       <p className="text-sm text-slate-600 leading-relaxed">
                         {p.descripcion}
                       </p>
-                      
+
                       <ul className="space-y-2 text-sm text-slate-700">
                         {p.bullets.map((b) => (
                           <li key={b} className="flex items-center gap-2">
@@ -160,8 +160,8 @@ export default function ProductosPage() {
                       </ul>
 
                       <div className="pt-2">
-                        <Button 
-                          asChild 
+                        <Button
+                          asChild
                           className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 shadow-lg hover:shadow-xl transition-all duration-300"
                         >
                           <a href={waLink(p.titulo)} target="_blank" rel="noopener noreferrer">
@@ -172,7 +172,7 @@ export default function ProductosPage() {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Subtle hover border effect */}
                   <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-orange-500/10 via-transparent to-orange-500/10" />
                 </article>
@@ -191,8 +191,8 @@ export default function ProductosPage() {
                     Te asesoramos para escoger la mejor opción según tu actividad y nivel de riesgo.
                   </p>
                   <div>
-                    <Button 
-                      asChild 
+                    <Button
+                      asChild
                       size="lg"
                       className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 shadow-lg hover:shadow-xl transition-all duration-300 px-8"
                     >
@@ -207,7 +207,7 @@ export default function ProductosPage() {
             </div>
           </section>
         </div>
-        
+
         <WhatsappButton />
       </main>
     </>

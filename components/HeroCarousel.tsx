@@ -8,17 +8,17 @@ import { useRef } from "react"
 
 const images = [
   {
-    src: "/img/sst1.jpg",
+    src: "/img/sst1.webp",
     title: "La seguridad no es opcional",
     subtitle: "Comprometidos con el bienestar laboral y la prevención de riesgos",
   },
   {
-    src: "/img/sst2.jpg",
+    src: "/img/sst2.webp",
     title: "Ambientes laborales seguros",
     subtitle: "Implementamos sistemas de gestión bajo la norma ISO 45001",
   },
   {
-    src: "/img/sst3.jpg",
+    src: "/img/sst3.webp",
     title: "Prevención con propósito",
     subtitle: "La cultura de la seguridad comienza con la educación y la acción",
   },

@@ -22,7 +22,7 @@ const AppComponent = () => {
         <div className="relative space-y-3 rounded-[1rem] bg-white/5 p-4">
             <div className="flex items-center gap-1.5 text-orange-400">
                 <img
-                    src="/Huming.jpg"  // Asegúrate de tener esta imagen en /public
+                    src="/HumanIa.webp"  // Asegúrate de tener esta imagen en /public
                     alt="HumIng Icono"
                     className="w-6 h-6"
                 />

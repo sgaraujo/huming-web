@@ -12,7 +12,7 @@ const features = [
     details:
       "Apoyamos a tu empresa en el diseño, ejecución, evaluación y mejora continua del Sistema de Gestión de Seguridad y Salud en el Trabajo (SG-SST), cumpliendo con la normatividad vigente y promoviendo ambientes laborales seguros y saludables.",
     tutorialLink: "/blog",
-    image: "/img/service1.jpg",
+    image: "/img/service1.webp",
     buttonColor: "bg-orange-600 hover:bg-orange-700",
   },
   {
@@ -22,7 +22,7 @@ const features = [
     details:
       "Brindamos herramientas para evaluar, gestionar y reducir los riesgos psicosociales en el entorno laboral. Implementamos la batería de riesgo psicosocial según la Resolución 2764 de 2022, acompañamos en la gestión emocional y del estrés, y ofrecemos programas de educación en autocuidado, comunicación asertiva e inteligencia emocional. Todo orientado a fortalecer la salud mental, el equilibrio trabajo-familia y la productividad de tu organización.",
     tutorialLink: "/blog2",
-    image: "/img/service7.jpg",
+    image: "/img/service7.webp",
     buttonColor: "bg-pink-300 hover:bg-pink-400",
   },
   {
@@ -33,7 +33,7 @@ const features = [
     details:
       "Ofrecemos un servicio completo para la implementación del teletrabajo conforme al Decreto 1072 de 2015 y la Circular Externa 0027 de 2019. Incluye la identificación de modalidades de teletrabajo, visitas técnicas, elaboración de informes, diseño de planes y cronogramas de capacitación. Además, realizamos la evaluación continua y planes de mejora, garantizando eficiencia, bienestar laboral y cumplimiento legal.",
     tutorialLink: "/blog3",
-    image: "/img/service3.jpg",
+    image: "/img/service3.webp",
     buttonColor: "bg-sky-400 hover:bg-sky-500",
   },
   {
@@ -44,7 +44,7 @@ const features = [
     details:
       "Acompañamos a las organizaciones en la implementación del PESV según la Resolución 40595 de 2022 y la norma ISO 39001, adaptado al tamaño y misionalidad de cada empresa. Nuestro enfoque incluye la planificación, ejecución, control y mejora continua de las fases, con acciones concretas para mitigar riesgos viales y fortalecer la seguridad de los trabajadores.",
     tutorialLink: "/blog4",
-    image: "/img/service4.jpg",
+    image: "/img/service4.webp",
     buttonColor: "bg-red-600 hover:bg-red-700",
   },
   {
@@ -54,7 +54,7 @@ const features = [
     details:
       "Diseñamos e implementamos estrategias para reducir impactos, optimizar recursos y cumplir la normativa ambiental. Alineamos tus procesos con buenas prácticas de sostenibilidad y economía circular.",
     tutorialLink: "/blog5",
-    image: "/img/service2.jpg",
+    image: "/img/service2.webp",
     buttonColor: "bg-green-600 hover:bg-green-700",
   },
   {
@@ -64,7 +64,7 @@ const features = [
     details:
       "Brindamos acompañamiento especializado en legislación laboral, abarcando conceptos básicos, garantizando el cumplimiento legal y la seguridad jurídica de la organización.",
     tutorialLink: "/blog7", // ← AGREGADO
-    image: "/img/service5.jpg",
+    image: "/img/service5.webp",
     buttonColor: "bg-yellow-500 hover:bg-yellow-600",
   },
   {
@@ -75,7 +75,7 @@ const features = [
     details:
       "Brindamos apoyo en programación, mantenimiento de software, resolución de problemas técnicos y creación de plataformas digitales. Nuestro objetivo es potenciar la productividad de tu organización mediante soluciones tecnológicas personalizadas y eficientes.",
     tutorialLink: "/blog6",
-    image: "/img/service6.jpg",
+    image: "/img/service6.webp",
     buttonColor: "bg-purple-600 hover:bg-purple-700",
   },
 ];

@@ -8,38 +8,38 @@ import { useRef, useState } from "react";
 const services = [
   {
     title: "Sistema de Gestión de Seguridad y Salud en el Trabajo (SG-SST)",
-    image: "/img/service1.jpg",
+    image: "/img/service1.webp",
     slug: "sg-sst",
   },
   {
     title: "Riesgo Psicosocial",
-    image: "/img/service7.jpg",
+    image: "/img/service7.webp",
     slug: "riesgo-psicosocial",
-    
+
   },
   {
     title: "Teletrabajo: Implementación Legal y Estratégica",
-    image: "/img/service3.jpg",
+    image: "/img/service3.webp",
     slug: "teletrabajo",
-    },
+  },
   {
     title: "Plan Estratégico de Seguridad Vial (PESV)",
-    image: "/img/service4.jpg",
+    image: "/img/service4.webp",
     slug: "pesv",
   },
   {
     title: "Gestión ambiental",
-    image: "/img/service2.jpg",
+    image: "/img/service2.webp",
     slug: "gestion-ambiental",
   },
   {
     title: "Asesoría Jurídica Laboral",
-    image: "/img/service5.jpg",
+    image: "/img/service5.webp",
     slug: "asesoria-juridica-laboral",
   },
   {
     title: "Desarrollo Tecnológico",
-    image: "/img/service6.jpg",
+    image: "/img/service6.webp",
     slug: "desarrollo-tecnologico",
   },
 ]
@@ -63,8 +63,8 @@ export default function ServicesSection() {
           Servicios
         </h2>
         <p className="mt-4 text-gray-500 max-w-2xl mx-auto">
-          En HumanIA ofrecemos soluciones integrales diseñadas para fortalecer la gestión empresarial. 
-          Desde la implementación de sistemas normativos hasta la asesoría legal estratégica, acompañamos a tu 
+          En HumanIA ofrecemos soluciones integrales diseñadas para fortalecer la gestión empresarial.
+          Desde la implementación de sistemas normativos hasta la asesoría legal estratégica, acompañamos a tu
           organización en el cumplimiento y mejora continua de sus procesos clave.
         </p>
       </div>
@@ -76,14 +76,14 @@ export default function ServicesSection() {
             href={`#${service.slug}`}
             className="relative rounded-xl overflow-hidden shadow hover:shadow-lg transition group"
           >
-            <Image 
+            <Image
               src={service.image}
               alt={service.title}
               width={400}
               height={240}
               className="w-full h-60 object-cover group-hover:scale-105 transition-transform"
             />
-        
+
             <div className="absolute bottom-4 left-4 text-white">
               <h3 className="text-lg font-semibold">{service.title}</h3>
             </div>
@@ -93,7 +93,7 @@ export default function ServicesSection() {
           </a>
         ))}
       </div>
-      <Features06Page/>
+      <Features06Page />
     </section>
   );
 }
