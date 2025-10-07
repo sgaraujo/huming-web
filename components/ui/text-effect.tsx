@@ -57,6 +57,7 @@ const defaultContainerVariants: Variants = {
   },
 };
 
+
 const defaultItemVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -180,7 +181,7 @@ const createVariantsWithTransition = (
 ): Variants => {
   if (!transition) return baseVariants;
 
-  const { exit, ...mainTransition } = transition;
+  const { exit: exitTransition, ...mainTransition } = transition;
 
   return {
     ...baseVariants,
@@ -200,6 +201,7 @@ const createVariantsWithTransition = (
           ? baseVariants.exit.transition
           : {}),
         ...mainTransition,
+        ...(exitTransition ?? {}),
         staggerDirection: -1,
       },
     },

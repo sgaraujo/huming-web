@@ -1,9 +1,8 @@
 // app/productos/page.tsx
 import Image from "next/image"
-import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, MessageCircle } from "lucide-react"
+import { MessageCircle } from "lucide-react"
 import { HeroHeader } from "@/components/header"
 import WhatsappButton from "@/components/ui/WhatsappButton"
 

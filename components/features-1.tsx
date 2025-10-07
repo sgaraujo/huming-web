@@ -1,5 +1,6 @@
 "use client";
 import { Card, CardContent } from '@/components/ui/card'
+import Image from 'next/image';
 
 export default function Features() {
     return (
@@ -20,8 +21,13 @@ export default function Features() {
                     {/* Cercanía */}
                     <Card className="group relative overflow-hidden rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-80">
                         {/* Imagen de fondo */}
+<<<<<<< HEAD
                         <img
                             src="/Cercania.webp"
+=======
+                        <Image
+                            src="/Cercania.jpg"
+>>>>>>> a092616 (WIP: cambios locales)
                             alt="Cercanía"
                             className="absolute inset-0 w-full h-full object-cover"
                         />
@@ -42,8 +48,13 @@ export default function Features() {
 
                     {/* Compromiso */}
                     <Card className="group relative overflow-hidden rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-80">
+<<<<<<< HEAD
                         <img
                             src="/Compromiso.webp"
+=======
+                        <Image
+                            src="/Compromiso.jpg"
+>>>>>>> a092616 (WIP: cambios locales)
                             alt="Compromiso"
                             className="absolute inset-0 w-full h-full object-cover"
                         />
@@ -60,8 +71,13 @@ export default function Features() {
 
                     {/* Transparencia */}
                     <Card className="group relative overflow-hidden rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-80">
+<<<<<<< HEAD
                         <img
                             src="/Transparencia.webp"
+=======
+                        <Image
+                            src="/Transparencia.jpg"
+>>>>>>> a092616 (WIP: cambios locales)
                             alt="Transparencia"
                             className="absolute inset-0 w-full h-full object-cover"
                         />
@@ -78,8 +94,13 @@ export default function Features() {
 
                     {/* Seguridad */}
                     <Card className="group relative overflow-hidden rounded-2xl border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-80">
+<<<<<<< HEAD
                         <img
                             src="/seguridad.webp"
+=======
+                        <Image
+                            src="/seguridad.jpg"
+>>>>>>> a092616 (WIP: cambios locales)
                             alt="Seguridad"
                             className="absolute inset-0 w-full h-full object-cover"
                         />

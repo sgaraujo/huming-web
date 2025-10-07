@@ -16,6 +16,7 @@ export default function HeroSection() {
         </>
     )
 }
+<<<<<<< HEAD
 
 const AppComponent = () => {
     return (
@@ -39,3 +40,5 @@ const AppComponent = () => {
         </div>
     )
 }
+=======
+>>>>>>> a092616 (WIP: cambios locales)

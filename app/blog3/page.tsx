@@ -1,7 +1,6 @@
 import WhatsappButton from "@/components/ui/WhatsappButton"
 import { HeroHeader } from "@/components/header"
 import TeletrabajoSection from "@/components/teletrabajo-section"
-import Link from "next/link"
 
 export default function Teletrabajo() {
     return (

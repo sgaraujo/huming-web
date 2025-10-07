@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 type Hero7Props = {
   heading?: string;
   description?: string;
@@ -12,10 +10,6 @@ type Hero7Props = {
 export const HeroRiesgo = ({
   heading = "Gestión Integral del Riesgo Psicosocial",
   description = "Acompañamos a las organizaciones en la identificación, prevención y manejo de los riesgos psicosociales, promoviendo el bienestar emocional, la comunicación asertiva y la salud mental en el trabajo. Implementamos baterías de evaluación, estrategias de afrontamiento y programas de capacitación que fortalecen el equilibrio laboral y personal de los colaboradores.",
-  button = {
-    text: "Volver a Servicios",
-    url: "/servicios",
-  },
 }: Hero7Props) => {
   return (
     <section className="pt-36 pb-16 text-center relative">

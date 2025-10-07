@@ -3,7 +3,6 @@
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Features06Page from "./features-06/features-06";
-import { useRef, useState } from "react";
 
 const services = [
   {
@@ -44,18 +43,10 @@ const services = [
   },
 ]
 export default function ServicesSection() {
-  const [activeSlug, setActiveSlug] = useState<string | null>(null);
-  const detailRef = useRef<HTMLDivElement | null>(null);
+ 
 
-  const activeItem = services.find(s => s.slug === activeSlug) ?? null;
 
-  const handleCardClick = (slug: string) => {
-    setActiveSlug(slug);
-    // scroll suave al detalle
-    requestAnimationFrame(() => {
-      document.getElementById("feature-detail")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-  };
+
   return (
     <section className="px-4 py-25 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-7xl mx-auto text-center mb-12">

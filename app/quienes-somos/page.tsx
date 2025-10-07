@@ -6,7 +6,6 @@ import WhatsappButton from "@/components/ui/WhatsappButton"
 import Features from "@/components/features-1"
 import StatsSection from "@/components/stats"
 import ContentSection from "@/components/content-3"
-import DecorativeBackground from "@/components/DecorativeBackground"
 
 export default function QuienesSomosPage() {
   return (

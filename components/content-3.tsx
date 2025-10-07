@@ -1,9 +1,10 @@
+import Image from "next/image";
 
 export default function ContentSection() {
     return (
         <section >
             <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-12">
-                <img
+                <Image
                     className="rounded-lg mx-auto w-100 sm:w-100 md:w-100 lg:w-[500px] xl:w-[600px]"
                     src="/img/sst-grupo.webp"
                     alt="Imagen del equipo"
