@@ -1,13 +1,11 @@
 'use client'
 import React from 'react'
-import { HeroHeader } from './header'
 import "keen-slider/keen-slider.min.css"
 import { HeroCarousel } from './HeroCarousel'
 
 export default function HeroSection() {
     return (
         <>
-            <HeroHeader />
             <div className="flex flex-col items-center justify-center text-center space-y-6 px-6 pt-38 pb-12">
                 <HeroCarousel />
             </div>
@@ -16,7 +14,6 @@ export default function HeroSection() {
         </>
     )
 }
-<<<<<<< HEAD
 
 const AppComponent = () => {
     return (
@@ -40,5 +37,3 @@ const AppComponent = () => {
         </div>
     )
 }
-=======
->>>>>>> a092616 (WIP: cambios locales)

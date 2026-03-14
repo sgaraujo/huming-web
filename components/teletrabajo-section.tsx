@@ -5,35 +5,8 @@ import Link from "next/link"
 
 export default function TeletrabajoSection() {
   return (
-    <>
-      {/* Hero Section */}
-      <section className="pt-36 pb-16 text-center relative">
-        {/* Fondo específico del hero */}
-        <div className="absolute inset-0 bg-gradient-to-br from-sky-50/50 via-transparent to-blue-50/30" />
-        
-        <div className="container relative z-10">
-          <div className="mx-auto flex max-w-5xl flex-col gap-8">
-            <h1 className="text-3xl font-bold lg:text-5xl">
-              <span className="bg-gradient-to-r from-blue-600 via-sky-500 to-blue-700 bg-clip-text text-transparent">
-                Teletrabajo: Implementación Legal y Estratégica
-              </span>
-            </h1>
-            <p className="text-balance lg:text-lg text-slate-700 leading-relaxed max-w-4xl mx-auto">
-              Implementamos y formalizamos el teletrabajo en tu organización conforme al
-              <span className="font-medium text-blue-600"> Decreto 1072 de 2015</span> y la
-              <span className="font-medium text-blue-600"> Circular Externa 0027 de 2019</span>, con enfoque
-              práctico, cumplimiento normativo y bienestar laboral.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="px-6 py-16 relative">
-        {/* Fondo específico de features */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-sky-50/20 to-blue-50/30" />
-        
-        <div className="mx-auto max-w-5xl relative z-10">
+      <section className="px-6 py-16 bg-white">
+        <div className="mx-auto max-w-5xl">
           {/* Grid de cards */}
           <div className="grid gap-8 md:grid-cols-3">
             {/* Card 1 */}
@@ -140,6 +113,5 @@ export default function TeletrabajoSection() {
           </div>
         </div>
       </section>
-    </>
   )
 }

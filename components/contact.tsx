@@ -2,7 +2,7 @@
 
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Mail, Phone, MapPin, MessageCircle, Users, Instagram, Facebook, Clock } from 'lucide-react'
+import { Mail, Phone, MapPin, MessageCircle, Instagram, Facebook, Clock } from 'lucide-react'
 import React from 'react'
 
 export default function ContactSection() {
@@ -52,30 +52,8 @@ export default function ContactSection() {
   }
 
   return (
-    <section className="py-24 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-950 dark:to-indigo-950 relative overflow-hidden">
-      {/* Decorativos */}
-      <div className="absolute inset-0 opacity-40 pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-        <div className="absolute top-40 right-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-1000"></div>
-        <div className="absolute -bottom-8 left-1/2 w-72 h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-500"></div>
-      </div>
-
-      <div className="mx-auto max-w-6xl px-4 lg:px-0 relative z-10">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="mb-6 pt-12 text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
-            Contáctanos
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Estamos aquí para ayudarte a transformar tu organización. Conversemos sobre tus necesidades y objetivos.
-          </p>
-          <div className="flex items-center justify-center gap-6 mt-8">
-            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
-              <Users className="w-5 h-5" />
-              <span className="text-sm font-medium">Asesoría personalizada</span>
-            </div>
-          </div>
-        </div>
+    <section className="py-16 bg-white relative overflow-hidden">
+      <div className="mx-auto max-w-6xl px-6 relative z-10">
 
         {/* Info de contacto: MISMA ALTURA */}
         <div className="grid gap-6 md:grid-cols-2 auto-rows-fr mb-12">

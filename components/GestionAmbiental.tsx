@@ -4,20 +4,8 @@ import Link from "next/link"
 
 export default function GestionAmbiental() {
   return (
-    <section className="pt-32 pb-32 bg-gradient-to-b from-green-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
-      <div className="container mx-auto max-w-6xl px-6 text-center">
-        {/* Título */}
-        <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-green-700 dark:text-green-400">
-          Gestión Ambiental
-        </h2>
-
-        {/* Descripción */}
-        <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-16">
-          Diseñamos e implementamos estrategias sostenibles para reducir impactos,
-          optimizar recursos y cumplir la normativa ambiental. Alineamos tus procesos
-          con buenas prácticas de sostenibilidad y economía circular.
-        </p>
-
+    <section className="py-16 bg-white">
+      <div className="container mx-auto max-w-6xl px-6">
         {/* Grid de características */}
         <div className="grid gap-8 md:grid-cols-2 text-left">
           {/* Tarjeta */}

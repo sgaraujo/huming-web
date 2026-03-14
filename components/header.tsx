@@ -4,7 +4,7 @@ import { Logo } from '@/components/logo'
 import { Menu, X } from 'lucide-react'
 import React from 'react'
 import { cn } from '@/lib/utils'
-
+import { usePathname } from 'next/navigation'
 
 const menuItems = [
     { name: 'Inicio', href: '/' },
@@ -17,6 +17,7 @@ const menuItems = [
 export const HeroHeader = () => {
     const [menuState, setMenuState] = React.useState(false)
     const [isScrolled, setIsScrolled] = React.useState(false)
+    const pathname = usePathname()
 
     React.useEffect(() => {
         const handleScroll = () => {
@@ -25,6 +26,10 @@ export const HeroHeader = () => {
         window.addEventListener('scroll', handleScroll)
         return () => window.removeEventListener('scroll', handleScroll)
     }, [])
+
+    const isActive = (href: string) =>
+        href === '/' ? pathname === '/' : pathname.startsWith(href)
+
     return (
         <header>
             <nav
@@ -35,14 +40,14 @@ export const HeroHeader = () => {
                         <div className="flex w-full justify-between lg:w-auto">
                             <Link
                                 href="/"
-                                aria-label="home"
+                                aria-label="Ir al inicio de HumanIA"
                                 className="flex items-center space-x-2">
                                 <Logo />
                             </Link>
 
                             <button
                                 onClick={() => setMenuState(!menuState)}
-                                aria-label={menuState == true ? 'Close Menu' : 'Open Menu'}
+                                aria-label={menuState ? 'Cerrar menú' : 'Abrir menú'}
                                 className="relative z-20 -m-2.5 -mr-4 block cursor-pointer p-2.5 lg:hidden">
                                 <Menu className="in-data-[state=active]:rotate-180 in-data-[state=active]:scale-0 in-data-[state=active]:opacity-0 m-auto size-6 duration-200" />
                                 <X className="in-data-[state=active]:rotate-0 in-data-[state=active]:scale-100 in-data-[state=active]:opacity-100 absolute inset-0 m-auto size-6 -rotate-180 scale-0 opacity-0 duration-200" />
@@ -55,7 +60,12 @@ export const HeroHeader = () => {
                                     <li key={index}>
                                         <Link
                                             href={item.href}
-                                            className="text-muted-foreground hover:text-accent-foreground block duration-150">
+                                            className={cn(
+                                                'block duration-150 font-medium',
+                                                isActive(item.href)
+                                                    ? 'text-foreground border-b-2 border-orange-500 pb-0.5'
+                                                    : 'text-muted-foreground hover:text-accent-foreground'
+                                            )}>
                                             <span>{item.name}</span>
                                         </Link>
                                     </li>
@@ -70,7 +80,13 @@ export const HeroHeader = () => {
                                         <li key={index}>
                                             <Link
                                                 href={item.href}
-                                                className="text-muted-foreground hover:text-accent-foreground block duration-150">
+                                                onClick={() => setMenuState(false)}
+                                                className={cn(
+                                                    'block duration-150 font-medium',
+                                                    isActive(item.href)
+                                                        ? 'text-foreground'
+                                                        : 'text-muted-foreground hover:text-accent-foreground'
+                                                )}>
                                                 <span>{item.name}</span>
                                             </Link>
                                         </li>

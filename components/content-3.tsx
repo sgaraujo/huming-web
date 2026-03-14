@@ -8,6 +8,8 @@ export default function ContentSection() {
                     className="rounded-lg mx-auto w-100 sm:w-100 md:w-100 lg:w-[500px] xl:w-[600px]"
                     src="/img/sst-grupo.webp"
                     alt="Imagen del equipo"
+                    width={600}
+                    height={400}
                     loading="lazy"
                 />
 

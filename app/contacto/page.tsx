@@ -1,19 +1,36 @@
-import {HeroHeader} from "@/components/header"
-import WhatsappButton from "@/components/ui/WhatsappButton"
+import type { Metadata } from "next";
+import { HeroHeader } from "@/components/header"
+import PageHeader from "@/components/page-header"
 import ContactSection from "@/components/contact"
-export default function QuienesSomosPage() {
+
+export const metadata: Metadata = {
+  title: "Contacto",
+  description:
+    "Contáctanos por WhatsApp, correo o teléfono. El equipo de HumanIA está disponible de lunes a viernes de 8:00 AM a 5:00 PM para atender tus necesidades.",
+  openGraph: {
+    title: "Contacto | HumanIA",
+    description:
+      "Escríbenos o llámanos. Estamos en Bogotá, Colombia, con cobertura a nivel nacional e internacional.",
+    url: "https://humania.com.co/contacto",
+  },
+  alternates: { canonical: "https://humania.com.co/contacto" },
+};
+
+export default function ContactoPage() {
   return (
     <div className="flex min-h-screen flex-col">
       <HeroHeader />
-      <main className="flex-1 pt-5">
-        <ContactSection />
+      <main className="flex-1">
 
-        {/* Aquí puedes insertar más secciones como <Servicios /> */}
+        <PageHeader
+          label="Escríbenos"
+          title="Contáctanos"
+          description="Estamos aquí para ayudarte. Conversemos sobre las necesidades de tu empresa y diseñemos juntos la mejor solución."
+          breadcrumb="Contacto"
+        />
+
+        <ContactSection />
       </main>
-      <footer className="bg-muted text-center text-sm py-4">
-        © {new Date().getFullYear()} HumanIA. Todos los derechos reservados.
-      </footer>
-      <WhatsappButton />
     </div>
   )
 }

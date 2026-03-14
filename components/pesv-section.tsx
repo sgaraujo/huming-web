@@ -5,36 +5,8 @@ import Link from "next/link"
 
 export default function PesvSection() {
   return (
-    <>
-      {/* Hero Section */}
-      <section className="pt-36 pb-16 text-center relative">
-        {/* Fondo específico del hero */}
-        <div className="absolute inset-0 bg-gradient-to-br from-red-50/50 via-transparent to-rose-50/30" />
-
-        <div className="container relative z-10">
-          <div className="mx-auto flex max-w-6xl flex-col gap-8">
-            <h1 className="text-3xl font-bold lg:text-5xl">
-              <span className="bg-gradient-to-r from-red-600 via-rose-500 to-red-700 bg-clip-text text-transparent">
-                Plan Estratégico de Seguridad Vial (PESV)
-              </span>
-            </h1>
-            <p className="text-balance lg:text-lg text-slate-700 leading-relaxed max-w-4xl mx-auto">
-              Diseñamos, implementamos, evaluamos y mejoramos tu PESV conforme a la{" "}
-              <span className="font-medium text-red-600">Resolución 40595 de 2022</span> e{" "}
-              <span className="font-medium text-red-600">ISO 39001</span>, ajustado al tamaño y la
-              misionalidad de tu organización (empresas generadoras o dedicadas a
-              actividades de transporte).
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="px-6 py-16 relative">
-        {/* Fondo específico de features */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-red-50/20 to-rose-50/30" />
-
-        <div className="mx-auto max-w-6xl relative z-10">
+      <section className="px-6 py-16 bg-white">
+        <div className="mx-auto max-w-6xl">
           {/* Grid de fases */}
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {/* Fase I */}
@@ -179,6 +151,5 @@ export default function PesvSection() {
 
         </div>
       </section>
-    </>
   )
 }

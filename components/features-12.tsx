@@ -1,4 +1,3 @@
-// app/components/services-section.tsx
 "use client";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
@@ -8,85 +7,83 @@ const services = [
   {
     title: "Sistema de Gestión de Seguridad y Salud en el Trabajo (SG-SST)",
     image: "/img/service1.webp",
-    slug: "sg-sst",
+    href: "/blog",
   },
   {
     title: "Riesgo Psicosocial",
     image: "/img/service7.webp",
-    slug: "riesgo-psicosocial",
-
+    href: "/blog2",
   },
   {
     title: "Teletrabajo: Implementación Legal y Estratégica",
     image: "/img/service3.webp",
-    slug: "teletrabajo",
+    href: "/blog3",
   },
   {
     title: "Plan Estratégico de Seguridad Vial (PESV)",
     image: "/img/service4.webp",
-    slug: "pesv",
+    href: "/blog4",
   },
   {
-    title: "Gestión ambiental",
+    title: "Gestión Ambiental",
     image: "/img/service2.webp",
-    slug: "gestion-ambiental",
+    href: "/blog5",
   },
   {
     title: "Asesoría Jurídica Laboral",
     image: "/img/service5.webp",
-    slug: "asesoria-juridica-laboral",
+    href: "/blog7",
   },
   {
     title: "Desarrollo Tecnológico",
     image: "/img/service6.webp",
-    slug: "desarrollo-tecnologico",
+    href: "/blog6",
   },
 ]
+
 export default function ServicesSection() {
- 
-
-
-
   return (
-    <section className="px-4 py-25 sm:px-6 lg:px-8 bg-white">
-      <div className="max-w-7xl mx-auto text-center mb-12">
-        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Servicios
-        </h2>
-        <p className="mt-4 text-gray-500 max-w-2xl mx-auto">
-          En HumanIA ofrecemos soluciones integrales diseñadas para fortalecer la gestión empresarial.
-          Desde la implementación de sistemas normativos hasta la asesoría legal estratégica, acompañamos a tu
-          organización en el cumplimiento y mejora continua de sus procesos clave.
-        </p>
-      </div>
+    <section className="py-16 bg-white">
+      <div className="mx-auto max-w-6xl px-6">
+        {/* Grid de tarjetas */}
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {services.map((service) => (
+            <a
+              key={service.title}
+              href={service.href}
+              className="relative rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group aspect-[4/3] block"
+            >
+              <Image
+                src={service.image}
+                alt={service.title}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              />
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {services.map((service) => (
-          <a
-            key={service.title}
-            href={`#${service.slug}`}
-            className="relative rounded-xl overflow-hidden shadow hover:shadow-lg transition group"
-          >
-            <Image
-              src={service.image}
-              alt={service.title}
-              width={400}
-              height={240}
-              className="w-full h-60 object-cover group-hover:scale-105 transition-transform"
-            />
+              {/* Gradient overlay — siempre visible */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
 
-            <div className="absolute bottom-4 left-4 text-white">
-              <h3 className="text-lg font-semibold">{service.title}</h3>
-            </div>
-            <div className="absolute top-4 right-4 text-white">
-              <ArrowUpRight className="w-5 h-5" />
-            </div>
-          </a>
-        ))}
+              {/* Arrow */}
+              <div className="absolute top-4 right-4">
+                <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 group-hover:bg-orange-500 group-hover:border-orange-500 transition-colors duration-300">
+                  <ArrowUpRight className="w-4 h-4 text-white" />
+                </div>
+              </div>
+
+              {/* Title */}
+              <div className="absolute bottom-0 left-0 right-0 p-5">
+                <h3 className="text-white font-semibold text-base leading-snug drop-shadow-sm">
+                  {service.title}
+                </h3>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        {/* Secciones de detalle */}
+        <Features06Page />
       </div>
-      <Features06Page />
     </section>
   );
 }
-
-

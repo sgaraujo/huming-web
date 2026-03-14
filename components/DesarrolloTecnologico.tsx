@@ -4,20 +4,8 @@ import Link from "next/link"
 
 export default function DesarrolloTecnologico() {
   return (
-    <section className="py-20 bg-gradient-to-b from-purple-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
-      <div className="container mx-auto max-w-6xl px-6 text-center">
-        {/* Título */}
-        <h2 className="text-4xl pt-20 md:text-5xl font-extrabold mb-6 text-purple-700 dark:text-purple-400">
-          Desarrollo Tecnológico
-        </h2>
-
-        {/* Descripción */}
-        <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-16">
-          Acompañamos a tu organización con soluciones tecnológicas prácticas: desarrollo de
-          software, mantenimiento y actualización de sistemas, soporte técnico y creación de
-          plataformas o sitios web alineados a tus objetivos de negocio.
-        </p>
-
+    <section className="py-16 bg-white">
+      <div className="container mx-auto max-w-6xl px-6">
         {/* Grid de features */}
         <div className="grid gap-8 md:grid-cols-2 text-left">
           {/* Programación */}

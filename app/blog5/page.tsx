@@ -1,35 +1,36 @@
-import WhatsappButton from "@/components/ui/WhatsappButton"
+import type { Metadata } from "next";
 import { HeroHeader } from "@/components/header"
+import PageHeader from "@/components/page-header"
 import GestionAmbiental from "@/components/GestionAmbiental"
+import FinalCta from "@/components/final-cta"
 
+export const metadata: Metadata = {
+  title: "Gestión Ambiental: ISO 14001 y SGA",
+  description:
+    "Implementa y certifica tu Sistema de Gestión Ambiental (SGA) bajo la norma ISO 14001. Diagnóstico, gestión de residuos, impacto ambiental y cumplimiento regulatorio.",
+  openGraph: {
+    title: "Gestión Ambiental | HumanIA",
+    description:
+      "Consultoría en ISO 14001 y gestión ambiental empresarial: auditoría, implementación y mejora continua para empresas en Colombia.",
+    url: "https://humania.com.co/blog5",
+  },
+  alternates: { canonical: "https://humania.com.co/blog5" },
+};
 
-export default function blog1() {
-    return (
-        <div className="flex min-h-screen flex-col">
-            <HeroHeader />
-            <main className="flex-1 relative z-0">
-                {/* Fondo decorativo */}
-                <div className="absolute inset-0 z-[-1] bg-white dark:bg-gray-950">
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(59,130,246,0.15),transparent_70%)] dark:bg-[radial-gradient(ellipse_at_top_left,rgba(59,130,246,0.1),transparent_70%)]" />
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(236,72,153,0.15),transparent_70%)] dark:bg-[radial-gradient(ellipse_at_bottom_right,rgba(236,72,153,0.1),transparent_70%)]" />
-                    <div
-                        className="absolute inset-0 opacity-[0.3] dark:opacity-[0.15] backdrop-blur-[100px]"
-                        style={{
-                            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.005' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-                        }}
-                    />
-                    <div className="absolute inset-0 backdrop-blur-[100px]" />
-                </div>
-
-                {/* Secciones del sitio */}
-                <GestionAmbiental />
-            </main>
-
-            <footer className="bg-muted text-center text-sm py-4">
-                © {new Date().getFullYear()} HumanIA. Todos los derechos reservados.
-            </footer>
-            <WhatsappButton />
-        </div>
-    )
+export default function GestionAmbientalPage() {
+  return (
+    <div className="flex min-h-screen flex-col">
+      <HeroHeader />
+      <main className="flex-1">
+        <PageHeader
+          label="Sostenibilidad"
+          title="Gestión Ambiental"
+          description="Diseñamos e implementamos estrategias sostenibles para reducir impactos, optimizar recursos y cumplir la normativa ambiental. Alineamos tus procesos con buenas prácticas de sostenibilidad y economía circular."
+          breadcrumb="Gestión Ambiental"
+        />
+        <GestionAmbiental />
+        <FinalCta />
+      </main>
+    </div>
+  )
 }
-

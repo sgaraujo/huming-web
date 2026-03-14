@@ -3,8 +3,22 @@ import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { MessageCircle } from "lucide-react"
+import type { Metadata } from "next"
 import { HeroHeader } from "@/components/header"
-import WhatsappButton from "@/components/ui/WhatsappButton"
+import PageHeader from "@/components/page-header"
+
+export const metadata: Metadata = {
+  title: "Elementos de Emergencia",
+  description:
+    "Botiquines, extintores, luces de emergencia, detectores de humo y señalización. Venta, mantenimiento y suministro conforme a la normativa vigente en Colombia.",
+  openGraph: {
+    title: "Elementos de Emergencia | HumanIA",
+    description:
+      "Suministro y mantenimiento de botiquines, extintores, luces de emergencia, detectores de humo y señalización para empresas en Colombia.",
+    url: "https://humania.com.co/productos",
+  },
+  alternates: { canonical: "https://humania.com.co/productos" },
+};
 
 const WA_BASE =
   "https://wa.me/573102365931?text=" // cambia al número de HumIng
@@ -58,66 +72,26 @@ function waLink(nombre: string) {
   return `${WA_BASE}${encodeURIComponent(msg)}`
 }
 
-export const metadata = {
-  title: "Elementos de Emergencia | HumanIA",
-  description:
-    "Suministro de botiquines, extintores, luces de emergencia, detectores de humo y señalización. Venta y mantenimiento.",
-}
 
 export default function ProductosPage() {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <HeroHeader />
-      <main className="relative min-h-screen flex items-center justify-center py-20">
-        {/* Enhanced background */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-orange-50/30" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_1200px_600px_at_20%_30%,rgba(251,146,60,0.08),transparent_70%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_800px_400px_at_80%_70%,rgba(251,146,60,0.06),transparent_70%)]" />
+      <main className="flex-1">
 
-          {/* Decorative elements */}
-          <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-br from-orange-200/20 to-transparent rounded-full blur-2xl" />
-          <div className="absolute bottom-32 right-24 w-40 h-40 bg-gradient-to-br from-orange-300/15 to-transparent rounded-full blur-3xl" />
+        <PageHeader
+          label="Equipos de seguridad"
+          title="Elementos de Emergencia"
+          description="Suministro y mantenimiento de equipos de seguridad conforme a la normativa vigente. Cotiza en un clic por WhatsApp."
+          breadcrumb="Productos"
+        />
 
-          {/* Subtle grid pattern */}
-          <div
-            className="absolute inset-0 opacity-[0.02]"
-            style={{
-              backgroundImage: `linear-gradient(rgba(251,146,60,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(251,146,60,0.1) 1px, transparent 1px)`,
-              backgroundSize: '40px 40px'
-            }}
-          />
-        </div>
-
-        <div className="container px-4 sm:px-6 lg:px-8 py-16">
-          <section className="max-w-7xl mx-auto">
-            {/* Centered header section */}
-            <header className="text-center mb-16">
-              <div className="space-y-6">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                  <span className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 bg-clip-text text-transparent">
-                    Elementos de
-                  </span>
-                  <br />
-                  <span className="bg-gradient-to-r from-orange-600 via-orange-500 to-orange-700 bg-clip-text text-transparent">
-                    Emergencia
-                  </span>
-                </h1>
-
-                <div className="max-w-2xl mx-auto space-y-2">
-                  <p className="text-lg md:text-xl text-slate-600 font-medium">
-                    Suministro, mantenimiento conforme a la normativa vigente.
-                  </p>
-                  <p className="text-base md:text-lg text-orange-600 font-semibold">
-                    Cotiza en un clic por WhatsApp
-                  </p>
-                </div>
-              </div>
-            </header>
+        <div className="py-16 bg-white">
+          <div className="mx-auto max-w-6xl px-6">
 
             {/* Products grid */}
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mb-16">
-              {productos.map((p) => (
+              {productos.map((p, i) => (
                 <article
                   key={p.slug}
                   className="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm border border-orange-100/50 shadow-lg hover:shadow-xl hover:shadow-orange-100/20 transition-all duration-300 hover:-translate-y-1"
@@ -133,7 +107,7 @@ export default function ProductosPage() {
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-110"
                         sizes="(max-width: 768px) 100vw, 33vw"
-                        priority
+                        priority={i === 0}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
                       <Badge className="absolute left-4 top-4 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 shadow-lg">
@@ -204,11 +178,10 @@ export default function ProductosPage() {
                 </div>
               </div>
             </div>
-          </section>
+          </div>
         </div>
 
-        <WhatsappButton />
       </main>
-    </>
+    </div>
   )
 }

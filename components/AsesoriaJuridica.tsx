@@ -6,33 +6,8 @@ import Link from "next/link"
 
 export default function AsesoriaJuridica() {
   return (
-    <>
-      {/* Hero Section */}
-      <section className="pt-36 pb-16 text-center relative">
-        {/* Fondo específico del hero */}
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-50/50 via-transparent to-yellow-50/30" />
-        
-        <div className="container relative z-10">
-          <div className="mx-auto flex max-w-5xl flex-col gap-8">
-            <h1 className="text-3xl font-bold lg:text-5xl">
-              <span className="bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-700 bg-clip-text text-transparent">
-                Asesoría Jurídica Laboral
-              </span>
-            </h1>
-            <p className="text-balance lg:text-lg text-slate-700 leading-relaxed max-w-4xl mx-auto">
-              Brindamos asesoría jurídica especializada en derecho laboral, garantizando el cumplimiento 
-              normativo y la protección de los derechos tanto de empleadores como de trabajadores.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="px-6 py-16 relative">
-        {/* Fondo específico de features */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-amber-50/20 to-yellow-50/30" />
-        
-        <div className="mx-auto max-w-6xl relative z-10">
+      <section className="px-6 py-16 bg-white">
+        <div className="mx-auto max-w-6xl">
           {/* Grid de cards */}
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {/* Card 1 */}
@@ -147,6 +122,5 @@ export default function AsesoriaJuridica() {
           </div>
         </div>
       </section>
-    </>
   )
 }
