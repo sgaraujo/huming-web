@@ -1,6 +1,5 @@
 "use client";
 import { Card, CardContent } from '@/components/ui/card'
-import Image from 'next/image';
 
 export default function Features() {
     return (

@@ -4,7 +4,6 @@ import PageHeader from "@/components/page-header"
 import TeamSection from "@/components/team"
 import Features from "@/components/features-1"
 import StatsSection from "@/components/stats"
-import ContentSection from "@/components/content-3"
 import FinalCta from "@/components/final-cta"
 
 export const metadata: Metadata = {
