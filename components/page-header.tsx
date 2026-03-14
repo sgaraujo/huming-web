@@ -10,7 +10,7 @@ interface PageHeaderProps {
 
 export default function PageHeader({ label, title, description, breadcrumb }: PageHeaderProps) {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-orange-50 via-white to-slate-50 pt-24 pb-14 lg:pt-28">
+    <section className="relative overflow-hidden bg-gradient-to-br from-orange-50 via-white to-slate-50 pt-28 pb-14 lg:pt-32">
       {/* Decorative */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-24 -left-24 w-[400px] h-[400px] rounded-full bg-orange-100/50 blur-3xl" />

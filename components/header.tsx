@@ -42,7 +42,7 @@ export const HeroHeader = () => {
                                 href="/"
                                 aria-label="Ir al inicio de HumanIA"
                                 className="flex items-center space-x-2">
-                                <Logo />
+                                <Logo className="h-10 w-auto" />
                             </Link>
 
                             <button
