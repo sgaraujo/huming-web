@@ -75,13 +75,13 @@ export default function ServicesGridHome() {
       <div className="mx-auto max-w-6xl px-6">
         {/* Header */}
         <div className="text-center mb-16 space-y-4">
-          <p className="text-sm font-semibold text-orange-500 uppercase tracking-widest">
+          <p className="text-sm font-semibold text-orange-700 uppercase tracking-widest">
             Nuestros servicios
           </p>
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900">
             Soluciones integrales para
             <br />
-            <span className="text-orange-500">tu organización</span>
+            <span className="text-orange-700">tu organización</span>
           </h2>
           <p className="text-slate-500 max-w-xl mx-auto text-lg">
             Desde la implementación hasta la auditoría, cubrimos cada etapa de tu sistema de gestión.
@@ -110,7 +110,7 @@ export default function ServicesGridHome() {
                 {s.description}
               </p>
 
-              <div className="flex items-center gap-1 text-orange-500 text-sm font-semibold translate-y-1 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-200">
+              <div className="flex items-center gap-1 text-orange-700 text-sm font-semibold translate-y-1 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-200">
                 Ver más <ArrowRight className="w-4 h-4" />
               </div>
 

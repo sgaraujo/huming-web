@@ -45,7 +45,7 @@ export default function HowWeWork() {
       <div className="mx-auto max-w-6xl px-6">
         {/* Header */}
         <div className="text-center mb-16 space-y-4">
-          <p className="text-sm font-semibold text-orange-500 uppercase tracking-widest">
+          <p className="text-sm font-semibold text-orange-700 uppercase tracking-widest">
             Metodología
           </p>
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900">

@@ -195,12 +195,12 @@ export default function RootLayout({
                       comercial@humania.com.co
                     </a>
                   </li>
-                  <li className="text-gray-500">Lunes a viernes, 8:00 AM – 5:00 PM</li>
+                  <li className="text-gray-300">Lunes a viernes, 8:00 AM – 5:00 PM</li>
                 </ul>
               </div>
             </div>
 
-            <div className="border-t border-gray-800 pt-6 text-center text-xs text-gray-600">
+            <div className="border-t border-gray-800 pt-6 text-center text-xs text-gray-400">
               © {new Date().getFullYear()} HumanIA. Todos los derechos reservados.
             </div>
           </div>

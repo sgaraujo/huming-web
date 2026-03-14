@@ -53,7 +53,7 @@ export default function ContentSection() {
                     <line x1="1" y1="9" x2="4" y2="9" />
                     <line x1="1" y1="14" x2="4" y2="14" />
                   </svg>
-                  <h3 className="text-sm font-medium text-sky-500">
+                  <h3 className="text-sm font-medium text-sky-700">
                     Enfoque en Seguridad y Salud en el Trabajo
                   </h3>
                 </div>
@@ -83,7 +83,7 @@ export default function ContentSection() {
                     <line x1="2" y1="12" x2="22" y2="12" />
                     <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
                   </svg>
-                  <h3 className="text-sm font-medium text-rose-500 dark:text-rose-400">
+                  <h3 className="text-sm font-medium text-rose-700 dark:text-rose-400">
                     Proyección regional
                   </h3>
                 </div>
@@ -95,21 +95,19 @@ export default function ContentSection() {
           </div>
 
           <div className="relative mt-6 sm:mt-0 pb-5">
-            <div className="relative aspect-video rounded-2xl bg-gradient-to-b from-zinc-300 to-transparent p-px dark:from-zinc-700">
+            <div className="relative aspect-video rounded-2xl bg-gradient-to-b from-zinc-300 to-transparent p-px dark:from-zinc-700 overflow-hidden">
               <Image
                 src="/SeguridadEnTrabajo.webp"
-                className="hidden rounded-2xl dark:block"
-                alt="Ilustración seguridad en el trabajo (modo oscuro)"
-                width={1206}
-                height={612}
+                className="hidden rounded-2xl dark:block object-cover"
+                alt="Ilustración seguridad en el trabajo"
+                fill
                 priority
               />
               <Image
                 src="/SeguridadEnTrabajo.webp"
-                className="rounded-2xl shadow dark:hidden"
-                alt="Ilustración seguridad en el trabajo (modo claro)"
-                width={1206}
-                height={612}
+                className="rounded-2xl shadow dark:hidden object-cover"
+                alt="Ilustración seguridad en el trabajo"
+                fill
                 priority
               />
             </div>
