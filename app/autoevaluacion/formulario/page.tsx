@@ -52,14 +52,14 @@ function ItemRow({
   ];
 
   return (
-    <div className="bg-white/3 border border-white/8 rounded-xl p-4 space-y-3 hover:border-white/15 transition-colors">
+    <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3 hover:border-violet-300 hover:shadow-sm transition-all">
       <div className="flex items-start gap-3">
-        <span className="shrink-0 text-xs font-mono bg-violet-500/20 text-violet-300 px-2 py-0.5 rounded-md mt-0.5">
+        <span className="shrink-0 text-xs font-mono bg-violet-100 text-violet-700 px-2 py-0.5 rounded-md mt-0.5 font-semibold">
           {item.id}
         </span>
         <div className="flex-1">
-          <p className="text-slate-200 text-sm leading-relaxed">{item.descripcion}</p>
-          <p className="text-slate-500 text-xs mt-1">Valor: {item.valor} puntos</p>
+          <p className="text-slate-700 text-sm leading-relaxed">{item.descripcion}</p>
+          <p className="text-slate-400 text-xs mt-1">Valor: {item.valor} puntos</p>
         </div>
       </div>
 
@@ -67,17 +67,17 @@ function ItemRow({
         {opts.map((o) => {
           const selected = respuesta?.estado === o.value;
           const colors = {
-            green: selected ? 'bg-green-600 border-green-500 text-white' : 'border-green-800/40 text-green-400 hover:border-green-600',
-            red: selected ? 'bg-red-600 border-red-500 text-white' : 'border-red-800/40 text-red-400 hover:border-red-600',
-            blue: selected ? 'bg-violet-600 border-violet-500 text-white' : 'border-violet-800/40 text-violet-400 hover:border-violet-600',
-            orange: selected ? 'bg-orange-600 border-orange-500 text-white' : 'border-orange-800/40 text-orange-400 hover:border-orange-600',
+            green: selected ? 'bg-green-600 border-green-600 text-white' : 'border-green-300 text-green-700 hover:bg-green-50',
+            red: selected ? 'bg-red-600 border-red-600 text-white' : 'border-red-300 text-red-600 hover:bg-red-50',
+            blue: selected ? 'bg-violet-600 border-violet-600 text-white' : 'border-violet-300 text-violet-700 hover:bg-violet-50',
+            orange: selected ? 'bg-orange-500 border-orange-500 text-white' : 'border-orange-300 text-orange-600 hover:bg-orange-50',
           };
           return (
             <button
               key={o.value}
               type="button"
               onClick={() => onChange(item.id, { ...respuesta, estado: o.value })}
-              className={`text-xs px-3 py-1.5 rounded-lg border transition-all font-medium ${colors[o.color as keyof typeof colors]}`}
+              className={`text-xs px-4 py-2 rounded-lg border transition-all font-medium ${colors[o.color as keyof typeof colors]}`}
             >
               {o.label}
             </button>
@@ -92,7 +92,7 @@ function ItemRow({
         onChange={(e) =>
           onChange(item.id, { estado: respuesta?.estado ?? null, observacion: e.target.value })
         }
-        className="w-full bg-white/3 border border-white/8 rounded-lg px-3 py-2 text-slate-300 placeholder:text-slate-600 text-xs focus:outline-none focus:border-violet-500/50 transition-colors"
+        className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-600 placeholder:text-slate-400 text-xs focus:outline-none focus:border-violet-400 transition-colors"
       />
     </div>
   );
@@ -252,24 +252,24 @@ export default function FormularioPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950 to-slate-900">
+    <main className="min-h-screen bg-slate-50">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-slate-950/90 backdrop-blur border-b border-white/10">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center gap-4">
-          <Link href="/" className="text-white font-bold text-lg tracking-tight shrink-0">
-            Human<span className="text-violet-400">IA</span>
+      <header className="sticky top-0 z-10 bg-white border-b border-slate-200 shadow-sm">
+        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
+          <Link href="/" className="font-bold text-lg tracking-tight shrink-0 text-slate-800">
+            Human<span className="text-violet-600">IA</span>
           </Link>
 
           <div className="flex-1 max-w-xs hidden sm:block">
-            <div className="flex justify-between text-xs text-slate-500 mb-1">
+            <div className="flex justify-between text-xs text-slate-400 mb-1">
               <span>
                 {step <= 3 ? `Ciclo ${step + 1} de 4: ${CICLOS[step]}` : 'Tus resultados'}
               </span>
               <span>{progressPct}%</span>
             </div>
-            <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+            <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
               <div
-                className="h-full bg-violet-500 rounded-full transition-all duration-500"
+                className="h-full bg-violet-600 rounded-full transition-all duration-500"
                 style={{ width: `${progressPct}%` }}
               />
             </div>
@@ -277,12 +277,12 @@ export default function FormularioPage() {
 
           {Object.keys(respuestas).length > 0 && (
             <div
-              className={`text-xs font-semibold px-3 py-1 rounded-full border shrink-0 ${
+              className={`text-xs font-semibold px-3 py-1.5 rounded-full border shrink-0 ${
                 nivelColor === 'red'
-                  ? 'bg-red-950/50 border-red-700/50 text-red-400'
+                  ? 'bg-red-50 border-red-200 text-red-600'
                   : nivelColor === 'yellow'
-                  ? 'bg-yellow-950/50 border-yellow-700/50 text-yellow-400'
-                  : 'bg-green-950/50 border-green-700/50 text-green-400'
+                  ? 'bg-yellow-50 border-yellow-200 text-yellow-700'
+                  : 'bg-green-50 border-green-200 text-green-700'
               }`}
             >
               {puntaje.toFixed(1)}% · {nivel}
@@ -299,13 +299,13 @@ export default function FormularioPage() {
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-3xl">{CICLO_ICONS[step]}</span>
-                <h2 className="text-2xl font-bold text-white">{currentCiclo}</h2>
+                <h2 className="text-2xl font-bold text-slate-800">{currentCiclo}</h2>
               </div>
-              <p className="text-slate-400 text-sm">
+              <p className="text-slate-500 text-sm">
                 {currentItems.length} ítems · Selecciona para cada uno:{' '}
-                <span className="text-green-400">Cumple</span>,{' '}
-                <span className="text-red-400">No cumple</span>, o{' '}
-                <span className="text-violet-400">No aplica</span>
+                <span className="text-green-600 font-medium">Cumple</span>,{' '}
+                <span className="text-red-600 font-medium">No cumple</span>, o{' '}
+                <span className="text-violet-600 font-medium">No aplica</span>
               </p>
             </div>
 
@@ -313,11 +313,11 @@ export default function FormularioPage() {
               {Object.entries(itemsByEstandar).map(([estandar, items]) => (
                 <div key={estandar}>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="h-px flex-1 bg-white/10" />
-                    <span className="text-xs font-semibold text-violet-300 uppercase tracking-wider px-3">
+                    <div className="h-px flex-1 bg-slate-200" />
+                    <span className="text-xs font-bold text-violet-600 uppercase tracking-wider px-3 bg-violet-50 py-1 rounded-full border border-violet-200">
                       {estandar}
                     </span>
-                    <div className="h-px flex-1 bg-white/10" />
+                    <div className="h-px flex-1 bg-slate-200" />
                   </div>
                   <div className="space-y-3">
                     {items.map((item) => (
@@ -339,59 +339,43 @@ export default function FormularioPage() {
         {step === 4 && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-white mb-1">¡Cuestionario completado!</h2>
-              <p className="text-slate-400 text-sm">Tu resultado preliminar está listo. Completa tus datos para recibir el informe completo.</p>
+              <h2 className="text-2xl font-bold text-slate-800 mb-1">¡Cuestionario completado!</h2>
+              <p className="text-slate-500 text-sm">Tu resultado preliminar está listo. Completa tus datos para recibir el informe completo.</p>
             </div>
 
             {/* Score card */}
             <div
-              className={`rounded-2xl p-6 border ${
+              className={`rounded-2xl p-6 border-2 ${
                 nivelColor === 'red'
-                  ? 'bg-red-950/40 border-red-800/40'
+                  ? 'bg-red-50 border-red-200'
                   : nivelColor === 'yellow'
-                  ? 'bg-yellow-950/40 border-yellow-800/40'
-                  : 'bg-green-950/40 border-green-800/40'
+                  ? 'bg-yellow-50 border-yellow-200'
+                  : 'bg-green-50 border-green-200'
               }`}
             >
-              <p className="text-slate-400 text-xs mb-3 uppercase tracking-wider">Puntaje obtenido · Res. 0312 de 2019</p>
+              <p className="text-slate-500 text-xs mb-3 uppercase tracking-wider font-medium">Puntaje obtenido · Res. 0312 de 2019</p>
               <div className="flex items-end gap-3 mb-3">
-                <span
-                  className={`text-6xl font-black ${
-                    nivelColor === 'red' ? 'text-red-400' : nivelColor === 'yellow' ? 'text-yellow-400' : 'text-green-400'
-                  }`}
-                >
+                <span className={`text-6xl font-black ${nivelColor === 'red' ? 'text-red-500' : nivelColor === 'yellow' ? 'text-yellow-600' : 'text-green-600'}`}>
                   {puntaje.toFixed(1)}
                 </span>
                 <span className="text-slate-400 text-xl mb-2">/ 100</span>
-                <span
-                  className={`mb-2 text-sm font-bold px-3 py-1 rounded-full ${
-                    nivelColor === 'red'
-                      ? 'bg-red-500/20 text-red-400'
-                      : nivelColor === 'yellow'
-                      ? 'bg-yellow-500/20 text-yellow-400'
-                      : 'bg-green-500/20 text-green-400'
-                  }`}
-                >
-                  {nivel}
-                </span>
+                <span className={`mb-2 text-sm font-bold px-3 py-1 rounded-full ${
+                  nivelColor === 'red' ? 'bg-red-100 text-red-600' : nivelColor === 'yellow' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'
+                }`}>{nivel}</span>
               </div>
-              <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                <div
-                  className={`h-full rounded-full ${
-                    nivelColor === 'red' ? 'bg-red-500' : nivelColor === 'yellow' ? 'bg-yellow-500' : 'bg-green-500'
-                  }`}
-                  style={{ width: `${puntaje}%` }}
-                />
+              <div className="h-3 bg-slate-200 rounded-full overflow-hidden">
+                <div className={`h-full rounded-full ${nivelColor === 'red' ? 'bg-red-500' : nivelColor === 'yellow' ? 'bg-yellow-500' : 'bg-green-500'}`}
+                  style={{ width: `${puntaje}%` }} />
               </div>
-              <div className="flex justify-between text-xs text-slate-600 mt-1">
-                <span>0%</span><span className="text-red-500">60% Crítico</span>
+              <div className="flex justify-between text-xs text-slate-400 mt-1">
+                <span>0%</span><span className="text-red-400">60% Crítico</span>
                 <span className="text-yellow-500">85% Moderado</span><span>100%</span>
               </div>
 
               {nivel === 'CRÍTICO' && (
-                <div className="mt-4 flex gap-2 bg-red-950/50 border border-red-800/40 rounded-xl p-3">
-                  <AlertTriangle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
-                  <p className="text-red-300 text-xs leading-relaxed">
+                <div className="mt-4 flex gap-2 bg-red-100 border border-red-200 rounded-xl p-3">
+                  <AlertTriangle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                  <p className="text-red-600 text-xs leading-relaxed">
                     Debes elaborar un Plan de Mejoramiento inmediato y ponerlo a disposición del Ministerio del Trabajo.
                   </p>
                 </div>
@@ -399,9 +383,9 @@ export default function FormularioPage() {
             </div>
 
             {/* Delivery method */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-              <h3 className="text-white font-semibold mb-1">¿Cómo quieres recibir tus resultados?</h3>
-              <p className="text-slate-400 text-xs mb-4">Te enviaremos el informe completo con el Plan de Mejoramiento en PDF</p>
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+              <h3 className="text-slate-800 font-semibold mb-1">¿Cómo quieres recibir tus resultados?</h3>
+              <p className="text-slate-500 text-sm mb-4">Te enviaremos el informe completo con el Plan de Mejoramiento en PDF</p>
               <div className="grid sm:grid-cols-3 gap-3">
                 {([
                   { id: 'email', icon: Mail, label: 'Por correo', desc: 'PDF completo a tu email' },
@@ -412,13 +396,13 @@ export default function FormularioPage() {
                     key={id}
                     type="button"
                     onClick={() => setEnvio(id)}
-                    className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all text-center ${
+                    className={`flex flex-col items-center gap-2 p-5 rounded-xl border-2 transition-all text-center ${
                       envio === id
-                        ? 'bg-violet-600/30 border-violet-500 text-white'
-                        : 'border-white/10 text-slate-400 hover:border-white/25'
+                        ? 'bg-violet-50 border-violet-500 text-violet-700'
+                        : 'border-slate-200 text-slate-500 hover:border-violet-300'
                     }`}
                   >
-                    <Icon className={`w-5 h-5 ${envio === id ? 'text-violet-300' : ''}`} />
+                    <Icon className={`w-6 h-6 ${envio === id ? 'text-violet-600' : 'text-slate-400'}`} />
                     <span className="font-semibold text-sm">{label}</span>
                     <span className="text-xs opacity-70">{desc}</span>
                   </button>
@@ -427,9 +411,9 @@ export default function FormularioPage() {
             </div>
 
             {/* Registration form */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-              <h3 className="text-white font-semibold mb-1">Completa tu registro</h3>
-              <p className="text-slate-400 text-xs mb-5">Para enviarte los resultados y guardar tu evaluación</p>
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+              <h3 className="text-slate-800 font-semibold mb-1">Completa tu registro</h3>
+              <p className="text-slate-500 text-sm mb-5">Para enviarte los resultados y guardar tu evaluación</p>
 
               <div className="grid sm:grid-cols-2 gap-4">
                 {[
@@ -442,15 +426,15 @@ export default function FormularioPage() {
                   { k: 'trabajadores', label: 'N.º de trabajadores', placeholder: 'Ej: 25', type: 'text', full: false, req: false },
                 ].map(({ k, label, placeholder, type, full, req }) => (
                   <div key={k} className={full ? 'sm:col-span-2' : ''}>
-                    <label className="text-slate-300 text-sm mb-1.5 block">
-                      {label} {req && <span className="text-red-400">*</span>}
+                    <label className="text-slate-700 text-sm mb-1.5 block font-medium">
+                      {label} {req && <span className="text-red-500">*</span>}
                     </label>
                     <input
                       type={type}
                       value={empresa[k as keyof EmpresaData]}
                       onChange={(e) => setEmpresa((p) => ({ ...p, [k]: e.target.value }))}
                       placeholder={placeholder}
-                      className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-violet-500 transition-colors text-sm"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100 transition-all text-sm"
                     />
                   </div>
                 ))}
@@ -462,7 +446,7 @@ export default function FormularioPage() {
                   <select
                     value={empresa.sector}
                     onChange={(e) => setEmpresa((p) => ({ ...p, sector: e.target.value }))}
-                    className="w-full bg-slate-900 border border-white/15 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-violet-500 transition-colors text-sm"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100 transition-all text-sm"
                   >
                     <option value="">Seleccionar sector...</option>
                     {SECTORES.map((s) => <option key={s} value={s}>{s}</option>)}
@@ -475,7 +459,7 @@ export default function FormularioPage() {
 
         {/* Error */}
         {error && (
-          <div className="mt-4 p-3 bg-red-950/50 border border-red-800/50 rounded-xl text-red-400 text-sm">
+          <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
             {error}
           </div>
         )}
@@ -485,7 +469,7 @@ export default function FormularioPage() {
           {step > 0 && (
             <button
               onClick={prev}
-              className="flex items-center gap-2 px-5 py-2.5 border border-white/15 text-slate-300 hover:text-white hover:border-white/30 rounded-xl transition-colors text-sm"
+              className="flex items-center gap-2 px-6 py-3.5 border-2 border-slate-300 text-slate-600 hover:border-slate-400 hover:text-slate-800 rounded-xl transition-colors font-medium"
             >
               <ArrowLeft className="w-4 h-4" /> Anterior
             </button>
@@ -494,21 +478,21 @@ export default function FormularioPage() {
           {step < 4 && (
             <button
               onClick={next}
-              className="flex items-center gap-2 px-6 py-2.5 bg-violet-600 hover:bg-violet-500 text-white font-semibold rounded-xl transition-colors text-sm"
+              className="flex items-center gap-2 px-8 py-3.5 bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-xl transition-colors text-base shadow-md shadow-violet-200"
             >
-              {step === 3 ? 'Ver mis resultados' : 'Siguiente'} <ArrowRight className="w-4 h-4" />
+              {step === 3 ? 'Ver mis resultados' : 'Siguiente'} <ArrowRight className="w-5 h-5" />
             </button>
           )}
           {step === 4 && (
             <button
               onClick={handleSubmit}
               disabled={submitting}
-              className="flex items-center gap-2 px-6 py-2.5 bg-orange-600 hover:bg-orange-500 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-colors text-sm"
+              className="flex items-center gap-2 px-8 py-3.5 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-colors text-base shadow-md shadow-orange-200"
             >
               {submitting ? (
-                <><Loader2 className="w-4 h-4 animate-spin" /> Enviando...</>
+                <><Loader2 className="w-5 h-5 animate-spin" /> Enviando...</>
               ) : (
-                <><CheckCircle2 className="w-4 h-4" /> Recibir mis resultados</>
+                <><CheckCircle2 className="w-5 h-5" /> Recibir mis resultados</>
               )}
             </button>
           )}

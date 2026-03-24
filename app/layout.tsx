@@ -77,8 +77,9 @@ export const metadata: Metadata = {
     creator: "@HumanIA2025",
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
+    icon: "/HumanIa-logo.webp",
+    shortcut: "/HumanIa-logo.webp",
+    apple: "/HumanIa-logo.webp",
   },
   alternates: {
     canonical: BASE_URL,
