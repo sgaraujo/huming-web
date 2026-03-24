@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   SST_ITEMS,
@@ -101,14 +100,13 @@ function ItemRow({
 
 // ─── Main component ───────────────────────────────────────────────────────────
 export default function FormularioPage() {
-  const router = useRouter();
-
   const [step, setStep] = useState(0);
   const [empresa, setEmpresa] = useState<EmpresaData>({
     nombre: '', nit: '', sector: '', responsable: '',
     cargo: '', email: '', telefono: '', trabajadores: '',
   });
   const [respuestas, setRespuestas] = useState<Record<string, RespuestaItem>>({});
+  const [enviado, setEnviado] = useState<{ id: string } | null>(null);
   const [envio, setEnvio] = useState<'email' | 'whatsapp' | 'ambos'>('email');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -198,7 +196,7 @@ export default function FormularioPage() {
         window.open(`https://wa.me/573102365931?text=${msg}`, '_blank');
       }
 
-      router.push(`/autoevaluacion/resultado/${docRef.id}`);
+      setEnviado({ id: docRef.id });
     } catch {
       setError('Error al guardar. Intenta de nuevo.');
       setSubmitting(false);
@@ -206,6 +204,52 @@ export default function FormularioPage() {
   }
 
   const progressPct = Math.round((step / (TOTAL_STEPS - 1)) * 100);
+
+  // ── Pantalla de éxito ────────────────────────────────────────────────────────
+  if (enviado) {
+    const nivelColor = nivel === 'CRÍTICO' ? 'red' : nivel === 'MODERADO' ? 'yellow' : 'green';
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950 to-slate-900 flex items-center justify-center px-4">
+        <div className="max-w-md w-full text-center">
+          <div className="w-20 h-20 rounded-full bg-green-500/20 border border-green-500/40 flex items-center justify-center mx-auto mb-6">
+            <CheckCircle2 className="w-10 h-10 text-green-400" />
+          </div>
+          <h1 className="text-2xl font-bold text-white mb-2">¡Evaluación completada!</h1>
+          <p className="text-slate-400 mb-6">
+            {envio === 'email' && 'Revisa tu correo, te enviamos el informe completo con tu Plan de Mejoramiento en PDF.'}
+            {envio === 'whatsapp' && 'Pronto te contactaremos por WhatsApp con tu informe completo.'}
+            {envio === 'ambos' && 'Te enviamos el informe por correo y pronto te contactamos por WhatsApp.'}
+          </p>
+
+          <div className={`rounded-2xl p-5 mb-6 border ${
+            nivelColor === 'red' ? 'bg-red-950/40 border-red-800/40'
+            : nivelColor === 'yellow' ? 'bg-yellow-950/40 border-yellow-800/40'
+            : 'bg-green-950/40 border-green-800/40'
+          }`}>
+            <p className="text-slate-400 text-xs mb-1">Tu puntaje</p>
+            <p className={`text-5xl font-black ${
+              nivelColor === 'red' ? 'text-red-400' : nivelColor === 'yellow' ? 'text-yellow-400' : 'text-green-400'
+            }`}>{puntaje.toFixed(1)}<span className="text-slate-500 text-xl"> / 100</span></p>
+            <p className={`mt-2 font-bold ${
+              nivelColor === 'red' ? 'text-red-400' : nivelColor === 'yellow' ? 'text-yellow-400' : 'text-green-400'
+            }`}>{nivel}</p>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <Link
+              href={`/autoevaluacion/resultado/${enviado.id}`}
+              className="px-6 py-3 bg-violet-600 hover:bg-violet-500 text-white font-semibold rounded-xl transition-colors"
+            >
+              Ver informe completo →
+            </Link>
+            <Link href="/" className="text-slate-400 hover:text-white text-sm transition-colors">
+              Volver al inicio
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950 to-slate-900">

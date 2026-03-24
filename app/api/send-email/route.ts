@@ -33,79 +33,100 @@ export async function POST(req: NextRequest) {
     const pdfFilename = `HumanIA-SG-SST-${empresa.nit || 'evaluacion'}.pdf`;
 
     // ── HTML del correo ──────────────────────────────────────────────────────
-    const html = `
-<!DOCTYPE html>
+    const nivelBg = nivel === 'CRÍTICO' ? '#3b0a0a' : nivel === 'MODERADO' ? '#2d1f00' : '#052e16';
+    const nivelBorder = nivel === 'CRÍTICO' ? '#7f1d1d' : nivel === 'MODERADO' ? '#713f12' : '#14532d';
+
+    const html = `<!DOCTYPE html>
 <html lang="es">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="font-family:sans-serif;background:#0f172a;color:#e2e8f0;padding:0;margin:0;">
-  <div style="max-width:560px;margin:0 auto;padding:40px 20px;">
-    <div style="margin-bottom:28px;">
-      <span style="font-size:22px;font-weight:800;color:#fff;">Human<span style="color:#f97316;">IA</span></span>
-      <p style="font-size:11px;color:#475569;margin:4px 0 0;">Consultoría en SST · Sistemas de Gestión ISO · Colombia</p>
-    </div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+</head>
+<body style="margin:0;padding:0;background-color:#0f172a;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0f172a;">
+    <tr><td align="center" style="padding:32px 16px;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;">
 
-    <h1 style="font-size:20px;font-weight:700;color:#fff;margin:0 0 6px;">
-      Tu Autoevaluación SG-SST está lista
-    </h1>
-    <p style="color:#94a3b8;font-size:13px;margin:0 0 28px;">
-      Resolución 0312 de 2019 · Estándares Mínimos · ${fecha}
-    </p>
+        <!-- Logo -->
+        <tr><td style="padding-bottom:28px;">
+          <span style="font-size:24px;font-weight:800;color:#ffffff;">Human<span style="color:#f97316;">IA</span></span><br>
+          <span style="font-size:11px;color:#475569;">Consultoría en SST · Colombia</span>
+        </td></tr>
 
-    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px 20px;margin-bottom:20px;">
-      <p style="color:#94a3b8;font-size:11px;margin:0 0 6px;">EMPRESA EVALUADA</p>
-      <p style="color:#fff;font-weight:700;font-size:15px;margin:0 0 3px;">${empresa.nombre}</p>
-      <p style="color:#64748b;font-size:12px;margin:0;">NIT: ${empresa.nit} · Sector: ${empresa.sector}</p>
-    </div>
+        <!-- Título -->
+        <tr><td style="padding-bottom:24px;">
+          <p style="margin:0 0 6px;font-size:20px;font-weight:700;color:#ffffff;">Tu Autoevaluación SG-SST está lista</p>
+          <p style="margin:0;font-size:13px;color:#94a3b8;">Resolución 0312 de 2019 · ${fecha}</p>
+        </td></tr>
 
-    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;margin-bottom:20px;text-align:center;">
-      <p style="color:#94a3b8;font-size:11px;margin:0 0 10px;">PUNTAJE OBTENIDO</p>
-      <span style="font-size:60px;font-weight:900;color:${nivelColor};line-height:1;">${puntaje.toFixed(1)}</span>
-      <span style="font-size:22px;color:#475569;"> / 100</span>
-      <div style="margin:14px 0 0;">
-        <span style="display:inline-block;padding:6px 18px;border-radius:999px;background:${nivelColor}22;color:${nivelColor};font-weight:700;font-size:13px;border:1px solid ${nivelColor}44;">
-          ${nivelEmoji} ${nivel}
-        </span>
-      </div>
-      <div style="height:6px;background:rgba(255,255,255,0.08);border-radius:3px;margin:16px 0 4px;overflow:hidden;">
-        <div style="height:6px;width:${puntaje}%;background:${nivelColor};border-radius:3px;"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;">
-        <span>0%</span><span style="color:#f87171;">60% Crítico</span><span style="color:#facc15;">85% Moderado</span><span style="color:#4ade80;">100%</span>
-      </div>
-    </div>
+        <!-- Empresa -->
+        <tr><td style="background-color:#1e293b;border:1px solid #334155;border-radius:12px;padding:18px 20px;margin-bottom:20px;">
+          <p style="margin:0 0 6px;font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px;">EMPRESA EVALUADA</p>
+          <p style="margin:0 0 4px;font-size:15px;font-weight:700;color:#ffffff;">${empresa.nombre}</p>
+          <p style="margin:0;font-size:12px;color:#64748b;">NIT: ${empresa.nit} &nbsp;·&nbsp; Sector: ${empresa.sector}</p>
+        </td></tr>
 
-    <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:14px 16px;margin-bottom:20px;">
-      <p style="color:#93c5fd;font-weight:600;font-size:12px;margin:0 0 6px;">¿Qué debes hacer?</p>
-      <p style="color:#bfdbfe;font-size:12px;margin:0;line-height:1.6;">${nivelAccion}</p>
-    </div>
+        <tr><td style="padding:12px 0;"></td></tr>
 
-    <p style="color:#64748b;font-size:12px;margin-bottom:20px;line-height:1.6;">
-      Adjunto encontrarás el <strong style="color:#94a3b8;">informe completo en PDF</strong> con tu resultado detallado,
-      el análisis por ciclo PHVA y el Plan de Mejoramiento con los ítems que requieren acción.
-    </p>
+        <!-- Puntaje -->
+        <tr><td align="center" style="background-color:${nivelBg};border:1px solid ${nivelBorder};border-radius:12px;padding:24px 20px;">
+          <p style="margin:0 0 8px;font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;">PUNTAJE OBTENIDO</p>
+          <p style="margin:0;font-size:64px;font-weight:900;color:${nivelColor};line-height:1;">${puntaje.toFixed(1)}<span style="font-size:24px;color:#475569;font-weight:400;"> / 100</span></p>
+          <p style="margin:12px 0 0;display:inline-block;padding:6px 20px;border-radius:999px;background-color:${nivelBg};border:1px solid ${nivelBorder};color:${nivelColor};font-weight:700;font-size:14px;">${nivelEmoji} ${nivel}</p>
+          <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px;">
+            <tr>
+              <td style="background-color:#1e293b;border-radius:4px;height:8px;padding:0;">
+                <table width="${Math.round(puntaje)}%" cellpadding="0" cellspacing="0">
+                  <tr><td style="background-color:${nivelColor};border-radius:4px;height:8px;font-size:0;">&nbsp;</td></tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td></tr>
 
-    <a href="${process.env.NEXT_PUBLIC_BASE_URL || 'https://humania.com.co'}/autoevaluacion/resultado/${evaluacionId}"
-       style="display:inline-block;background:#f97316;color:#fff;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13px;margin-bottom:28px;">
-      Ver informe en línea →
-    </a>
+        <tr><td style="padding:12px 0;"></td></tr>
 
-    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:16px;margin-bottom:24px;">
-      <p style="color:#94a3b8;font-size:12px;font-weight:600;margin:0 0 6px;">¿Necesitas apoyo?</p>
-      <p style="color:#64748b;font-size:11px;margin:0 0 10px;line-height:1.5;">
-        Nuestros expertos en SST te acompañan en el Plan de Mejoramiento y la implementación completa del SG-SST.
-      </p>
-      <a href="https://wa.me/573102365931" style="color:#4ade80;font-size:11px;text-decoration:none;">
-        💬 Escribir por WhatsApp
-      </a>
-    </div>
+        <!-- Acción requerida -->
+        <tr><td style="background-color:#1e1b4b;border:1px solid #3730a3;border-radius:12px;padding:16px 18px;">
+          <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#a5b4fc;">¿Qué debes hacer?</p>
+          <p style="margin:0;font-size:13px;color:#c7d2fe;line-height:1.6;">${nivelAccion}</p>
+        </td></tr>
 
-    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:0 0 20px;">
-    <p style="color:#334155;font-size:11px;margin:0;line-height:1.6;">
-      HumanIA · Consultoría en SST · Bogotá, Colombia<br>
-      comercial@humania.com.co · +57 310 236 5931<br>
-      Lunes a viernes, 8:00 AM – 5:00 PM
-    </p>
-  </div>
+        <tr><td style="padding:12px 0;"></td></tr>
+
+        <!-- Descripción PDF -->
+        <tr><td>
+          <p style="margin:0;font-size:13px;color:#64748b;line-height:1.7;">
+            Adjunto encontrarás el <strong style="color:#94a3b8;">informe completo en PDF</strong> con tu resultado detallado, el análisis por ciclo PHVA y el Plan de Mejoramiento.
+          </p>
+        </td></tr>
+
+        <tr><td style="padding:20px 0;">
+          <a href="${process.env.NEXT_PUBLIC_BASE_URL || 'https://humania.com.co'}/autoevaluacion/resultado/${evaluacionId}"
+             style="display:inline-block;background-color:#f97316;color:#ffffff;padding:14px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;">
+            Ver informe en línea →
+          </a>
+        </td></tr>
+
+        <!-- Apoyo -->
+        <tr><td style="background-color:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px 18px;">
+          <p style="margin:0 0 6px;font-size:13px;font-weight:600;color:#94a3b8;">¿Necesitas apoyo?</p>
+          <p style="margin:0 0 10px;font-size:12px;color:#64748b;line-height:1.5;">Nuestros expertos en SST te acompañan en el Plan de Mejoramiento y la implementación del SG-SST.</p>
+          <a href="https://wa.me/573102365931" style="font-size:13px;color:#4ade80;text-decoration:none;">💬 Escribir por WhatsApp</a>
+        </td></tr>
+
+        <tr><td style="padding:24px 0 0;">
+          <p style="margin:0;font-size:11px;color:#334155;line-height:1.7;">
+            HumanIA · Consultoría en SST · Bogotá, Colombia<br>
+            comercial@humania.com.co · +57 310 236 5931<br>
+            Lunes a viernes, 8:00 AM – 5:00 PM
+          </p>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
 </body>
 </html>`;
 
