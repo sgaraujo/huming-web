@@ -11,73 +11,55 @@ import {
 } from '@/lib/sst-items';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { ArrowLeft, ArrowRight, CheckCircle2, Loader2, AlertTriangle, Mail, MessageCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2, Loader2, AlertTriangle, Mail, MessageCircle, ClipboardList } from 'lucide-react';
 
-// ─── Types ───────────────────────────────────────────────────────────────────
 interface EmpresaData {
-  nombre: string;
-  nit: string;
-  sector: string;
-  responsable: string;
-  cargo: string;
-  email: string;
-  telefono: string;
-  trabajadores: string;
+  nombre: string; nit: string; sector: string; responsable: string;
+  cargo: string; email: string; telefono: string; trabajadores: string;
 }
 
 const SECTORES = [
-  'Manufactura', 'Construcción', 'Comercio', 'Servicios', 'Salud',
-  'Educación', 'Transporte', 'Agropecuario', 'Minería', 'Tecnología', 'Otro',
+  'Manufactura','Construcción','Comercio','Servicios','Salud',
+  'Educación','Transporte','Agropecuario','Minería','Tecnología','Otro',
 ];
 
-const CICLO_ICONS = ['📋', '⚙️', '✅', '🔄'];
-// Steps: 0-3 = ciclos PHVA, 4 = resultados + registro
+const CICLO_ICONS = ['📋','⚙️','✅','🔄'];
 const TOTAL_STEPS = 5;
 
-// ─── Item row component ───────────────────────────────────────────────────────
-function ItemRow({
-  item,
-  respuesta,
-  onChange,
-}: {
+// ─── Item row ─────────────────────────────────────────────────────────────────
+function ItemRow({ item, respuesta, onChange }: {
   item: (typeof SST_ITEMS)[0];
   respuesta: RespuestaItem | undefined;
   onChange: (id: string, r: RespuestaItem) => void;
 }) {
-  const opts: { value: RespuestaItem['estado']; label: string; color: string }[] = [
-    { value: 'cumple', label: 'Cumple', color: 'green' },
-    { value: 'no_cumple', label: 'No cumple', color: 'red' },
-    { value: 'no_aplica_j', label: 'N/A Justificado', color: 'blue' },
-    { value: 'no_aplica_nj', label: 'N/A Sin justificar', color: 'orange' },
+  const opts = [
+    { value: 'cumple' as const,       label: '✓ Cumple',             cls: 'border-emerald-400 bg-emerald-500 text-white', idle: 'border-slate-300 text-slate-600 hover:border-emerald-400 hover:text-emerald-700 hover:bg-emerald-50' },
+    { value: 'no_cumple' as const,    label: '✗ No cumple',          cls: 'border-red-500 bg-red-500 text-white',         idle: 'border-slate-300 text-slate-600 hover:border-red-400 hover:text-red-600 hover:bg-red-50' },
+    { value: 'no_aplica_j' as const,  label: 'N/A Justificado',      cls: 'border-violet-500 bg-violet-500 text-white',   idle: 'border-slate-300 text-slate-600 hover:border-violet-400 hover:text-violet-700 hover:bg-violet-50' },
+    { value: 'no_aplica_nj' as const, label: 'N/A Sin justificar',   cls: 'border-amber-500 bg-amber-500 text-white',     idle: 'border-slate-300 text-slate-600 hover:border-amber-400 hover:text-amber-600 hover:bg-amber-50' },
   ];
 
+  const answered = respuesta?.estado != null;
+
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3 hover:border-violet-300 hover:shadow-sm transition-all">
-      <div className="flex items-start gap-3">
-        <span className="shrink-0 text-xs font-mono bg-violet-100 text-violet-700 px-2 py-0.5 rounded-md mt-0.5 font-semibold">
+    <div className={`rounded-2xl border-2 p-5 transition-all ${answered ? 'border-slate-200 bg-white shadow-sm' : 'border-dashed border-slate-300 bg-white'}`}>
+      <div className="flex items-start gap-3 mb-4">
+        <span className="shrink-0 mt-0.5 text-[11px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded-lg tracking-wide">
           {item.id}
         </span>
-        <div className="flex-1">
-          <p className="text-slate-700 text-sm leading-relaxed">{item.descripcion}</p>
-          <p className="text-slate-400 text-xs mt-1">Valor: {item.valor} puntos</p>
-        </div>
+        <p className="text-slate-800 text-[15px] leading-relaxed font-medium flex-1">{item.descripcion}</p>
+        <span className="shrink-0 text-xs text-slate-400 mt-0.5">{item.valor} pts</span>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 mb-3">
         {opts.map((o) => {
-          const selected = respuesta?.estado === o.value;
-          const colors = {
-            green: selected ? 'bg-green-600 border-green-600 text-white' : 'border-green-300 text-green-700 hover:bg-green-50',
-            red: selected ? 'bg-red-600 border-red-600 text-white' : 'border-red-300 text-red-600 hover:bg-red-50',
-            blue: selected ? 'bg-violet-600 border-violet-600 text-white' : 'border-violet-300 text-violet-700 hover:bg-violet-50',
-            orange: selected ? 'bg-orange-500 border-orange-500 text-white' : 'border-orange-300 text-orange-600 hover:bg-orange-50',
-          };
+          const sel = respuesta?.estado === o.value;
           return (
             <button
               key={o.value}
               type="button"
               onClick={() => onChange(item.id, { ...respuesta, estado: o.value })}
-              className={`text-xs px-4 py-2 rounded-lg border transition-all font-medium ${colors[o.color as keyof typeof colors]}`}
+              className={`text-sm px-4 py-2 rounded-xl border-2 font-semibold transition-all active:scale-95 ${sel ? o.cls : o.idle}`}
             >
               {o.label}
             </button>
@@ -85,29 +67,28 @@ function ItemRow({
         })}
       </div>
 
-      <input
-        type="text"
-        placeholder="Observación (opcional)"
-        value={respuesta?.observacion ?? ''}
-        onChange={(e) =>
-          onChange(item.id, { estado: respuesta?.estado ?? null, observacion: e.target.value })
-        }
-        className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-600 placeholder:text-slate-400 text-xs focus:outline-none focus:border-violet-400 transition-colors"
-      />
+      {answered && (
+        <input
+          type="text"
+          placeholder="Observación (opcional)"
+          value={respuesta?.observacion ?? ''}
+          onChange={(e) => onChange(item.id, { estado: respuesta?.estado ?? null, observacion: e.target.value })}
+          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-700 placeholder:text-slate-400 text-sm focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 transition-all"
+        />
+      )}
     </div>
   );
 }
 
-// ─── Main component ───────────────────────────────────────────────────────────
+// ─── Main ─────────────────────────────────────────────────────────────────────
 export default function FormularioPage() {
   const [step, setStep] = useState(0);
   const [empresa, setEmpresa] = useState<EmpresaData>({
-    nombre: '', nit: '', sector: '', responsable: '',
-    cargo: '', email: '', telefono: '', trabajadores: '',
+    nombre:'',nit:'',sector:'',responsable:'',cargo:'',email:'',telefono:'',trabajadores:'',
   });
   const [respuestas, setRespuestas] = useState<Record<string, RespuestaItem>>({});
   const [enviado, setEnviado] = useState<{ id: string } | null>(null);
-  const [envio, setEnvio] = useState<'email' | 'whatsapp' | 'ambos'>('email');
+  const [envio, setEnvio] = useState<'email'|'whatsapp'|'ambos'>('email');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -119,22 +100,19 @@ export default function FormularioPage() {
   const nivel = calcularNivel(puntaje);
   const nivelColor = nivel === 'CRÍTICO' ? 'red' : nivel === 'MODERADO' ? 'yellow' : 'green';
 
-  // Steps 0-3 = ciclos PHVA
   const currentCiclo = step <= 3 ? CICLOS[step] : null;
   const currentItems = currentCiclo ? SST_ITEMS.filter((i) => i.ciclo === currentCiclo) : [];
-  const itemsByEstandar = currentItems.reduce(
-    (acc, item) => {
-      if (!acc[item.estandar]) acc[item.estandar] = [];
-      acc[item.estandar].push(item);
-      return acc;
-    },
-    {} as Record<string, typeof SST_ITEMS>
-  );
+  const answeredCount = currentItems.filter((i) => respuestas[i.id]?.estado).length;
+  const itemsByEstandar = currentItems.reduce((acc, item) => {
+    if (!acc[item.estandar]) acc[item.estandar] = [];
+    acc[item.estandar].push(item);
+    return acc;
+  }, {} as Record<string, typeof SST_ITEMS>);
 
   function validateStep(): string {
     if (step <= 3) {
-      const unanswered = currentItems.filter((i) => !respuestas[i.id]?.estado);
-      if (unanswered.length > 0) return `Faltan ${unanswered.length} ítems por responder`;
+      const left = currentItems.filter((i) => !respuestas[i.id]?.estado).length;
+      if (left > 0) return `Faltan ${left} ítem${left > 1 ? 's' : ''} por responder`;
     }
     if (step === 4) {
       if (!empresa.nombre) return 'Ingresa el nombre de la empresa';
@@ -142,7 +120,7 @@ export default function FormularioPage() {
       if (!empresa.sector) return 'Selecciona el sector';
       if (!empresa.responsable) return 'Ingresa el responsable SG-SST';
       if (envio !== 'whatsapp' && !empresa.email) return 'Ingresa el correo para enviarte los resultados';
-      if (envio !== 'email' && !empresa.telefono) return 'Ingresa el teléfono para enviarte los resultados por WhatsApp';
+      if (envio !== 'email' && !empresa.telefono) return 'Ingresa el teléfono de WhatsApp';
     }
     return '';
   }
@@ -150,33 +128,22 @@ export default function FormularioPage() {
   function next() {
     const err = validateStep();
     if (err) { setError(err); return; }
-    setError('');
-    setStep((s) => s + 1);
+    setError(''); setStep((s) => s + 1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
   function prev() {
-    setError('');
-    setStep((s) => s - 1);
+    setError(''); setStep((s) => s - 1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   async function handleSubmit() {
     const err = validateStep();
     if (err) { setError(err); return; }
-    setSubmitting(true);
-    setError('');
+    setSubmitting(true); setError('');
     try {
       const docRef = await addDoc(collection(db, 'evaluaciones'), {
-        empresa,
-        respuestas,
-        puntaje,
-        nivel,
-        envio,
-        createdAt: serverTimestamp(),
+        empresa, respuestas, puntaje, nivel, envio, createdAt: serverTimestamp(),
       });
-
-      // Send email if requested (non-blocking — don't fail the form if email fails)
       if (envio === 'email' || envio === 'ambos') {
         fetch('/api/send-email', {
           method: 'POST',
@@ -184,18 +151,15 @@ export default function FormularioPage() {
           body: JSON.stringify({ empresa, respuestas, puntaje, nivel, evaluacionId: docRef.id }),
         }).catch(console.error);
       }
-
-      // Open WhatsApp if requested
       if (envio === 'whatsapp' || envio === 'ambos') {
         const msg = encodeURIComponent(
           `Hola HumanIA, acabo de completar mi Autoevaluación SG-SST.\n\n` +
           `*Empresa:* ${empresa.nombre}\n*NIT:* ${empresa.nit}\n` +
           `*Puntaje:* ${puntaje.toFixed(1)}% - Nivel ${nivel}\n\n` +
-          `Quisiera recibir mis resultados completos y orientación sobre los próximos pasos.`
+          `Quisiera recibir mis resultados y orientación sobre los próximos pasos.`
         );
         window.open(`https://wa.me/573102365931?text=${msg}`, '_blank');
       }
-
       setEnviado({ id: docRef.id });
     } catch {
       setError('Error al guardar. Intenta de nuevo.');
@@ -205,128 +169,128 @@ export default function FormularioPage() {
 
   const progressPct = Math.round((step / (TOTAL_STEPS - 1)) * 100);
 
-  // ── Pantalla de éxito ────────────────────────────────────────────────────────
+  // ── Pantalla éxito ──────────────────────────────────────────────────────────
   if (enviado) {
-    const nivelColor = nivel === 'CRÍTICO' ? 'red' : nivel === 'MODERADO' ? 'yellow' : 'green';
     return (
-      <main className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950 to-slate-900 flex items-center justify-center px-4">
+      <main className="min-h-screen bg-gradient-to-b from-violet-50 to-white flex items-center justify-center px-4 py-16">
         <div className="max-w-md w-full text-center">
-          <div className="w-20 h-20 rounded-full bg-green-500/20 border border-green-500/40 flex items-center justify-center mx-auto mb-6">
-            <CheckCircle2 className="w-10 h-10 text-green-400" />
+          <div className="w-24 h-24 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-100">
+            <CheckCircle2 className="w-12 h-12 text-green-500" />
           </div>
-          <h1 className="text-2xl font-bold text-white mb-2">¡Evaluación completada!</h1>
-          <p className="text-slate-400 mb-6">
-            {envio === 'email' && 'Revisa tu correo, te enviamos el informe completo con tu Plan de Mejoramiento en PDF.'}
-            {envio === 'whatsapp' && 'Pronto te contactaremos por WhatsApp con tu informe completo.'}
-            {envio === 'ambos' && 'Te enviamos el informe por correo y pronto te contactamos por WhatsApp.'}
+          <h1 className="text-3xl font-bold text-slate-800 mb-3">¡Listo!</h1>
+          <p className="text-slate-500 text-lg mb-8 leading-relaxed">
+            {envio === 'email' && 'Revisa tu correo — te enviamos el informe completo con el Plan de Mejoramiento en PDF.'}
+            {envio === 'whatsapp' && 'En breve te contactamos por WhatsApp con tu informe completo.'}
+            {envio === 'ambos' && 'Te enviamos el informe por correo y te contactamos por WhatsApp.'}
           </p>
-
-          <div className={`rounded-2xl p-5 mb-6 border ${
-            nivelColor === 'red' ? 'bg-red-950/40 border-red-800/40'
-            : nivelColor === 'yellow' ? 'bg-yellow-950/40 border-yellow-800/40'
-            : 'bg-green-950/40 border-green-800/40'
+          <div className={`rounded-2xl p-6 mb-8 ${
+            nivelColor === 'red' ? 'bg-red-50 border-2 border-red-200'
+            : nivelColor === 'yellow' ? 'bg-yellow-50 border-2 border-yellow-200'
+            : 'bg-green-50 border-2 border-green-200'
           }`}>
-            <p className="text-slate-400 text-xs mb-1">Tu puntaje</p>
-            <p className={`text-5xl font-black ${
-              nivelColor === 'red' ? 'text-red-400' : nivelColor === 'yellow' ? 'text-yellow-400' : 'text-green-400'
-            }`}>{puntaje.toFixed(1)}<span className="text-slate-500 text-xl"> / 100</span></p>
-            <p className={`mt-2 font-bold ${
-              nivelColor === 'red' ? 'text-red-400' : nivelColor === 'yellow' ? 'text-yellow-400' : 'text-green-400'
-            }`}>{nivel}</p>
+            <p className="text-slate-500 text-sm mb-2">Tu puntaje SG-SST</p>
+            <p className={`text-6xl font-black mb-1 ${nivelColor === 'red' ? 'text-red-500' : nivelColor === 'yellow' ? 'text-yellow-600' : 'text-green-600'}`}>
+              {puntaje.toFixed(1)}<span className="text-2xl font-normal text-slate-400"> / 100</span>
+            </p>
+            <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold ${
+              nivelColor === 'red' ? 'bg-red-100 text-red-600' : nivelColor === 'yellow' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'
+            }`}>{nivel}</span>
           </div>
-
-          <div className="flex flex-col gap-3">
-            <Link
-              href={`/autoevaluacion/resultado/${enviado.id}`}
-              className="px-6 py-3 bg-violet-600 hover:bg-violet-500 text-white font-semibold rounded-xl transition-colors"
-            >
-              Ver informe completo →
-            </Link>
-            <Link href="/" className="text-slate-400 hover:text-white text-sm transition-colors">
-              Volver al inicio
-            </Link>
-          </div>
+          <Link
+            href={`/autoevaluacion/resultado/${enviado.id}`}
+            className="block w-full py-4 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-2xl transition-colors text-lg mb-3"
+          >
+            Ver informe completo →
+          </Link>
+          <Link href="/" className="text-slate-400 hover:text-slate-600 text-sm transition-colors">
+            Volver al inicio
+          </Link>
         </div>
       </main>
     );
   }
 
+  // ── Formulario ──────────────────────────────────────────────────────────────
   return (
     <main className="min-h-screen bg-slate-50">
+
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white border-b border-slate-200 shadow-sm">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
-          <Link href="/" className="font-bold text-lg tracking-tight shrink-0 text-slate-800">
+      <header className="sticky top-0 z-20 bg-white/95 backdrop-blur border-b border-slate-100 shadow-sm">
+        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-4">
+          <Link href="/" className="font-extrabold text-xl shrink-0 text-slate-800">
             Human<span className="text-violet-600">IA</span>
           </Link>
-
-          <div className="flex-1 max-w-xs hidden sm:block">
-            <div className="flex justify-between text-xs text-slate-400 mb-1">
-              <span>
-                {step <= 3 ? `Ciclo ${step + 1} de 4: ${CICLOS[step]}` : 'Tus resultados'}
+          <div className="flex-1">
+            <div className="flex justify-between text-xs text-slate-400 mb-1.5">
+              <span className="font-medium text-slate-600">
+                {step <= 3 ? `${CICLO_ICONS[step]} ${CICLOS[step]}` : '📊 Tus resultados'}
               </span>
-              <span>{progressPct}%</span>
+              <span className="font-semibold text-violet-600">{progressPct}%</span>
             </div>
-            <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-violet-600 rounded-full transition-all duration-500"
-                style={{ width: `${progressPct}%` }}
-              />
+            <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-violet-500 to-orange-400 rounded-full transition-all duration-700"
+                style={{ width: `${progressPct}%` }} />
             </div>
           </div>
-
           {Object.keys(respuestas).length > 0 && (
-            <div
-              className={`text-xs font-semibold px-3 py-1.5 rounded-full border shrink-0 ${
-                nivelColor === 'red'
-                  ? 'bg-red-50 border-red-200 text-red-600'
-                  : nivelColor === 'yellow'
-                  ? 'bg-yellow-50 border-yellow-200 text-yellow-700'
-                  : 'bg-green-50 border-green-200 text-green-700'
-              }`}
-            >
-              {puntaje.toFixed(1)}% · {nivel}
+            <div className={`hidden sm:block text-xs font-bold px-3 py-1.5 rounded-full shrink-0 ${
+              nivelColor === 'red' ? 'bg-red-50 text-red-600' : nivelColor === 'yellow' ? 'bg-yellow-50 text-yellow-700' : 'bg-green-50 text-green-700'
+            }`}>
+              {puntaje.toFixed(1)}%
             </div>
           )}
         </div>
+
+        {/* Step pills */}
+        <div className="max-w-3xl mx-auto px-4 pb-2 flex gap-1.5 overflow-x-auto scrollbar-hide">
+          {['PLANEAR','HACER','VERIFICAR','ACTUAR','Resultados'].map((s, i) => (
+            <div key={i} className={`shrink-0 text-xs px-3 py-1 rounded-full font-medium transition-all ${
+              i === step ? 'bg-violet-600 text-white shadow-sm' : i < step ? 'bg-violet-100 text-violet-700' : 'bg-slate-100 text-slate-400'
+            }`}>
+              {i < step ? '✓ ' : ''}{s}
+            </div>
+          ))}
+        </div>
       </header>
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-3xl mx-auto px-4 py-6 pb-32">
 
-        {/* Steps 0-3: Ciclos PHVA */}
+        {/* Ciclos PHVA */}
         {step <= 3 && currentCiclo && (
           <div>
-            <div className="mb-6">
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-3xl">{CICLO_ICONS[step]}</span>
-                <h2 className="text-2xl font-bold text-slate-800">{currentCiclo}</h2>
+            {/* Ciclo header */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6 flex items-center justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-2xl">{CICLO_ICONS[step]}</span>
+                  <h2 className="text-xl font-bold text-slate-800">{currentCiclo}</h2>
+                </div>
+                <p className="text-slate-500 text-sm">
+                  Para cada ítem selecciona:{' '}
+                  <span className="text-emerald-600 font-semibold">Cumple</span>,{' '}
+                  <span className="text-red-500 font-semibold">No cumple</span> o{' '}
+                  <span className="text-violet-600 font-semibold">No aplica</span>
+                </p>
               </div>
-              <p className="text-slate-500 text-sm">
-                {currentItems.length} ítems · Selecciona para cada uno:{' '}
-                <span className="text-green-600 font-medium">Cumple</span>,{' '}
-                <span className="text-red-600 font-medium">No cumple</span>, o{' '}
-                <span className="text-violet-600 font-medium">No aplica</span>
-              </p>
+              <div className="text-right shrink-0 ml-4">
+                <p className="text-2xl font-black text-slate-800">{answeredCount}<span className="text-slate-400 text-base font-normal"> / {currentItems.length}</span></p>
+                <p className="text-xs text-slate-400">respondidos</p>
+              </div>
             </div>
 
-            <div className="space-y-8">
+            <div className="space-y-6">
               {Object.entries(itemsByEstandar).map(([estandar, items]) => (
                 <div key={estandar}>
-                  <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center gap-3 my-4">
                     <div className="h-px flex-1 bg-slate-200" />
-                    <span className="text-xs font-bold text-violet-600 uppercase tracking-wider px-3 bg-violet-50 py-1 rounded-full border border-violet-200">
+                    <span className="text-xs font-bold text-violet-700 bg-violet-50 border border-violet-200 px-4 py-1.5 rounded-full uppercase tracking-wide whitespace-nowrap">
                       {estandar}
                     </span>
                     <div className="h-px flex-1 bg-slate-200" />
                   </div>
                   <div className="space-y-3">
                     {items.map((item) => (
-                      <ItemRow
-                        key={item.id}
-                        item={item}
-                        respuesta={respuestas[item.id]}
-                        onChange={setResp}
-                      />
+                      <ItemRow key={item.id} item={item} respuesta={respuestas[item.id]} onChange={setResp} />
                     ))}
                   </div>
                 </div>
@@ -335,120 +299,96 @@ export default function FormularioPage() {
           </div>
         )}
 
-        {/* Step 4: Resultados + cómo recibir + registro */}
+        {/* Paso final: Resultados + envío + registro */}
         {step === 4 && (
-          <div className="space-y-6">
-            <div>
-              <h2 className="text-2xl font-bold text-slate-800 mb-1">¡Cuestionario completado!</h2>
-              <p className="text-slate-500 text-sm">Tu resultado preliminar está listo. Completa tus datos para recibir el informe completo.</p>
+          <div className="space-y-5">
+            <div className="text-center py-4">
+              <div className="inline-flex items-center gap-2 bg-violet-50 text-violet-700 text-sm font-semibold px-4 py-2 rounded-full border border-violet-200 mb-4">
+                <ClipboardList className="w-4 h-4" /> Cuestionario completado
+              </div>
+              <h2 className="text-2xl font-bold text-slate-800 mb-1">Tu resultado preliminar</h2>
+              <p className="text-slate-500">Completa tus datos para recibir el informe completo gratis</p>
             </div>
 
-            {/* Score card */}
-            <div
-              className={`rounded-2xl p-6 border-2 ${
-                nivelColor === 'red'
-                  ? 'bg-red-50 border-red-200'
-                  : nivelColor === 'yellow'
-                  ? 'bg-yellow-50 border-yellow-200'
-                  : 'bg-green-50 border-green-200'
-              }`}
-            >
-              <p className="text-slate-500 text-xs mb-3 uppercase tracking-wider font-medium">Puntaje obtenido · Res. 0312 de 2019</p>
-              <div className="flex items-end gap-3 mb-3">
-                <span className={`text-6xl font-black ${nivelColor === 'red' ? 'text-red-500' : nivelColor === 'yellow' ? 'text-yellow-600' : 'text-green-600'}`}>
-                  {puntaje.toFixed(1)}
-                </span>
-                <span className="text-slate-400 text-xl mb-2">/ 100</span>
-                <span className={`mb-2 text-sm font-bold px-3 py-1 rounded-full ${
-                  nivelColor === 'red' ? 'bg-red-100 text-red-600' : nivelColor === 'yellow' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'
-                }`}>{nivel}</span>
-              </div>
-              <div className="h-3 bg-slate-200 rounded-full overflow-hidden">
-                <div className={`h-full rounded-full ${nivelColor === 'red' ? 'bg-red-500' : nivelColor === 'yellow' ? 'bg-yellow-500' : 'bg-green-500'}`}
+            {/* Score */}
+            <div className={`rounded-3xl p-6 text-center border-2 ${
+              nivelColor === 'red' ? 'bg-red-50 border-red-200' : nivelColor === 'yellow' ? 'bg-yellow-50 border-yellow-200' : 'bg-emerald-50 border-emerald-200'
+            }`}>
+              <p className={`text-7xl font-black leading-none mb-2 ${nivelColor === 'red' ? 'text-red-500' : nivelColor === 'yellow' ? 'text-yellow-600' : 'text-emerald-600'}`}>
+                {puntaje.toFixed(1)}
+              </p>
+              <p className="text-slate-400 text-sm mb-3">puntos de 100</p>
+              <span className={`inline-block px-6 py-2 rounded-full font-bold text-base ${
+                nivelColor === 'red' ? 'bg-red-500 text-white' : nivelColor === 'yellow' ? 'bg-yellow-400 text-white' : 'bg-emerald-500 text-white'
+              }`}>{nivel}</span>
+              <div className="mt-4 h-3 bg-white/70 rounded-full overflow-hidden">
+                <div className={`h-full rounded-full transition-all ${nivelColor === 'red' ? 'bg-red-400' : nivelColor === 'yellow' ? 'bg-yellow-400' : 'bg-emerald-400'}`}
                   style={{ width: `${puntaje}%` }} />
               </div>
-              <div className="flex justify-between text-xs text-slate-400 mt-1">
-                <span>0%</span><span className="text-red-400">60% Crítico</span>
-                <span className="text-yellow-500">85% Moderado</span><span>100%</span>
-              </div>
-
               {nivel === 'CRÍTICO' && (
-                <div className="mt-4 flex gap-2 bg-red-100 border border-red-200 rounded-xl p-3">
-                  <AlertTriangle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
-                  <p className="text-red-600 text-xs leading-relaxed">
-                    Debes elaborar un Plan de Mejoramiento inmediato y ponerlo a disposición del Ministerio del Trabajo.
+                <div className="mt-4 flex gap-2 bg-red-100 border border-red-200 rounded-xl p-3 text-left">
+                  <AlertTriangle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                  <p className="text-red-700 text-sm leading-relaxed">
+                    Debes elaborar un Plan de Mejoramiento de inmediato y ponerlo a disposición del Ministerio del Trabajo.
                   </p>
                 </div>
               )}
             </div>
 
-            {/* Delivery method */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-              <h3 className="text-slate-800 font-semibold mb-1">¿Cómo quieres recibir tus resultados?</h3>
-              <p className="text-slate-500 text-sm mb-4">Te enviaremos el informe completo con el Plan de Mejoramiento en PDF</p>
-              <div className="grid sm:grid-cols-3 gap-3">
+            {/* Cómo recibir */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+              <h3 className="text-slate-800 font-bold text-lg mb-1">¿Cómo quieres recibir el informe?</h3>
+              <p className="text-slate-500 text-sm mb-4">El informe incluye el análisis por ciclo PHVA y tu Plan de Mejoramiento en PDF</p>
+              <div className="grid grid-cols-3 gap-3">
                 {([
-                  { id: 'email', icon: Mail, label: 'Por correo', desc: 'PDF completo a tu email' },
-                  { id: 'whatsapp', icon: MessageCircle, label: 'Por WhatsApp', desc: 'Te contactamos por chat' },
-                  { id: 'ambos', icon: CheckCircle2, label: 'Ambos', desc: 'Email + WhatsApp' },
+                  { id: 'email',    icon: Mail,           label: 'Correo',   desc: 'PDF al email' },
+                  { id: 'whatsapp', icon: MessageCircle,  label: 'WhatsApp', desc: 'Por chat' },
+                  { id: 'ambos',    icon: CheckCircle2,   label: 'Ambos',    desc: 'Email + WA' },
                 ] as const).map(({ id, icon: Icon, label, desc }) => (
-                  <button
-                    key={id}
-                    type="button"
-                    onClick={() => setEnvio(id)}
-                    className={`flex flex-col items-center gap-2 p-5 rounded-xl border-2 transition-all text-center ${
-                      envio === id
-                        ? 'bg-violet-50 border-violet-500 text-violet-700'
-                        : 'border-slate-200 text-slate-500 hover:border-violet-300'
-                    }`}
-                  >
-                    <Icon className={`w-6 h-6 ${envio === id ? 'text-violet-600' : 'text-slate-400'}`} />
-                    <span className="font-semibold text-sm">{label}</span>
-                    <span className="text-xs opacity-70">{desc}</span>
+                  <button key={id} type="button" onClick={() => setEnvio(id)}
+                    className={`flex flex-col items-center gap-1.5 py-4 px-2 rounded-2xl border-2 transition-all font-medium text-center ${
+                      envio === id ? 'bg-violet-600 border-violet-600 text-white shadow-lg shadow-violet-100' : 'border-slate-200 text-slate-500 hover:border-violet-300'
+                    }`}>
+                    <Icon className={`w-6 h-6 ${envio === id ? 'text-white' : 'text-slate-400'}`} />
+                    <span className="text-sm font-bold">{label}</span>
+                    <span className={`text-xs ${envio === id ? 'text-violet-100' : 'text-slate-400'}`}>{desc}</span>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Registration form */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-              <h3 className="text-slate-800 font-semibold mb-1">Completa tu registro</h3>
-              <p className="text-slate-500 text-sm mb-5">Para enviarte los resultados y guardar tu evaluación</p>
-
+            {/* Registro */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+              <h3 className="text-slate-800 font-bold text-lg mb-1">Tus datos</h3>
+              <p className="text-slate-500 text-sm mb-5">Para enviarte el informe y guardar tu evaluación</p>
               <div className="grid sm:grid-cols-2 gap-4">
                 {[
-                  { k: 'nombre', label: 'Razón social / Empresa', placeholder: 'Empresa S.A.S.', type: 'text', full: true, req: true },
-                  { k: 'nit', label: 'NIT', placeholder: '900.123.456-7', type: 'text', full: false, req: true },
-                  { k: 'responsable', label: 'Nombre del responsable SST', placeholder: 'Nombre completo', type: 'text', full: false, req: true },
-                  { k: 'cargo', label: 'Cargo', placeholder: 'Coordinador SST', type: 'text', full: false, req: false },
-                  { k: 'email', label: 'Correo electrónico', placeholder: 'sst@empresa.com', type: 'email', full: false, req: envio !== 'whatsapp' },
-                  { k: 'telefono', label: 'Teléfono / WhatsApp', placeholder: '+57 300 000 0000', type: 'tel', full: false, req: envio !== 'email' },
-                  { k: 'trabajadores', label: 'N.º de trabajadores', placeholder: 'Ej: 25', type: 'text', full: false, req: false },
+                  { k:'nombre',      label:'Empresa / Razón social',     placeholder:'Empresa S.A.S.',     type:'text',  full:true,  req:true },
+                  { k:'nit',         label:'NIT',                         placeholder:'900.123.456-7',      type:'text',  full:false, req:true },
+                  { k:'responsable', label:'Responsable SG-SST',          placeholder:'Nombre completo',    type:'text',  full:false, req:true },
+                  { k:'cargo',       label:'Cargo',                       placeholder:'Coordinador SST',    type:'text',  full:false, req:false },
+                  { k:'email',       label:'Correo electrónico',          placeholder:'correo@empresa.com', type:'email', full:false, req:envio !== 'whatsapp' },
+                  { k:'telefono',    label:'Teléfono / WhatsApp',         placeholder:'+57 300 000 0000',   type:'tel',   full:false, req:envio !== 'email' },
+                  { k:'trabajadores',label:'N.º de trabajadores',         placeholder:'Ej: 50',             type:'text',  full:false, req:false },
                 ].map(({ k, label, placeholder, type, full, req }) => (
                   <div key={k} className={full ? 'sm:col-span-2' : ''}>
-                    <label className="text-slate-700 text-sm mb-1.5 block font-medium">
-                      {label} {req && <span className="text-red-500">*</span>}
+                    <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+                      {label}{req && <span className="text-orange-500 ml-0.5">*</span>}
                     </label>
-                    <input
-                      type={type}
-                      value={empresa[k as keyof EmpresaData]}
+                    <input type={type} value={empresa[k as keyof EmpresaData]}
                       onChange={(e) => setEmpresa((p) => ({ ...p, [k]: e.target.value }))}
                       placeholder={placeholder}
-                      className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100 transition-all text-sm"
+                      className="w-full border-2 border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-50 transition-all text-base"
                     />
                   </div>
                 ))}
-
                 <div>
-                  <label className="text-slate-300 text-sm mb-1.5 block">
-                    Sector económico <span className="text-red-400">*</span>
+                  <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+                    Sector económico<span className="text-orange-500 ml-0.5">*</span>
                   </label>
-                  <select
-                    value={empresa.sector}
-                    onChange={(e) => setEmpresa((p) => ({ ...p, sector: e.target.value }))}
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100 transition-all text-sm"
-                  >
-                    <option value="">Seleccionar sector...</option>
+                  <select value={empresa.sector} onChange={(e) => setEmpresa((p) => ({ ...p, sector: e.target.value }))}
+                    className="w-full border-2 border-slate-200 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-50 transition-all text-base bg-white">
+                    <option value="">Seleccionar...</option>
                     {SECTORES.map((s) => <option key={s} value={s}>{s}</option>)}
                   </select>
                 </div>
@@ -459,41 +399,32 @@ export default function FormularioPage() {
 
         {/* Error */}
         {error && (
-          <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
-            {error}
+          <div className="mt-4 flex gap-3 p-4 bg-red-50 border-2 border-red-200 rounded-2xl text-red-700 font-medium">
+            <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" /> {error}
           </div>
         )}
+      </div>
 
-        {/* Navigation */}
-        <div className="mt-8 flex gap-3">
-          {step > 0 && (
-            <button
-              onClick={prev}
-              className="flex items-center gap-2 px-6 py-3.5 border-2 border-slate-300 text-slate-600 hover:border-slate-400 hover:text-slate-800 rounded-xl transition-colors font-medium"
-            >
+      {/* Sticky bottom nav */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] z-20">
+        <div className="max-w-3xl mx-auto px-4 py-3 flex gap-3">
+          {step > 0 ? (
+            <button onClick={prev}
+              className="flex items-center gap-2 px-5 py-3.5 border-2 border-slate-300 text-slate-600 hover:border-slate-400 font-semibold rounded-2xl transition-all">
               <ArrowLeft className="w-4 h-4" /> Anterior
             </button>
-          )}
+          ) : <div />}
           <div className="flex-1" />
           {step < 4 && (
-            <button
-              onClick={next}
-              className="flex items-center gap-2 px-8 py-3.5 bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-xl transition-colors text-base shadow-md shadow-violet-200"
-            >
-              {step === 3 ? 'Ver mis resultados' : 'Siguiente'} <ArrowRight className="w-5 h-5" />
+            <button onClick={next}
+              className="flex items-center gap-2 px-8 py-3.5 bg-violet-600 hover:bg-violet-700 active:scale-95 text-white font-bold rounded-2xl transition-all shadow-lg shadow-violet-200 text-base">
+              {step === 3 ? 'Ver mis resultados' : 'Continuar'} <ArrowRight className="w-5 h-5" />
             </button>
           )}
           {step === 4 && (
-            <button
-              onClick={handleSubmit}
-              disabled={submitting}
-              className="flex items-center gap-2 px-8 py-3.5 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-colors text-base shadow-md shadow-orange-200"
-            >
-              {submitting ? (
-                <><Loader2 className="w-5 h-5 animate-spin" /> Enviando...</>
-              ) : (
-                <><CheckCircle2 className="w-5 h-5" /> Recibir mis resultados</>
-              )}
+            <button onClick={handleSubmit} disabled={submitting}
+              className="flex items-center gap-2 px-8 py-3.5 bg-orange-500 hover:bg-orange-600 active:scale-95 disabled:opacity-60 text-white font-bold rounded-2xl transition-all shadow-lg shadow-orange-200 text-base">
+              {submitting ? <><Loader2 className="w-5 h-5 animate-spin" /> Enviando...</> : <><CheckCircle2 className="w-5 h-5" /> Recibir mis resultados</>}
             </button>
           )}
         </div>
