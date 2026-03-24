@@ -4,7 +4,6 @@ import {
   Text,
   View,
   StyleSheet,
-  Font,
 } from '@react-pdf/renderer';
 import { calcularPorCiclo, calcularPorEstandar, SST_ITEMS, type RespuestaItem } from './sst-items';
 

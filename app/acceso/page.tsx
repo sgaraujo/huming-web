@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Eye, EyeOff, Loader2, ShieldCheck } from 'lucide-react';
 
 export default function AccesoAdminPage() {
-  const { signIn, user, profile, loading } = useAuth();
+  const { signIn, user, loading } = useAuth();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
