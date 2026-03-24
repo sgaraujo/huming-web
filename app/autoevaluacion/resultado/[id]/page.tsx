@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
@@ -45,26 +45,20 @@ interface Evaluacion {
 
 export default function ResultadoPage() {
   const { id } = useParams<{ id: string }>();
-  const { user, loading } = useAuth();
-  const router = useRouter();
   const [data, setData] = useState<Evaluacion | null>(null);
   const [fetching, setFetching] = useState(true);
   const [downloadingPdf, setDownloadingPdf] = useState(false);
 
   useEffect(() => {
-    if (!loading && !user) router.push('/autoevaluacion/login');
-  }, [user, loading, router]);
-
-  useEffect(() => {
-    if (!id || !user) return;
+    if (!id) return;
     (async () => {
       const snap = await getDoc(doc(db, 'evaluaciones', id));
       if (snap.exists()) setData(snap.data() as Evaluacion);
       setFetching(false);
     })();
-  }, [id, user]);
+  }, [id]);
 
-  if (loading || fetching) {
+  if (fetching) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-violet-400 animate-spin" />
