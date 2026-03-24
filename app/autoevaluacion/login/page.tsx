@@ -7,7 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Eye, EyeOff, ArrowLeft, Loader2 } from 'lucide-react';
 
 function LoginContent() {
-  const { signIn, signUp, resetPassword, user, loading } = useAuth();
+  const { signIn, signUp, resetPassword, user, profile, loading } = useAuth();
   const router = useRouter();
   const params = useSearchParams();
   const [modo, setModo] = useState<'login' | 'registro' | 'reset'>(
@@ -28,8 +28,11 @@ function LoginContent() {
   });
 
   useEffect(() => {
-    if (!loading && user) router.push('/autoevaluacion/formulario');
-  }, [user, loading, router]);
+    if (!loading && user && profile) {
+      if (profile.role === 'admin') router.push('/dashboard');
+      else router.push('/autoevaluacion/formulario');
+    }
+  }, [user, profile, loading, router]);
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -73,20 +76,20 @@ function LoginContent() {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
+        <Loader2 className="w-8 h-8 text-violet-400 animate-spin" />
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 flex flex-col">
+    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950 to-slate-900 flex flex-col">
       <header className="px-6 py-4 border-b border-white/10">
         <div className="max-w-6xl mx-auto flex items-center gap-4">
           <Link href="/autoevaluacion" className="text-slate-400 hover:text-white transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <Link href="/" className="text-white font-bold text-xl tracking-tight">
-            Human<span className="text-blue-400">IA</span>
+            Human<span className="text-violet-400">IA</span>
           </Link>
         </div>
       </header>
@@ -127,7 +130,7 @@ function LoginContent() {
                       onChange={set('nombre')}
                       required
                       placeholder="Ej: María García"
-                      className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-colors text-sm"
+                      className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-violet-500 transition-colors text-sm"
                     />
                   </div>
                   <div>
@@ -138,7 +141,7 @@ function LoginContent() {
                       onChange={set('empresa')}
                       required
                       placeholder="Razón social"
-                      className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-colors text-sm"
+                      className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-violet-500 transition-colors text-sm"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
@@ -150,7 +153,7 @@ function LoginContent() {
                         onChange={set('nit')}
                         required
                         placeholder="900.123.456-7"
-                        className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-colors text-sm"
+                        className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-violet-500 transition-colors text-sm"
                       />
                     </div>
                     <div>
@@ -160,7 +163,7 @@ function LoginContent() {
                         value={form.telefono}
                         onChange={set('telefono')}
                         placeholder="+57 300..."
-                        className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-colors text-sm"
+                        className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-violet-500 transition-colors text-sm"
                       />
                     </div>
                   </div>
@@ -175,7 +178,7 @@ function LoginContent() {
                   onChange={set('email')}
                   required
                   placeholder="empresa@ejemplo.com"
-                  className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-colors text-sm"
+                  className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-violet-500 transition-colors text-sm"
                 />
               </div>
 
@@ -189,7 +192,7 @@ function LoginContent() {
                       onChange={set('password')}
                       required
                       placeholder="••••••••"
-                      className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-colors text-sm pr-10"
+                      className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-violet-500 transition-colors text-sm pr-10"
                     />
                     <button
                       type="button"
@@ -205,7 +208,7 @@ function LoginContent() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-3 bg-blue-600 hover:bg-blue-500 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2"
+                className="w-full py-3 bg-violet-600 hover:bg-violet-500 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2"
               >
                 {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
                 {modo === 'login' ? 'Entrar' : modo === 'registro' ? 'Crear cuenta' : 'Enviar enlace'}
@@ -218,18 +221,18 @@ function LoginContent() {
                   <button onClick={() => setModo('reset')} className="text-slate-400 hover:text-white block w-full transition-colors">
                     ¿Olvidaste tu contraseña?
                   </button>
-                  <button onClick={() => setModo('registro')} className="text-blue-400 hover:text-blue-300 transition-colors">
+                  <button onClick={() => setModo('registro')} className="text-violet-400 hover:text-violet-300 transition-colors">
                     No tengo cuenta — Registrarme
                   </button>
                 </>
               )}
               {modo === 'registro' && (
-                <button onClick={() => setModo('login')} className="text-blue-400 hover:text-blue-300 transition-colors">
+                <button onClick={() => setModo('login')} className="text-violet-400 hover:text-violet-300 transition-colors">
                   Ya tengo cuenta — Iniciar sesión
                 </button>
               )}
               {modo === 'reset' && (
-                <button onClick={() => setModo('login')} className="text-blue-400 hover:text-blue-300 transition-colors">
+                <button onClick={() => setModo('login')} className="text-violet-400 hover:text-violet-300 transition-colors">
                   Volver al inicio de sesión
                 </button>
               )}

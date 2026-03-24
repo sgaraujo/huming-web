@@ -7,8 +7,8 @@ const steps = [
     title: 'Diagnóstico',
     description:
       'Evaluamos la situación actual de tu empresa: identificamos brechas normativas, riesgos y oportunidades de mejora.',
-    gradient: 'from-blue-500 to-indigo-600',
-    shadow: 'shadow-blue-500/25',
+    gradient: 'from-violet-500 to-indigo-600',
+    shadow: 'shadow-violet-500/25',
   },
   {
     number: '02',
@@ -41,7 +41,7 @@ const steps = [
 
 export default function HowWeWork() {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-transparent">
       <div className="mx-auto max-w-6xl px-6">
         {/* Header */}
         <div className="text-center mb-16 space-y-4">
@@ -59,7 +59,7 @@ export default function HowWeWork() {
         {/* Steps */}
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 relative">
           {/* Connector line (desktop only) */}
-          <div className="hidden lg:block absolute top-[2rem] left-[calc(12.5%+2rem)] right-[calc(12.5%+2rem)] h-px bg-gradient-to-r from-blue-200 via-orange-200 to-violet-200 z-0" />
+          <div className="hidden lg:block absolute top-[2rem] left-[calc(12.5%+2rem)] right-[calc(12.5%+2rem)] h-px bg-gradient-to-r from-violet-200 via-orange-200 to-violet-200 z-0" />
 
           {steps.map((step) => (
             <div

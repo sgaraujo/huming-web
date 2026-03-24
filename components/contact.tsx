@@ -18,8 +18,8 @@ export default function ContactSection() {
       name: 'Facebook',
       url: 'https://www.facebook.com/share/17H68FUwVy/',
       icon: Facebook,
-      color: 'from-blue-600 to-blue-700',
-      hoverColor: 'hover:from-blue-700 hover:to-blue-800'
+      color: 'from-violet-600 to-violet-700',
+      hoverColor: 'hover:from-violet-700 hover:to-violet-800'
     },
     {
       name: 'TikTok',

@@ -11,7 +11,7 @@ const certs = ['ISO 45001', 'ISO 9001', 'ISO 14001', 'SG-SST', 'PESV']
 
 export default function HeroMain() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-orange-50 via-white to-slate-50 pt-28 pb-16 lg:pt-36 lg:pb-24">
+    <section className="relative overflow-hidden bg-transparent pt-28 pb-16 lg:pt-36 lg:pb-24">
       {/* Decorative blobs */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full bg-orange-100/60 blur-3xl" />

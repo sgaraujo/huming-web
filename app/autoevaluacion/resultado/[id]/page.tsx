@@ -50,6 +50,7 @@ export default function ResultadoPage() {
   const router = useRouter();
   const [data, setData] = useState<Evaluacion | null>(null);
   const [fetching, setFetching] = useState(true);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) router.push('/autoevaluacion/login');
@@ -67,9 +68,38 @@ export default function ResultadoPage() {
   if (loading || fetching) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
+        <Loader2 className="w-8 h-8 text-violet-400 animate-spin" />
       </div>
     );
+  }
+
+  async function handleDownloadPdf() {
+    if (!data) return;
+    setDownloadingPdf(true);
+    try {
+      const res = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          empresa: data.empresa,
+          respuestas: data.respuestas,
+          puntaje: data.puntaje,
+          nivel: data.nivel,
+          evaluacionId: id,
+        }),
+      });
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `HumanIA-SG-SST-${data.empresa.nit || 'evaluacion'}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      alert('Error generando el PDF. Intenta de nuevo.');
+    } finally {
+      setDownloadingPdf(false);
+    }
   }
 
   if (!data) {
@@ -113,7 +143,7 @@ export default function ResultadoPage() {
   });
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900">
+    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950 to-slate-900">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-slate-950/90 backdrop-blur border-b border-white/10">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-4">
@@ -121,14 +151,18 @@ export default function ResultadoPage() {
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <Link href="/" className="text-white font-bold text-lg tracking-tight">
-            Human<span className="text-blue-400">IA</span>
+            Human<span className="text-violet-400">IA</span>
           </Link>
           <div className="flex-1" />
           <button
-            onClick={() => window.print()}
-            className="flex items-center gap-2 text-xs px-3 py-1.5 border border-white/15 text-slate-300 hover:text-white rounded-lg transition-colors"
+            onClick={handleDownloadPdf}
+            disabled={downloadingPdf}
+            className="flex items-center gap-2 text-xs px-3 py-1.5 border border-white/15 text-slate-300 hover:text-white rounded-lg transition-colors disabled:opacity-60"
           >
-            <Download className="w-3.5 h-3.5" /> Guardar PDF
+            {downloadingPdf
+              ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Generando...</>
+              : <><Download className="w-3.5 h-3.5" /> Descargar PDF</>
+            }
           </button>
         </div>
       </header>
@@ -259,7 +293,7 @@ export default function ResultadoPage() {
                   <p className="text-slate-400 text-xs mb-1">{ciclo}</p>
                   <p className="text-white font-bold text-lg">{v.obtenido.toFixed(1)} / {v.maximo}</p>
                   <div className="mt-2 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-500 rounded-full" style={{ width: `${pct}%` }} />
+                    <div className="h-full bg-violet-500 rounded-full" style={{ width: `${pct}%` }} />
                   </div>
                   <p className="text-slate-500 text-xs mt-1">{pct.toFixed(0)}%</p>
                 </div>
@@ -304,7 +338,7 @@ export default function ResultadoPage() {
             {[
               { label: 'Cumple', icon: CheckCircle2, color: 'text-green-400', estado: 'cumple' },
               { label: 'No cumple', icon: XCircle, color: 'text-red-400', estado: 'no_cumple' },
-              { label: 'N/A Justificado', icon: MinusCircle, color: 'text-blue-400', estado: 'no_aplica_j' },
+              { label: 'N/A Justificado', icon: MinusCircle, color: 'text-violet-400', estado: 'no_aplica_j' },
               { label: 'N/A Sin justificar', icon: MinusCircle, color: 'text-orange-400', estado: 'no_aplica_nj' },
             ].map(({ label, icon: Icon, color, estado }) => {
               const count = SST_ITEMS.filter((i) => respuestas[i.id]?.estado === estado).length;
@@ -320,14 +354,14 @@ export default function ResultadoPage() {
         </div>
 
         {/* CTA */}
-        <div className="bg-blue-950/40 border border-blue-800/40 rounded-2xl p-6 text-center">
+        <div className="bg-violet-950/40 border border-violet-800/40 rounded-2xl p-6 text-center">
           <h3 className="text-white font-semibold text-lg mb-2">¿Necesitas apoyo en tu Plan de Mejoramiento?</h3>
           <p className="text-slate-400 text-sm mb-5">
             Nuestros expertos en SST te acompañan desde el diagnóstico hasta la implementación.
           </p>
           <Link
             href="/contacto"
-            className="inline-block px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors"
+            className="inline-block px-6 py-2.5 bg-violet-600 hover:bg-violet-500 text-white font-semibold rounded-xl transition-colors"
           >
             Hablar con un asesor
           </Link>

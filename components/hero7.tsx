@@ -17,13 +17,13 @@ export const Hero7 = ({
   return (
     <section className="relative pt-36 pb-16 md:pt-36 md:pb-24 text-center overflow-hidden">
       {/* Background with gradient and subtle pattern */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-blue-50/30"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-violet-50/30"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.05),transparent_50%)]"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(34,197,94,0.05),transparent_50%)]"></div>
       
       {/* Decorative elements */}
       <div className="absolute top-10 left-10 w-20 h-20 bg-gradient-to-br from-purple-200/30 to-transparent rounded-full blur-xl"></div>
-      <div className="absolute top-32 right-16 w-32 h-32 bg-gradient-to-br from-blue-200/20 to-transparent rounded-full blur-2xl"></div>
+      <div className="absolute top-32 right-16 w-32 h-32 bg-gradient-to-br from-violet-200/20 to-transparent rounded-full blur-2xl"></div>
       <div className="absolute bottom-20 left-20 w-24 h-24 bg-gradient-to-br from-emerald-200/25 to-transparent rounded-full blur-xl"></div>
       
       <div className="container relative z-10 px-4 sm:px-6">

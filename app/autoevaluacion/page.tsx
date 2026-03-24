@@ -31,16 +31,16 @@ const beneficios = [
 
 export default function AutoevaluacionPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900">
+    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950 to-slate-900">
       {/* Header */}
       <header className="border-b border-white/10 px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link href="/" className="text-white font-bold text-xl tracking-tight">
-            Human<span className="text-blue-400">IA</span>
+            Human<span className="text-violet-400">IA</span>
           </Link>
           <Link
             href="/autoevaluacion/login"
-            className="text-sm text-blue-300 hover:text-white transition-colors"
+            className="text-sm text-violet-300 hover:text-white transition-colors"
           >
             Iniciar sesión
           </Link>
@@ -49,12 +49,12 @@ export default function AutoevaluacionPage() {
 
       {/* Hero */}
       <section className="max-w-4xl mx-auto px-6 py-20 text-center">
-        <span className="inline-block px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-medium mb-6 border border-blue-500/30">
+        <span className="inline-block px-3 py-1 rounded-full bg-violet-500/20 text-violet-300 text-xs font-medium mb-6 border border-violet-500/30">
           Resolución 0312 de 2019
         </span>
         <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6 leading-tight">
           Autoevaluación de{' '}
-          <span className="text-blue-400">Estándares Mínimos</span> SG-SST
+          <span className="text-violet-400">Estándares Mínimos</span> SG-SST
         </h1>
         <p className="text-lg text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">
           Conoce en minutos el nivel de cumplimiento de tu Sistema de Gestión de Seguridad y Salud
@@ -63,7 +63,7 @@ export default function AutoevaluacionPage() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/autoevaluacion/login?modo=registro"
-            className="px-8 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-blue-900/40"
+            className="px-8 py-3.5 bg-violet-600 hover:bg-violet-500 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-violet-900/40"
           >
             Comenzar evaluación gratis
           </Link>
@@ -84,8 +84,8 @@ export default function AutoevaluacionPage() {
               key={b.titulo}
               className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/8 transition-colors"
             >
-              <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4">
-                <b.icon className="w-5 h-5 text-blue-400" />
+              <div className="w-10 h-10 bg-violet-500/20 rounded-xl flex items-center justify-center mb-4">
+                <b.icon className="w-5 h-5 text-violet-400" />
               </div>
               <h3 className="text-white font-semibold mb-2">{b.titulo}</h3>
               <p className="text-slate-400 text-sm leading-relaxed">{b.desc}</p>

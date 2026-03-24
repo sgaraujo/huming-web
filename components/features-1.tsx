@@ -65,7 +65,7 @@ export default function Features() {
                             alt="Transparencia"
                             className="absolute inset-0 w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 group-hover:from-blue-900/90 group-hover:via-blue-800/60 transition-all duration-300" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 group-hover:from-violet-900/90 group-hover:via-violet-800/60 transition-all duration-300" />
                         <CardContent className="relative z-10 h-full flex flex-col justify-end p-6">
                             <h3 className="text-2xl font-bold text-white mb-3 group-hover:scale-105 transition-transform duration-300">
                                 Transparencia

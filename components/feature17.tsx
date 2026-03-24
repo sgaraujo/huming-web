@@ -114,7 +114,7 @@ const Feature17 = ({
               </div>
 
               {/* Subtle hover border effect */}
-              <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-emerald-500/10"></div>
+              <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-purple-500/10 via-violet-500/10 to-emerald-500/10"></div>
             </div>
           ))}
         </div>

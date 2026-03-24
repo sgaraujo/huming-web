@@ -56,7 +56,7 @@ function ItemRow({
   return (
     <div className="bg-white/3 border border-white/8 rounded-xl p-4 space-y-3 hover:border-white/15 transition-colors">
       <div className="flex items-start gap-3">
-        <span className="shrink-0 text-xs font-mono bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-md mt-0.5">
+        <span className="shrink-0 text-xs font-mono bg-violet-500/20 text-violet-300 px-2 py-0.5 rounded-md mt-0.5">
           {item.id}
         </span>
         <div className="flex-1">
@@ -72,7 +72,7 @@ function ItemRow({
           const colors = {
             green: selected ? 'bg-green-600 border-green-500 text-white' : 'border-green-800/40 text-green-400 hover:border-green-600',
             red: selected ? 'bg-red-600 border-red-500 text-white' : 'border-red-800/40 text-red-400 hover:border-red-600',
-            blue: selected ? 'bg-blue-600 border-blue-500 text-white' : 'border-blue-800/40 text-blue-400 hover:border-blue-600',
+            blue: selected ? 'bg-violet-600 border-violet-500 text-white' : 'border-violet-800/40 text-violet-400 hover:border-violet-600',
             orange: selected ? 'bg-orange-600 border-orange-500 text-white' : 'border-orange-800/40 text-orange-400 hover:border-orange-600',
           };
           return (
@@ -96,7 +96,7 @@ function ItemRow({
         onChange={(e) =>
           onChange(item.id, { estado: respuesta?.estado ?? null, observacion: e.target.value })
         }
-        className="w-full bg-white/3 border border-white/8 rounded-lg px-3 py-2 text-slate-300 placeholder:text-slate-600 text-xs focus:outline-none focus:border-blue-500/50 transition-colors"
+        className="w-full bg-white/3 border border-white/8 rounded-lg px-3 py-2 text-slate-300 placeholder:text-slate-600 text-xs focus:outline-none focus:border-violet-500/50 transition-colors"
       />
     </div>
   );
@@ -124,7 +124,8 @@ export default function FormularioPage() {
 
   useEffect(() => {
     if (!loading && !user) router.push('/autoevaluacion/login');
-  }, [user, loading, router]);
+    if (!loading && user && profile?.role === 'admin') router.push('/dashboard');
+  }, [user, profile, loading, router]);
 
   // Pre-fill empresa data from profile
   useEffect(() => {
@@ -229,18 +230,18 @@ export default function FormularioPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
+        <Loader2 className="w-8 h-8 text-violet-400 animate-spin" />
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900">
+    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950 to-slate-900">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-slate-950/90 backdrop-blur border-b border-white/10">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
           <Link href="/" className="text-white font-bold text-lg tracking-tight shrink-0">
-            Human<span className="text-blue-400">IA</span>
+            Human<span className="text-violet-400">IA</span>
           </Link>
 
           {/* Progress bar */}
@@ -251,7 +252,7 @@ export default function FormularioPage() {
             </div>
             <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
               <div
-                className="h-full bg-blue-500 rounded-full transition-all duration-500"
+                className="h-full bg-violet-500 rounded-full transition-all duration-500"
                 style={{ width: `${(step / (TOTAL_STEPS - 1)) * 100}%` }}
               />
             </div>
@@ -305,7 +306,7 @@ export default function FormularioPage() {
                     value={empresa[k as keyof EmpresaData]}
                     onChange={(e) => setEmpresa((p) => ({ ...p, [k]: e.target.value }))}
                     placeholder={placeholder}
-                    className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-colors text-sm"
+                    className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-violet-500 transition-colors text-sm"
                   />
                 </div>
               ))}
@@ -316,7 +317,7 @@ export default function FormularioPage() {
                 <select
                   value={empresa.sector}
                   onChange={(e) => setEmpresa((p) => ({ ...p, sector: e.target.value }))}
-                  className="w-full bg-slate-900 border border-white/15 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors text-sm"
+                  className="w-full bg-slate-900 border border-white/15 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-violet-500 transition-colors text-sm"
                 >
                   <option value="">Seleccionar sector...</option>
                   {SECTORES.map((s) => <option key={s} value={s}>{s}</option>)}
@@ -338,7 +339,7 @@ export default function FormularioPage() {
                 {currentItems.length} ítems · Para cada uno selecciona:{' '}
                 <span className="text-green-400">Cumple</span>,{' '}
                 <span className="text-red-400">No cumple</span>, o{' '}
-                <span className="text-blue-400">No aplica</span>
+                <span className="text-violet-400">No aplica</span>
               </p>
             </div>
 
@@ -347,7 +348,7 @@ export default function FormularioPage() {
                 <div key={estandar}>
                   <div className="flex items-center gap-3 mb-4">
                     <div className="h-px flex-1 bg-white/10" />
-                    <span className="text-xs font-semibold text-blue-300 uppercase tracking-wider px-3">
+                    <span className="text-xs font-semibold text-violet-300 uppercase tracking-wider px-3">
                       {estandar}
                     </span>
                     <div className="h-px flex-1 bg-white/10" />
@@ -484,7 +485,7 @@ export default function FormularioPage() {
           {step < 5 && (
             <button
               onClick={next}
-              className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors text-sm"
+              className="flex items-center gap-2 px-6 py-2.5 bg-violet-600 hover:bg-violet-500 text-white font-semibold rounded-xl transition-colors text-sm"
             >
               {step === 4 ? 'Ver resumen' : 'Siguiente'} <ArrowRight className="w-4 h-4" />
             </button>

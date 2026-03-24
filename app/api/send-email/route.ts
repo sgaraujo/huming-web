@@ -1,16 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { renderToBuffer } from '@react-pdf/renderer';
+import React from 'react';
+import { EvaluacionPDF } from '@/lib/pdf-template';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'comercial@humania.com.co';
 const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@humania.com.co';
 
 export async function POST(req: NextRequest) {
   try {
-    const { empresa, puntaje, nivel, evaluacionId } = await req.json();
+    const { empresa, respuestas, puntaje, nivel, evaluacionId } = await req.json();
 
     const nivelEmoji = nivel === 'CRÍTICO' ? '🔴' : nivel === 'MODERADO' ? '🟡' : '🟢';
+    const nivelColor = nivel === 'CRÍTICO' ? '#f87171' : nivel === 'MODERADO' ? '#facc15' : '#4ade80';
     const nivelAccion =
       nivel === 'CRÍTICO'
         ? 'Debes realizar un Plan de Mejoramiento de inmediato y ponerlo a disposición del Ministerio del Trabajo.'
@@ -18,104 +21,154 @@ export async function POST(req: NextRequest) {
         ? 'Elabora un Plan de Mejoramiento y repórtalo a tu ARL en máximo 6 meses.'
         : 'Mantén las evidencias y mejoras en tu Plan Anual de Trabajo. ¡Excelente trabajo!';
 
+    const fecha = new Date().toLocaleDateString('es-CO', {
+      day: '2-digit', month: 'long', year: 'numeric',
+    });
+
+    // ── Generar PDF ─────────────────────────────────────────────────────────
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const pdfBuffer = await (renderToBuffer as any)(
+      React.createElement(EvaluacionPDF, { empresa, respuestas, puntaje, nivel, fecha, evaluacionId })
+    );
+    const pdfBase64 = Buffer.from(pdfBuffer).toString('base64');
+    const pdfFilename = `HumanIA-SG-SST-${empresa.nit || 'evaluacion'}.pdf`;
+
+    // ── HTML del correo ──────────────────────────────────────────────────────
     const html = `
 <!DOCTYPE html>
 <html lang="es">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="font-family:sans-serif;background:#0f172a;color:#e2e8f0;padding:0;margin:0;">
   <div style="max-width:560px;margin:0 auto;padding:40px 20px;">
-    <div style="margin-bottom:32px;">
-      <span style="font-size:22px;font-weight:800;color:#fff;">Human<span style="color:#60a5fa;">IA</span></span>
+    <div style="margin-bottom:28px;">
+      <span style="font-size:22px;font-weight:800;color:#fff;">Human<span style="color:#f97316;">IA</span></span>
+      <p style="font-size:11px;color:#475569;margin:4px 0 0;">Consultoría en SST · Sistemas de Gestión ISO · Colombia</p>
     </div>
 
-    <h1 style="font-size:20px;font-weight:700;color:#fff;margin:0 0 8px;">
-      Resultado de tu Autoevaluación SG-SST
+    <h1 style="font-size:20px;font-weight:700;color:#fff;margin:0 0 6px;">
+      Tu Autoevaluación SG-SST está lista
     </h1>
-    <p style="color:#94a3b8;font-size:14px;margin:0 0 32px;">
-      Resolución 0312 de 2019 · Estándares Mínimos
+    <p style="color:#94a3b8;font-size:13px;margin:0 0 28px;">
+      Resolución 0312 de 2019 · Estándares Mínimos · ${fecha}
     </p>
 
-    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:24px;margin-bottom:24px;">
-      <p style="color:#94a3b8;font-size:12px;margin:0 0 8px;">EMPRESA</p>
-      <p style="color:#fff;font-weight:600;font-size:16px;margin:0 0 4px;">${empresa.nombre}</p>
-      <p style="color:#64748b;font-size:13px;margin:0;">NIT: ${empresa.nit}</p>
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px 20px;margin-bottom:20px;">
+      <p style="color:#94a3b8;font-size:11px;margin:0 0 6px;">EMPRESA EVALUADA</p>
+      <p style="color:#fff;font-weight:700;font-size:15px;margin:0 0 3px;">${empresa.nombre}</p>
+      <p style="color:#64748b;font-size:12px;margin:0;">NIT: ${empresa.nit} · Sector: ${empresa.sector}</p>
     </div>
 
-    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:24px;margin-bottom:24px;text-align:center;">
-      <p style="color:#94a3b8;font-size:12px;margin:0 0 12px;">PUNTAJE OBTENIDO</p>
-      <span style="font-size:64px;font-weight:900;color:${nivel === 'CRÍTICO' ? '#f87171' : nivel === 'MODERADO' ? '#facc15' : '#4ade80'}">
-        ${puntaje.toFixed(1)}
-      </span>
-      <span style="font-size:24px;color:#64748b;"> / 100</span>
-      <div style="margin-top:16px;">
-        <span style="display:inline-block;padding:6px 20px;border-radius:999px;background:${nivel === 'CRÍTICO' ? 'rgba(239,68,68,0.2)' : nivel === 'MODERADO' ? 'rgba(234,179,8,0.2)' : 'rgba(34,197,94,0.2)'};color:${nivel === 'CRÍTICO' ? '#f87171' : nivel === 'MODERADO' ? '#facc15' : '#4ade80'};font-weight:700;font-size:14px;">
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;margin-bottom:20px;text-align:center;">
+      <p style="color:#94a3b8;font-size:11px;margin:0 0 10px;">PUNTAJE OBTENIDO</p>
+      <span style="font-size:60px;font-weight:900;color:${nivelColor};line-height:1;">${puntaje.toFixed(1)}</span>
+      <span style="font-size:22px;color:#475569;"> / 100</span>
+      <div style="margin:14px 0 0;">
+        <span style="display:inline-block;padding:6px 18px;border-radius:999px;background:${nivelColor}22;color:${nivelColor};font-weight:700;font-size:13px;border:1px solid ${nivelColor}44;">
           ${nivelEmoji} ${nivel}
         </span>
       </div>
+      <div style="height:6px;background:rgba(255,255,255,0.08);border-radius:3px;margin:16px 0 4px;overflow:hidden;">
+        <div style="height:6px;width:${puntaje}%;background:${nivelColor};border-radius:3px;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;">
+        <span>0%</span><span style="color:#f87171;">60% Crítico</span><span style="color:#facc15;">85% Moderado</span><span style="color:#4ade80;">100%</span>
+      </div>
     </div>
 
-    <div style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:16px;margin-bottom:24px;">
-      <p style="color:#93c5fd;font-weight:600;font-size:13px;margin:0 0 8px;">¿Qué debes hacer?</p>
-      <p style="color:#bfdbfe;font-size:13px;margin:0;line-height:1.6;">${nivelAccion}</p>
+    <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:14px 16px;margin-bottom:20px;">
+      <p style="color:#93c5fd;font-weight:600;font-size:12px;margin:0 0 6px;">¿Qué debes hacer?</p>
+      <p style="color:#bfdbfe;font-size:12px;margin:0;line-height:1.6;">${nivelAccion}</p>
     </div>
 
-    <p style="color:#94a3b8;font-size:13px;margin-bottom:24px;line-height:1.6;">
-      Nuestro equipo de expertos en SST revisará tu evaluación y se pondrá en contacto contigo para orientarte en el proceso de mejoramiento.
+    <p style="color:#64748b;font-size:12px;margin-bottom:20px;line-height:1.6;">
+      Adjunto encontrarás el <strong style="color:#94a3b8;">informe completo en PDF</strong> con tu resultado detallado,
+      el análisis por ciclo PHVA y el Plan de Mejoramiento con los ítems que requieren acción.
     </p>
 
     <a href="${process.env.NEXT_PUBLIC_BASE_URL || 'https://humania.com.co'}/autoevaluacion/resultado/${evaluacionId}"
-       style="display:inline-block;background:#3b82f6;color:#fff;padding:12px 24px;border-radius:12px;text-decoration:none;font-weight:600;font-size:14px;margin-bottom:32px;">
-      Ver informe completo
+       style="display:inline-block;background:#f97316;color:#fff;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13px;margin-bottom:28px;">
+      Ver informe en línea →
     </a>
 
-    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:0 0 24px;">
-    <p style="color:#475569;font-size:12px;margin:0;line-height:1.6;">
+    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:16px;margin-bottom:24px;">
+      <p style="color:#94a3b8;font-size:12px;font-weight:600;margin:0 0 6px;">¿Necesitas apoyo?</p>
+      <p style="color:#64748b;font-size:11px;margin:0 0 10px;line-height:1.5;">
+        Nuestros expertos en SST te acompañan en el Plan de Mejoramiento y la implementación completa del SG-SST.
+      </p>
+      <a href="https://wa.me/573102365931" style="color:#4ade80;font-size:11px;text-decoration:none;">
+        💬 Escribir por WhatsApp
+      </a>
+    </div>
+
+    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:0 0 20px;">
+    <p style="color:#334155;font-size:11px;margin:0;line-height:1.6;">
       HumanIA · Consultoría en SST · Bogotá, Colombia<br>
-      comercial@humania.com.co · +57 310 236 5931
+      comercial@humania.com.co · +57 310 236 5931<br>
+      Lunes a viernes, 8:00 AM – 5:00 PM
     </p>
   </div>
 </body>
-</html>
-`;
+</html>`;
 
-    // Email to company
+    // ── Enviar correo a la empresa ───────────────────────────────────────────
     if (empresa.email) {
       await resend.emails.send({
         from: `HumanIA SST <${FROM_EMAIL}>`,
         to: empresa.email,
-        subject: `Tu Autoevaluación SG-SST: ${puntaje.toFixed(1)}% – Nivel ${nivel}`,
+        subject: `Tu Autoevaluación SG-SST: ${puntaje.toFixed(1)}% – Nivel ${nivel} ${nivelEmoji}`,
         html,
+        attachments: [
+          {
+            filename: pdfFilename,
+            content: pdfBase64,
+          },
+        ],
       });
     }
 
-    // Notification email to admin
+    // ── Notificación al admin ────────────────────────────────────────────────
     await resend.emails.send({
       from: `HumanIA SST <${FROM_EMAIL}>`,
       to: ADMIN_EMAIL,
       subject: `[Nueva evaluación] ${empresa.nombre} – ${puntaje.toFixed(1)}% ${nivelEmoji} ${nivel}`,
       html: `
-        <p><strong>Nueva autoevaluación recibida</strong></p>
-        <ul>
-          <li>Empresa: ${empresa.nombre}</li>
-          <li>NIT: ${empresa.nit}</li>
-          <li>Sector: ${empresa.sector}</li>
-          <li>Responsable: ${empresa.responsable}</li>
-          <li>Email: ${empresa.email}</li>
-          <li>Teléfono: ${empresa.telefono || 'No indicado'}</li>
-          <li>Trabajadores: ${empresa.trabajadores || 'No indicado'}</li>
-          <li>Puntaje: ${puntaje.toFixed(1)} / 100</li>
-          <li>Nivel: ${nivel}</li>
-          <li>ID: ${evaluacionId}</li>
-        </ul>
-        <a href="${process.env.NEXT_PUBLIC_BASE_URL || 'https://humania.com.co'}/autoevaluacion/resultado/${evaluacionId}">
-          Ver evaluación completa
-        </a>
+        <div style="font-family:sans-serif;padding:24px;max-width:500px;">
+          <h2 style="margin:0 0 16px;">Nueva autoevaluación recibida</h2>
+          <table style="width:100%;border-collapse:collapse;font-size:13px;">
+            ${[
+              ['Empresa', empresa.nombre],
+              ['NIT', empresa.nit],
+              ['Sector', empresa.sector],
+              ['Responsable', empresa.responsable],
+              ['Email', empresa.email],
+              ['Teléfono', empresa.telefono || '—'],
+              ['Trabajadores', empresa.trabajadores || '—'],
+              ['Puntaje', `${puntaje.toFixed(1)} / 100`],
+              ['Nivel', `${nivelEmoji} ${nivel}`],
+            ].map(([k, v]) => `
+              <tr style="border-bottom:1px solid #e2e8f0;">
+                <td style="padding:8px 12px 8px 0;color:#64748b;font-weight:600;">${k}</td>
+                <td style="padding:8px 0;">${v}</td>
+              </tr>
+            `).join('')}
+          </table>
+          <a href="${process.env.NEXT_PUBLIC_BASE_URL || 'https://humania.com.co'}/autoevaluacion/resultado/${evaluacionId}"
+             style="display:inline-block;margin-top:20px;background:#1e40af;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;">
+            Ver evaluación completa →
+          </a>
+        </div>
       `,
+      attachments: [
+        {
+          filename: pdfFilename,
+          content: pdfBase64,
+        },
+      ],
     });
 
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error('Email error:', err);
+    console.error('Email/PDF error:', err);
     return NextResponse.json({ ok: false, error: String(err) }, { status: 500 });
   }
 }

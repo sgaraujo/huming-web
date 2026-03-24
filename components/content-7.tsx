@@ -116,7 +116,7 @@ export default function ContentSection() {
 
         {/* Redes Sociales (bloque con defensas anti-CSS) */}
         <div className="pt-8 pb-8">
-          <div className="relative z-[9999] pointer-events-auto flex flex-col sm:flex-row items-center justify-between gap-6 p-6 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+          <div className="relative z-[9999] pointer-events-auto flex flex-col sm:flex-row items-center justify-between gap-6 p-6 rounded-xl bg-orange-50/60 dark:bg-gray-800 border border-orange-100 dark:border-gray-700">
             <div className="text-center sm:text-left">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                 Síguenos en redes sociales
@@ -141,7 +141,7 @@ export default function ContentSection() {
 
               {/* Facebook */}
               <Link href="https://www.facebook.com/share/17H68FUwVy/" target="_blank" rel="noopener noreferrer" prefetch={false} aria-label="Facebook" title="Facebook" className="group">
-                <div className="w-12 h-12 shrink-0 rounded-full flex items-center justify-center shadow-md transition-transform duration-300 group-hover:scale-110 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
+                <div className="w-12 h-12 shrink-0 rounded-full flex items-center justify-center shadow-md transition-transform duration-300 group-hover:scale-110 bg-gradient-to-r from-violet-600 to-violet-700 hover:from-violet-700 hover:to-violet-800">
                   <svg viewBox="0 0 24 24" width="20" height="20" style={{ color: '#fff' }} fill="currentColor" aria-hidden="true">
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                   </svg>
@@ -173,7 +173,7 @@ export default function ContentSection() {
         <div className="pb-12">
           <Link href="/contacto" prefetch={false} aria-label="Ir a contacto">
             <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-r from-orange-500 via-purple-600 to-green-500 p-[2px] transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl">
-              <div className="relative rounded-2xl bg-white dark:bg-gray-900 p-8 sm:p-10">
+              <div className="relative rounded-2xl bg-orange-50/80 dark:bg-gray-900 p-8 sm:p-10">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
                   <div className="text-center sm:text-left flex-1">
                     <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">

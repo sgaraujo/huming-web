@@ -17,7 +17,7 @@ const services = [
     description:
       'Sistema de Gestión de Seguridad y Salud en el Trabajo. Diseño, implementación y auditoría.',
     href: '/blog',
-    gradient: 'from-blue-500 to-indigo-600',
+    gradient: 'from-violet-500 to-indigo-600',
   },
   {
     icon: Brain,
@@ -71,7 +71,7 @@ const services = [
 
 export default function ServicesGridHome() {
   return (
-    <section className="py-24 bg-slate-50">
+    <section className="py-24 bg-transparent">
       <div className="mx-auto max-w-6xl px-6">
         {/* Header */}
         <div className="text-center mb-16 space-y-4">
@@ -94,7 +94,7 @@ export default function ServicesGridHome() {
             <Link
               key={s.href}
               href={s.href}
-              className="group relative overflow-hidden rounded-2xl bg-white border border-slate-100 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+              className="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm border border-orange-100 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
             >
               {/* Icon */}
               <div

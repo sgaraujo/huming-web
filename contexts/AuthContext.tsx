@@ -30,6 +30,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, nombre: string, empresa: string, nit: string, telefono: string) => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
+  refreshProfile: () => Promise<void>;
   isAdmin: boolean;
 }
 
@@ -83,6 +84,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setProfile(null);
   }
 
+  async function refreshProfile() {
+    const currentUser = auth.currentUser;
+    if (!currentUser) return;
+    const snap = await getDoc(doc(db, 'usuarios', currentUser.uid));
+    if (snap.exists()) setProfile(snap.data() as UserProfile);
+  }
+
   async function resetPassword(email: string) {
     await sendPasswordResetEmail(auth, email);
   }
@@ -97,6 +105,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signUp,
         signOut,
         resetPassword,
+        refreshProfile,
         isAdmin: profile?.role === 'admin',
       }}
     >

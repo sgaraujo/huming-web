@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { HeroHeader } from "@/components/header"
 import HeroMain from "@/components/hero-main"
 import StatsSection from "@/components/stats"
+import AutoevaluacionCta from "@/components/autoevaluacion-cta"
 import ServicesGridHome from "@/components/services-grid-home"
 import ContentSection from "@/components/content-7"
 import HowWeWork from "@/components/how-we-work"
@@ -24,14 +25,17 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
       <HeroHeader />
-      <main className="flex-1">
+      <main className="flex-1 bg-gradient-to-b from-orange-50 via-white to-orange-50/30">
         {/* 1. Hero: headline + CTAs + carousel */}
         <HeroMain />
 
         {/* 2. Stats: 25+ empresas, 10+ sectores, 100% auditorías */}
         <StatsSection />
 
-        {/* 3. Services grid: 7 servicios con iconos */}
+        {/* 3. Autoevaluación SG-SST CTA */}
+        <AutoevaluacionCta />
+
+        {/* 4. Services grid: 7 servicios con iconos */}
         <ServicesGridHome />
 
         {/* 4. ¿Por qué HumanIA? (sección existente) */}

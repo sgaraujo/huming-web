@@ -11,7 +11,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line,
 } from 'recharts';
-import { Loader2, LogOut, Search, ExternalLink, Users, TrendingUp, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { Loader2, LogOut, Search, ExternalLink, Users, TrendingUp, ShieldCheck, AlertTriangle, Shield } from 'lucide-react';
 
 interface Evaluacion {
   id: string;
@@ -25,7 +25,7 @@ interface Evaluacion {
 const NIVEL_COLORS = { CRÍTICO: '#ef4444', MODERADO: '#eab308', ACEPTABLE: '#22c55e' };
 
 export default function DashboardPage() {
-  const { user, profile, loading, isAdmin, signOut } = useAuth();
+  const { user, profile, loading, isAdmin, signOut, refreshProfile } = useAuth();
   const router = useRouter();
   const [evaluaciones, setEvaluaciones] = useState<Evaluacion[]>([]);
   const [fetching, setFetching] = useState(true);
@@ -33,27 +33,58 @@ export default function DashboardPage() {
   const [filtroNivel, setFiltroNivel] = useState<string>('todos');
 
   useEffect(() => {
-    if (!loading) {
-      if (!user) router.push('/autoevaluacion/login');
-      else if (!isAdmin) router.push('/autoevaluacion/formulario');
-    }
-  }, [user, loading, isAdmin, router]);
+    if (loading) return;
+    if (!user) { router.push('/acceso'); return; }
+    if (profile && !isAdmin) router.push('/autoevaluacion/formulario');
+  }, [user, loading, isAdmin, router]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (!isAdmin) return;
+    if (!user || loading) return;
     (async () => {
-      const q = query(collection(db, 'evaluaciones'), orderBy('createdAt', 'desc'));
-      const snap = await getDocs(q);
-      const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() })) as Evaluacion[];
-      setEvaluaciones(docs);
-      setFetching(false);
+      try {
+        const q = query(collection(db, 'evaluaciones'), orderBy('createdAt', 'desc'));
+        const snap = await getDocs(q);
+        const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() })) as Evaluacion[];
+        setEvaluaciones(docs);
+      } catch {
+        // Sin permisos aún — igual mostrar dashboard vacío
+      } finally {
+        setFetching(false);
+      }
     })();
-  }, [isAdmin]);
+  }, [user, loading]);
 
   if (loading || fetching) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
+        <Loader2 className="w-8 h-8 text-violet-400 animate-spin" />
+      </div>
+    );
+  }
+
+  // Usuario autenticado pero sin documento en Firestore
+  if (!profile) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4 px-4 text-center">
+        <div className="w-12 h-12 rounded-full bg-yellow-950/50 flex items-center justify-center">
+          <Shield className="w-6 h-6 text-yellow-400" />
+        </div>
+        <h2 className="text-white font-semibold">Perfil no configurado</h2>
+        <p className="text-slate-400 text-sm max-w-xs">
+          Tu cuenta no tiene perfil en Firestore. Si ya creaste el documento en Firebase,
+          haz clic en <strong className="text-white">Reintentar</strong>.
+        </p>
+        <div className="flex gap-3 mt-2">
+          <button
+            onClick={refreshProfile}
+            className="px-4 py-2 bg-violet-600 hover:bg-violet-500 text-white text-sm rounded-xl transition-colors"
+          >
+            Reintentar
+          </button>
+          <button onClick={signOut} className="text-slate-500 text-sm hover:text-white transition-colors">
+            Cerrar sesión
+          </button>
+        </div>
       </div>
     );
   }
@@ -119,7 +150,7 @@ export default function DashboardPage() {
       <header className="sticky top-0 z-10 bg-slate-950/95 backdrop-blur border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
           <Link href="/" className="text-white font-bold text-lg tracking-tight">
-            Human<span className="text-blue-400">IA</span>
+            Human<span className="text-violet-400">IA</span>
           </Link>
           <span className="text-slate-600 text-sm">|</span>
           <span className="text-slate-400 text-sm font-medium">Dashboard Administrativo</span>
@@ -142,10 +173,10 @@ export default function DashboardPage() {
           ].map(({ icon: Icon, label, value, color, sub }) => (
             <div key={label} className="bg-white/5 border border-white/10 rounded-2xl p-5">
               <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3 ${
-                color === 'blue' ? 'bg-blue-500/20' : color === 'purple' ? 'bg-purple-500/20' : color === 'red' ? 'bg-red-500/20' : 'bg-green-500/20'
+                color === 'blue' ? 'bg-violet-500/20' : color === 'purple' ? 'bg-purple-500/20' : color === 'red' ? 'bg-red-500/20' : 'bg-green-500/20'
               }`}>
                 <Icon className={`w-4 h-4 ${
-                  color === 'blue' ? 'text-blue-400' : color === 'purple' ? 'text-purple-400' : color === 'red' ? 'text-red-400' : 'text-green-400'
+                  color === 'blue' ? 'text-violet-400' : color === 'purple' ? 'text-purple-400' : color === 'red' ? 'text-red-400' : 'text-green-400'
                 }`} />
               </div>
               <p className="text-slate-400 text-xs mb-1">{label}</p>
@@ -243,7 +274,7 @@ export default function DashboardPage() {
                 placeholder="Buscar empresa, NIT..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-9 pr-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder:text-slate-500 focus:outline-none focus:border-blue-500 w-56 transition-colors"
+                className="pl-9 pr-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder:text-slate-500 focus:outline-none focus:border-violet-500 w-56 transition-colors"
               />
             </div>
             {/* Filter */}
@@ -305,7 +336,7 @@ export default function DashboardPage() {
                     <td className="py-3 px-3">
                       <Link
                         href={`/autoevaluacion/resultado/${ev.id}`}
-                        className="text-blue-400 hover:text-blue-300 transition-colors"
+                        className="text-violet-400 hover:text-violet-300 transition-colors"
                       >
                         <ExternalLink className="w-4 h-4" />
                       </Link>
