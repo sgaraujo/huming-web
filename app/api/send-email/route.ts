@@ -4,11 +4,10 @@ import { renderToBuffer } from '@react-pdf/renderer';
 import React from 'react';
 import { EvaluacionPDF } from '@/lib/pdf-template';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'comercial@humania.com.co';
-const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@humania.com.co';
-
 export async function POST(req: NextRequest) {
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'comercial@humania.com.co';
+  const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@humania.com.co';
   try {
     const { empresa, respuestas, puntaje, nivel, evaluacionId } = await req.json();
 
