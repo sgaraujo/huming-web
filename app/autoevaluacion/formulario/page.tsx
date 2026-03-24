@@ -10,7 +10,7 @@ import {
   type RespuestaItem,
 } from '@/lib/sst-items';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { ArrowLeft, ArrowRight, CheckCircle2, Loader2, AlertTriangle, Mail, MessageCircle, ClipboardList } from 'lucide-react';
 
 interface EmpresaData {
@@ -24,7 +24,8 @@ const SECTORES = [
 ];
 
 const CICLO_ICONS = ['📋','⚙️','✅','🔄'];
-const TOTAL_STEPS = 5;
+// Steps: 0=email, 1-4=ciclos PHVA, 5=resultados+registro
+const TOTAL_STEPS = 6;
 
 // ─── Item row ─────────────────────────────────────────────────────────────────
 function ItemRow({ item, respuesta, onChange }: {
@@ -83,6 +84,8 @@ function ItemRow({ item, respuesta, onChange }: {
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function FormularioPage() {
   const [step, setStep] = useState(0);
+  const [emailInicial, setEmailInicial] = useState('');
+  const [leadId, setLeadId] = useState<string | null>(null);
   const [empresa, setEmpresa] = useState<EmpresaData>({
     nombre:'',nit:'',sector:'',responsable:'',cargo:'',email:'',telefono:'',trabajadores:'',
   });
@@ -100,7 +103,8 @@ export default function FormularioPage() {
   const nivel = calcularNivel(puntaje);
   const nivelColor = nivel === 'CRÍTICO' ? 'red' : nivel === 'MODERADO' ? 'yellow' : 'green';
 
-  const currentCiclo = step <= 3 ? CICLOS[step] : null;
+  // steps 1-4 = ciclos PHVA
+  const currentCiclo = step >= 1 && step <= 4 ? CICLOS[step - 1] : null;
   const currentItems = currentCiclo ? SST_ITEMS.filter((i) => i.ciclo === currentCiclo) : [];
   const answeredCount = currentItems.filter((i) => respuestas[i.id]?.estado).length;
   const itemsByEstandar = currentItems.reduce((acc, item) => {
@@ -110,27 +114,43 @@ export default function FormularioPage() {
   }, {} as Record<string, typeof SST_ITEMS>);
 
   function validateStep(): string {
-    if (step <= 3) {
+    if (step === 0) {
+      if (!emailInicial) return 'Ingresa tu correo para continuar';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInicial)) return 'Ingresa un correo válido';
+    }
+    if (step >= 1 && step <= 4) {
       const left = currentItems.filter((i) => !respuestas[i.id]?.estado).length;
       if (left > 0) return `Faltan ${left} ítem${left > 1 ? 's' : ''} por responder`;
     }
-    if (step === 4) {
-      if (!empresa.nombre) return 'Ingresa el nombre de la empresa';
-      if (!empresa.nit) return 'Ingresa el NIT';
-      if (!empresa.sector) return 'Selecciona el sector';
-      if (!empresa.responsable) return 'Ingresa el responsable SG-SST';
-      if (envio !== 'whatsapp' && !empresa.email) return 'Ingresa el correo para enviarte los resultados';
+    if (step === 5) {
       if (envio !== 'email' && !empresa.telefono) return 'Ingresa el teléfono de WhatsApp';
     }
     return '';
   }
 
-  function next() {
+  async function next() {
     const err = validateStep();
     if (err) { setError(err); return; }
-    setError(''); setStep((s) => s + 1);
+    setError('');
+
+    // Al avanzar del paso 0, guardar el email en Firestore como lead
+    if (step === 0) {
+      try {
+        const ref = await addDoc(collection(db, 'leads'), {
+          email: emailInicial,
+          createdAt: serverTimestamp(),
+        });
+        setLeadId(ref.id);
+        setEmpresa((p) => ({ ...p, email: emailInicial }));
+      } catch {
+        // No bloquear si falla el guardado del lead
+      }
+    }
+
+    setStep((s) => s + 1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
   function prev() {
     setError(''); setStep((s) => s - 1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -141,14 +161,23 @@ export default function FormularioPage() {
     if (err) { setError(err); return; }
     setSubmitting(true); setError('');
     try {
+      // Merge email inicial con los datos de empresa
+      const empresaFinal = { ...empresa, email: empresa.email || emailInicial };
       const docRef = await addDoc(collection(db, 'evaluaciones'), {
-        empresa, respuestas, puntaje, nivel, envio, createdAt: serverTimestamp(),
+        empresa: empresaFinal, respuestas, puntaje, nivel, envio,
+        leadId: leadId || null,
+        createdAt: serverTimestamp(),
       });
+
+      // Actualizar lead con el ID de la evaluación
+      if (leadId) {
+        updateDoc(doc(db, 'leads', leadId), { evaluacionId: docRef.id }).catch(() => {});
+      }
       if (envio === 'email' || envio === 'ambos') {
         fetch('/api/send-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ empresa, respuestas, puntaje, nivel, evaluacionId: docRef.id }),
+          body: JSON.stringify({ empresa: empresaFinal, respuestas, puntaje, nivel, evaluacionId: docRef.id }),
         }).catch(console.error);
       }
       if (envio === 'whatsapp' || envio === 'ambos') {
@@ -223,7 +252,7 @@ export default function FormularioPage() {
           <div className="flex-1">
             <div className="flex justify-between text-xs text-slate-400 mb-1.5">
               <span className="font-medium text-slate-600">
-                {step <= 3 ? `${CICLO_ICONS[step]} ${CICLOS[step]}` : '📊 Tus resultados'}
+                {step === 0 ? '✉️ Tu correo' : step <= 4 ? `${CICLO_ICONS[step-1]} ${CICLOS[step-1]}` : '📊 Tus resultados'}
               </span>
               <span className="font-semibold text-violet-600">{progressPct}%</span>
             </div>
@@ -243,7 +272,7 @@ export default function FormularioPage() {
 
         {/* Step pills */}
         <div className="max-w-3xl mx-auto px-4 pb-2 flex gap-1.5 overflow-x-auto scrollbar-hide">
-          {['PLANEAR','HACER','VERIFICAR','ACTUAR','Resultados'].map((s, i) => (
+          {['Correo','PLANEAR','HACER','VERIFICAR','ACTUAR','Resultados'].map((s, i) => (
             <div key={i} className={`shrink-0 text-xs px-3 py-1 rounded-full font-medium transition-all ${
               i === step ? 'bg-violet-600 text-white shadow-sm' : i < step ? 'bg-violet-100 text-violet-700' : 'bg-slate-100 text-slate-400'
             }`}>
@@ -255,14 +284,47 @@ export default function FormularioPage() {
 
       <div className="max-w-3xl mx-auto px-4 py-6 pb-32">
 
+        {/* Paso 0: Captura de correo */}
+        {step === 0 && (
+          <div className="max-w-md mx-auto py-8">
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-violet-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Mail className="w-8 h-8 text-violet-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-slate-800 mb-2">¡Comencemos!</h2>
+              <p className="text-slate-500 leading-relaxed">
+                Ingresa tu correo para guardar tu progreso y recibir los resultados al terminar.
+              </p>
+            </div>
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Correo electrónico <span className="text-orange-500">*</span>
+              </label>
+              <input
+                type="email"
+                value={emailInicial}
+                onChange={(e) => setEmailInicial(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && next()}
+                placeholder="correo@empresa.com"
+                autoFocus
+                className="w-full border-2 border-slate-200 rounded-xl px-4 py-3.5 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-50 transition-all text-base mb-4"
+              />
+              <p className="text-xs text-slate-400 flex items-start gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                Guardamos tu correo para enviarte el informe y nunca compartimos tu información.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Ciclos PHVA */}
-        {step <= 3 && currentCiclo && (
+        {step >= 1 && step <= 4 && currentCiclo && (
           <div>
             {/* Ciclo header */}
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-2xl">{CICLO_ICONS[step]}</span>
+                  <span className="text-2xl">{CICLO_ICONS[step-1]}</span>
                   <h2 className="text-xl font-bold text-slate-800">{currentCiclo}</h2>
                 </div>
                 <p className="text-slate-500 text-sm">
@@ -300,7 +362,7 @@ export default function FormularioPage() {
         )}
 
         {/* Paso final: Resultados + envío + registro */}
-        {step === 4 && (
+        {step === 5 && (
           <div className="space-y-5">
             <div className="text-center py-4">
               <div className="inline-flex items-center gap-2 bg-violet-50 text-violet-700 text-sm font-semibold px-4 py-2 rounded-full border border-violet-200 mb-4">
@@ -359,15 +421,18 @@ export default function FormularioPage() {
 
             {/* Registro */}
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-              <h3 className="text-slate-800 font-bold text-lg mb-1">Tus datos</h3>
-              <p className="text-slate-500 text-sm mb-5">Para enviarte el informe y guardar tu evaluación</p>
+              <h3 className="text-slate-800 font-bold text-lg mb-1">Tus datos <span className="text-slate-400 font-normal text-sm">(opcional)</span></h3>
+              <p className="text-slate-500 text-sm mb-2">Mientras más completo, mejor podremos ayudarte.</p>
+              <div className="bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 mb-5 flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                <p className="text-emerald-700 text-sm">Correo guardado: <strong>{emailInicial}</strong></p>
+              </div>
               <div className="grid sm:grid-cols-2 gap-4">
                 {[
-                  { k:'nombre',      label:'Empresa / Razón social',     placeholder:'Empresa S.A.S.',     type:'text',  full:true,  req:true },
-                  { k:'nit',         label:'NIT',                         placeholder:'900.123.456-7',      type:'text',  full:false, req:true },
-                  { k:'responsable', label:'Responsable SG-SST',          placeholder:'Nombre completo',    type:'text',  full:false, req:true },
+                  { k:'nombre',      label:'Empresa / Razón social',     placeholder:'Empresa S.A.S.',     type:'text',  full:true,  req:false },
+                  { k:'nit',         label:'NIT',                         placeholder:'900.123.456-7',      type:'text',  full:false, req:false },
+                  { k:'responsable', label:'Responsable SG-SST',          placeholder:'Nombre completo',    type:'text',  full:false, req:false },
                   { k:'cargo',       label:'Cargo',                       placeholder:'Coordinador SST',    type:'text',  full:false, req:false },
-                  { k:'email',       label:'Correo electrónico',          placeholder:'correo@empresa.com', type:'email', full:false, req:envio !== 'whatsapp' },
                   { k:'telefono',    label:'Teléfono / WhatsApp',         placeholder:'+57 300 000 0000',   type:'tel',   full:false, req:envio !== 'email' },
                   { k:'trabajadores',label:'N.º de trabajadores',         placeholder:'Ej: 50',             type:'text',  full:false, req:false },
                 ].map(({ k, label, placeholder, type, full, req }) => (
@@ -415,13 +480,13 @@ export default function FormularioPage() {
             </button>
           ) : <div />}
           <div className="flex-1" />
-          {step < 4 && (
+          {step < 5 && (
             <button onClick={next}
               className="flex items-center gap-2 px-8 py-3.5 bg-violet-600 hover:bg-violet-700 active:scale-95 text-white font-bold rounded-2xl transition-all shadow-lg shadow-violet-200 text-base">
-              {step === 3 ? 'Ver mis resultados' : 'Continuar'} <ArrowRight className="w-5 h-5" />
+              {step === 4 ? 'Ver mis resultados' : 'Continuar'} <ArrowRight className="w-5 h-5" />
             </button>
           )}
-          {step === 4 && (
+          {step === 5 && (
             <button onClick={handleSubmit} disabled={submitting}
               className="flex items-center gap-2 px-8 py-3.5 bg-orange-500 hover:bg-orange-600 active:scale-95 disabled:opacity-60 text-white font-bold rounded-2xl transition-all shadow-lg shadow-orange-200 text-base">
               {submitting ? <><Loader2 className="w-5 h-5 animate-spin" /> Enviando...</> : <><CheckCircle2 className="w-5 h-5" /> Recibir mis resultados</>}
