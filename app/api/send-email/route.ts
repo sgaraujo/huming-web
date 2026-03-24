@@ -109,61 +109,22 @@ export async function POST(req: NextRequest) {
 </body>
 </html>`;
 
-    // ── Enviar correo a la empresa ───────────────────────────────────────────
-    if (empresa.email) {
+    // ── Enviar correo a la empresa + admin ──────────────────────────────────
+    const recipients = [ADMIN_EMAIL];
+    if (empresa.email) recipients.push(empresa.email);
+
+    try {
       await resend.emails.send({
         from: `HumanIA SST <${FROM_EMAIL}>`,
-        to: empresa.email,
+        to: recipients,
         subject: `Tu Autoevaluación SG-SST: ${puntaje.toFixed(1)}% – Nivel ${nivel} ${nivelEmoji}`,
         html,
-        attachments: [
-          {
-            filename: pdfFilename,
-            content: pdfBase64,
-          },
-        ],
+        attachments: [{ filename: pdfFilename, content: pdfBase64 }],
       });
+    } catch (emailErr) {
+      console.error('Resend error:', emailErr);
+      // Don't fail — data is already saved in Firestore
     }
-
-    // ── Notificación al admin ────────────────────────────────────────────────
-    await resend.emails.send({
-      from: `HumanIA SST <${FROM_EMAIL}>`,
-      to: ADMIN_EMAIL,
-      subject: `[Nueva evaluación] ${empresa.nombre} – ${puntaje.toFixed(1)}% ${nivelEmoji} ${nivel}`,
-      html: `
-        <div style="font-family:sans-serif;padding:24px;max-width:500px;">
-          <h2 style="margin:0 0 16px;">Nueva autoevaluación recibida</h2>
-          <table style="width:100%;border-collapse:collapse;font-size:13px;">
-            ${[
-              ['Empresa', empresa.nombre],
-              ['NIT', empresa.nit],
-              ['Sector', empresa.sector],
-              ['Responsable', empresa.responsable],
-              ['Email', empresa.email],
-              ['Teléfono', empresa.telefono || '—'],
-              ['Trabajadores', empresa.trabajadores || '—'],
-              ['Puntaje', `${puntaje.toFixed(1)} / 100`],
-              ['Nivel', `${nivelEmoji} ${nivel}`],
-            ].map(([k, v]) => `
-              <tr style="border-bottom:1px solid #e2e8f0;">
-                <td style="padding:8px 12px 8px 0;color:#64748b;font-weight:600;">${k}</td>
-                <td style="padding:8px 0;">${v}</td>
-              </tr>
-            `).join('')}
-          </table>
-          <a href="${process.env.NEXT_PUBLIC_BASE_URL || 'https://humania.com.co'}/autoevaluacion/resultado/${evaluacionId}"
-             style="display:inline-block;margin-top:20px;background:#1e40af;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;">
-            Ver evaluación completa →
-          </a>
-        </div>
-      `,
-      attachments: [
-        {
-          filename: pdfFilename,
-          content: pdfBase64,
-        },
-      ],
-    });
 
     return NextResponse.json({ ok: true });
   } catch (err) {

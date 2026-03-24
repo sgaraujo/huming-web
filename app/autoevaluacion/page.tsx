@@ -62,16 +62,10 @@ export default function AutoevaluacionPage() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href="/autoevaluacion/login?modo=registro"
-            className="px-8 py-3.5 bg-violet-600 hover:bg-violet-500 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-violet-900/40"
+            href="/autoevaluacion/formulario"
+            className="px-8 py-3.5 bg-orange-500 hover:bg-orange-400 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-orange-900/40"
           >
-            Comenzar evaluación gratis
-          </Link>
-          <Link
-            href="/autoevaluacion/login"
-            className="px-8 py-3.5 border border-white/20 hover:border-white/40 text-white rounded-xl transition-colors"
-          >
-            Ya tengo cuenta
+            Comenzar evaluación gratis →
           </Link>
         </div>
       </section>

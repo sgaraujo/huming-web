@@ -67,7 +67,7 @@ export default function AutoevaluacionCta() {
                 {/* CTAs */}
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <Link
-                    href="/autoevaluacion/login?modo=registro"
+                    href="/autoevaluacion/formulario"
                     className="inline-flex items-center justify-center gap-2 rounded-xl bg-orange-500 px-7 py-3.5 font-semibold text-white shadow-lg shadow-orange-500/25 transition-all duration-200 hover:bg-orange-400 hover:shadow-orange-400/30 hover:scale-[1.02]"
                   >
                     <ClipboardList className="h-5 w-5" />
