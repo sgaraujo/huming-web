@@ -9,9 +9,9 @@ const items = [
 ]
 
 const niveles = [
-  { label: 'CRÍTICO', rango: '≤ 60%', color: 'bg-red-500', text: 'text-red-600', border: 'border-red-200', bg: 'bg-red-50' },
-  { label: 'MODERADO', rango: '61–85%', color: 'bg-yellow-400', text: 'text-yellow-700', border: 'border-yellow-200', bg: 'bg-yellow-50' },
-  { label: 'ACEPTABLE', rango: '≥ 86%', color: 'bg-green-500', text: 'text-green-700', border: 'border-green-200', bg: 'bg-green-50' },
+  { label: 'CRÍTICO', rango: 'Menor al 60%', color: 'bg-red-500', text: 'text-red-600', border: 'border-red-200', bg: 'bg-red-50' },
+  { label: 'MODERADO', rango: 'Entre el 61 y el 85%', color: 'bg-yellow-400', text: 'text-yellow-700', border: 'border-yellow-200', bg: 'bg-yellow-50' },
+  { label: 'ACEPTABLE', rango: 'Mayor al 86%', color: 'bg-green-500', text: 'text-green-700', border: 'border-green-200', bg: 'bg-green-50' },
 ]
 
 export default function AutoevaluacionCta() {
@@ -50,7 +50,7 @@ export default function AutoevaluacionCta() {
                   </h2>
                   <p className="text-base leading-relaxed text-slate-300 max-w-md">
                     Realiza gratis la autoevaluación de Estándares Mínimos SG-SST y conoce
-                    en minutos si tu empresa está en nivel Crítico, Moderado o Aceptable.
+                    en minutos si tu empresa está en nivel Crítico, Moderado o Aceptable según criteros establecidos por el ministerio de trabajo.
                   </p>
                 </div>
 
@@ -95,8 +95,10 @@ export default function AutoevaluacionCta() {
                   <div className="space-y-3">
                     {niveles.map((n) => (
                       <div key={n.label} className="flex items-center gap-4">
-                        <span className="w-24 text-xs font-bold text-slate-400">{n.rango}</span>
-                        <div className="flex-1 h-2 rounded-full bg-white/10 overflow-hidden">
+                        <span className={`w-24 text-xs font-semibold ${
+                          n.label === 'CRÍTICO' ? 'text-red-400' : n.label === 'MODERADO' ? 'text-yellow-400' : 'text-green-400'
+                        }`}>{n.rango}</span>
+                        <div className="flex-1 h-2.5 rounded-full bg-white/10 overflow-hidden">
                           <div
                             className={`h-full rounded-full ${n.color}`}
                             style={{
@@ -117,16 +119,16 @@ export default function AutoevaluacionCta() {
                 {/* Mini stats */}
                 <div className="grid grid-cols-3 gap-3">
                   {[
-                    { value: '60', label: 'ítems evaluados' },
-                    { value: '4', label: 'ciclos PHVA' },
-                    { value: '100', label: 'puntos máximos' },
+                    { value: '7, 21 ó 60', label: 'ítems evaluados', small: true },
+                    { value: '4', label: 'ciclos PHVA', small: false },
+                    { value: '100', label: 'puntos máximos', small: false },
                   ].map((s) => (
                     <div
                       key={s.label}
                       className="rounded-xl border border-white/8 bg-white/5 p-4 text-center"
                     >
-                      <p className="text-2xl font-black text-white">{s.value}</p>
-                      <p className="mt-1 text-[11px] text-slate-500 leading-tight">{s.label}</p>
+                      <p className={`font-black text-white ${s.small ? 'text-base leading-snug' : 'text-2xl'}`}>{s.value}</p>
+                      <p className="mt-1 text-[11px] text-slate-400 leading-tight">{s.label}</p>
                     </div>
                   ))}
                 </div>

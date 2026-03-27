@@ -34,10 +34,8 @@ function ItemRow({ item, respuesta, onChange }: {
   onChange: (id: string, r: RespuestaItem) => void;
 }) {
   const opts = [
-    { value: 'cumple' as const,       label: '✓ Cumple',             cls: 'border-emerald-400 bg-emerald-500 text-white', idle: 'border-slate-300 text-slate-600 hover:border-emerald-400 hover:text-emerald-700 hover:bg-emerald-50' },
-    { value: 'no_cumple' as const,    label: '✗ No cumple',          cls: 'border-red-500 bg-red-500 text-white',         idle: 'border-slate-300 text-slate-600 hover:border-red-400 hover:text-red-600 hover:bg-red-50' },
-    { value: 'no_aplica_j' as const,  label: 'N/A Justificado',      cls: 'border-violet-500 bg-violet-500 text-white',   idle: 'border-slate-300 text-slate-600 hover:border-violet-400 hover:text-violet-700 hover:bg-violet-50' },
-    { value: 'no_aplica_nj' as const, label: 'N/A Sin justificar',   cls: 'border-amber-500 bg-amber-500 text-white',     idle: 'border-slate-300 text-slate-600 hover:border-amber-400 hover:text-amber-600 hover:bg-amber-50' },
+    { value: 'cumple' as const,    label: '✓ Cumple',    cls: 'border-emerald-400 bg-emerald-500 text-white', idle: 'border-slate-300 text-slate-600 hover:border-emerald-400 hover:text-emerald-700 hover:bg-emerald-50' },
+    { value: 'no_cumple' as const, label: '✗ No cumple', cls: 'border-red-500 bg-red-500 text-white',         idle: 'border-slate-300 text-slate-600 hover:border-red-400 hover:text-red-600 hover:bg-red-50' },
   ];
 
   const answered = respuesta?.estado != null;
@@ -284,34 +282,84 @@ export default function FormularioPage() {
 
       <div className="max-w-3xl mx-auto px-4 py-6 pb-32">
 
-        {/* Paso 0: Captura de correo */}
+        {/* Paso 0: Correo + cómo recibir */}
         {step === 0 && (
-          <div className="max-w-md mx-auto py-8">
-            <div className="text-center mb-8">
+          <div className="max-w-md mx-auto py-8 space-y-4">
+            <div className="text-center mb-6">
               <div className="w-16 h-16 bg-violet-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Mail className="w-8 h-8 text-violet-600" />
+                <ClipboardList className="w-8 h-8 text-violet-600" />
               </div>
               <h2 className="text-2xl font-bold text-slate-800 mb-2">¡Comencemos!</h2>
               <p className="text-slate-500 leading-relaxed">
-                Ingresa tu correo para guardar tu progreso y recibir los resultados al terminar.
+                Antes de iniciar, dinos cómo quieres recibir tu informe.
               </p>
             </div>
+
+            {/* Cómo recibir */}
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Correo electrónico <span className="text-orange-500">*</span>
-              </label>
-              <input
-                type="email"
-                value={emailInicial}
-                onChange={(e) => setEmailInicial(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && next()}
-                placeholder="correo@empresa.com"
-                autoFocus
-                className="w-full border-2 border-slate-200 rounded-xl px-4 py-3.5 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-50 transition-all text-base mb-4"
-              />
+              <h3 className="text-slate-800 font-bold mb-1">¿Cómo quieres recibir el informe?</h3>
+              <p className="text-slate-400 text-sm mb-4">Te lo enviamos al terminar con tu Plan de Mejoramiento en PDF</p>
+              <div className="grid grid-cols-3 gap-3">
+                {([
+                  { id: 'email',    icon: Mail,          label: 'Correo',   desc: 'PDF al email' },
+                  { id: 'whatsapp', icon: MessageCircle, label: 'WhatsApp', desc: 'Por chat' },
+                  { id: 'ambos',    icon: CheckCircle2,  label: 'Ambos',    desc: 'Email + WA' },
+                ] as const).map(({ id, icon: Icon, label, desc }) => (
+                  <button key={id} type="button" onClick={() => setEnvio(id)}
+                    className={`flex flex-col items-center gap-1.5 py-4 px-2 rounded-2xl border-2 transition-all text-center ${
+                      envio === id ? 'bg-violet-600 border-violet-600 text-white shadow-lg shadow-violet-100' : 'border-slate-200 text-slate-500 hover:border-violet-300'
+                    }`}>
+                    <Icon className={`w-6 h-6 ${envio === id ? 'text-white' : 'text-slate-400'}`} />
+                    <span className="text-sm font-bold">{label}</span>
+                    <span className={`text-xs ${envio === id ? 'text-violet-100' : 'text-slate-400'}`}>{desc}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Datos */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Empresa / Razón social
+                </label>
+                <input
+                  type="text"
+                  value={empresa.nombre}
+                  onChange={(e) => setEmpresa((p) => ({ ...p, nombre: e.target.value }))}
+                  placeholder="Empresa S.A.S."
+                  className="w-full border-2 border-slate-200 rounded-xl px-4 py-3.5 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-50 transition-all text-base"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Correo electrónico <span className="text-orange-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  value={emailInicial}
+                  onChange={(e) => setEmailInicial(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && next()}
+                  placeholder="correo@empresa.com"
+                  autoFocus
+                  className="w-full border-2 border-slate-200 rounded-xl px-4 py-3.5 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-50 transition-all text-base"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Teléfono / WhatsApp {envio !== 'email' && <span className="text-orange-500">*</span>}
+                </label>
+                <input
+                  type="tel"
+                  value={empresa.telefono}
+                  onChange={(e) => setEmpresa((p) => ({ ...p, telefono: e.target.value }))}
+                  placeholder="+57 300 000 0000"
+                  className="w-full border-2 border-slate-200 rounded-xl px-4 py-3.5 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-50 transition-all text-base"
+                />
+              </div>
               <p className="text-xs text-slate-400 flex items-start gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                Guardamos tu correo para enviarte el informe y nunca compartimos tu información.
+                Nunca compartimos tu información con terceros.
               </p>
             </div>
           </div>
@@ -329,9 +377,8 @@ export default function FormularioPage() {
                 </div>
                 <p className="text-slate-500 text-sm">
                   Para cada ítem selecciona:{' '}
-                  <span className="text-emerald-600 font-semibold">Cumple</span>,{' '}
-                  <span className="text-red-500 font-semibold">No cumple</span> o{' '}
-                  <span className="text-violet-600 font-semibold">No aplica</span>
+                  <span className="text-emerald-600 font-semibold">Cumple</span> o{' '}
+                  <span className="text-red-500 font-semibold">No cumple</span>
                 </p>
               </div>
               <div className="text-right shrink-0 ml-4">
@@ -372,23 +419,41 @@ export default function FormularioPage() {
               <p className="text-slate-500">Completa tus datos para recibir el informe completo gratis</p>
             </div>
 
-            {/* Score */}
-            <div className={`rounded-3xl p-6 text-center border-2 ${
+            {/* Score por nivel */}
+            <div className={`rounded-3xl p-6 border-2 ${
               nivelColor === 'red' ? 'bg-red-50 border-red-200' : nivelColor === 'yellow' ? 'bg-yellow-50 border-yellow-200' : 'bg-emerald-50 border-emerald-200'
             }`}>
-              <p className={`text-7xl font-black leading-none mb-2 ${nivelColor === 'red' ? 'text-red-500' : nivelColor === 'yellow' ? 'text-yellow-600' : 'text-emerald-600'}`}>
-                {puntaje.toFixed(1)}
-              </p>
-              <p className="text-slate-400 text-sm mb-3">puntos de 100</p>
-              <span className={`inline-block px-6 py-2 rounded-full font-bold text-base ${
-                nivelColor === 'red' ? 'bg-red-500 text-white' : nivelColor === 'yellow' ? 'bg-yellow-400 text-white' : 'bg-emerald-500 text-white'
-              }`}>{nivel}</span>
-              <div className="mt-4 h-3 bg-white/70 rounded-full overflow-hidden">
-                <div className={`h-full rounded-full transition-all ${nivelColor === 'red' ? 'bg-red-400' : nivelColor === 'yellow' ? 'bg-yellow-400' : 'bg-emerald-400'}`}
-                  style={{ width: `${puntaje}%` }} />
+              {/* Nivel badge grande */}
+              <div className="text-center mb-4">
+                <span className={`inline-block text-4xl font-black px-8 py-3 rounded-2xl ${
+                  nivelColor === 'red' ? 'bg-red-500 text-white' : nivelColor === 'yellow' ? 'bg-yellow-400 text-white' : 'bg-emerald-500 text-white'
+                }`}>{nivel}</span>
               </div>
+
+              {/* Descripción del nivel */}
+              <p className={`text-center text-base font-semibold mb-4 ${
+                nivelColor === 'red' ? 'text-red-700' : nivelColor === 'yellow' ? 'text-yellow-700' : 'text-emerald-700'
+              }`}>
+                {nivelColor === 'red' && 'Puntaje obtenido es menor al 60%'}
+                {nivelColor === 'yellow' && 'Puntaje obtenido está entre el 61% y 85%'}
+                {nivelColor === 'green' && 'Puntaje obtenido está entre el 86% al 100%'}
+              </p>
+
+              {/* Barra de niveles visual */}
+              <div className="relative h-10 rounded-2xl overflow-hidden flex">
+                <div className="flex-1 bg-red-400 flex items-center justify-center text-white text-xs font-bold">CRÍTICO</div>
+                <div className="flex-1 bg-yellow-400 flex items-center justify-center text-white text-xs font-bold">MODERADO</div>
+                <div className="flex-1 bg-emerald-400 flex items-center justify-center text-white text-xs font-bold">ACEPTABLE</div>
+              </div>
+              <div className="flex text-xs text-slate-400 mt-1 px-1">
+                <span className="flex-1">0%</span>
+                <span className="flex-1 text-center">60%</span>
+                <span className="flex-1 text-center">85%</span>
+                <span className="text-right">100%</span>
+              </div>
+
               {nivel === 'CRÍTICO' && (
-                <div className="mt-4 flex gap-2 bg-red-100 border border-red-200 rounded-xl p-3 text-left">
+                <div className="mt-4 flex gap-2 bg-red-100 border border-red-200 rounded-xl p-3">
                   <AlertTriangle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
                   <p className="text-red-700 text-sm leading-relaxed">
                     Debes elaborar un Plan de Mejoramiento de inmediato y ponerlo a disposición del Ministerio del Trabajo.
@@ -397,68 +462,6 @@ export default function FormularioPage() {
               )}
             </div>
 
-            {/* Cómo recibir */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-              <h3 className="text-slate-800 font-bold text-lg mb-1">¿Cómo quieres recibir el informe?</h3>
-              <p className="text-slate-500 text-sm mb-4">El informe incluye el análisis por ciclo PHVA y tu Plan de Mejoramiento en PDF</p>
-              <div className="grid grid-cols-3 gap-3">
-                {([
-                  { id: 'email',    icon: Mail,           label: 'Correo',   desc: 'PDF al email' },
-                  { id: 'whatsapp', icon: MessageCircle,  label: 'WhatsApp', desc: 'Por chat' },
-                  { id: 'ambos',    icon: CheckCircle2,   label: 'Ambos',    desc: 'Email + WA' },
-                ] as const).map(({ id, icon: Icon, label, desc }) => (
-                  <button key={id} type="button" onClick={() => setEnvio(id)}
-                    className={`flex flex-col items-center gap-1.5 py-4 px-2 rounded-2xl border-2 transition-all font-medium text-center ${
-                      envio === id ? 'bg-violet-600 border-violet-600 text-white shadow-lg shadow-violet-100' : 'border-slate-200 text-slate-500 hover:border-violet-300'
-                    }`}>
-                    <Icon className={`w-6 h-6 ${envio === id ? 'text-white' : 'text-slate-400'}`} />
-                    <span className="text-sm font-bold">{label}</span>
-                    <span className={`text-xs ${envio === id ? 'text-violet-100' : 'text-slate-400'}`}>{desc}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Registro */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-              <h3 className="text-slate-800 font-bold text-lg mb-1">Tus datos <span className="text-slate-400 font-normal text-sm">(opcional)</span></h3>
-              <p className="text-slate-500 text-sm mb-2">Mientras más completo, mejor podremos ayudarte.</p>
-              <div className="bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 mb-5 flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                <p className="text-emerald-700 text-sm">Correo guardado: <strong>{emailInicial}</strong></p>
-              </div>
-              <div className="grid sm:grid-cols-2 gap-4">
-                {[
-                  { k:'nombre',      label:'Empresa / Razón social',     placeholder:'Empresa S.A.S.',     type:'text',  full:true,  req:false },
-                  { k:'nit',         label:'NIT',                         placeholder:'900.123.456-7',      type:'text',  full:false, req:false },
-                  { k:'responsable', label:'Responsable SG-SST',          placeholder:'Nombre completo',    type:'text',  full:false, req:false },
-                  { k:'cargo',       label:'Cargo',                       placeholder:'Coordinador SST',    type:'text',  full:false, req:false },
-                  { k:'telefono',    label:'Teléfono / WhatsApp',         placeholder:'+57 300 000 0000',   type:'tel',   full:false, req:envio !== 'email' },
-                  { k:'trabajadores',label:'N.º de trabajadores',         placeholder:'Ej: 50',             type:'text',  full:false, req:false },
-                ].map(({ k, label, placeholder, type, full, req }) => (
-                  <div key={k} className={full ? 'sm:col-span-2' : ''}>
-                    <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                      {label}{req && <span className="text-orange-500 ml-0.5">*</span>}
-                    </label>
-                    <input type={type} value={empresa[k as keyof EmpresaData]}
-                      onChange={(e) => setEmpresa((p) => ({ ...p, [k]: e.target.value }))}
-                      placeholder={placeholder}
-                      className="w-full border-2 border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-50 transition-all text-base"
-                    />
-                  </div>
-                ))}
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                    Sector económico<span className="text-orange-500 ml-0.5">*</span>
-                  </label>
-                  <select value={empresa.sector} onChange={(e) => setEmpresa((p) => ({ ...p, sector: e.target.value }))}
-                    className="w-full border-2 border-slate-200 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-50 transition-all text-base bg-white">
-                    <option value="">Seleccionar...</option>
-                    {SECTORES.map((s) => <option key={s} value={s}>{s}</option>)}
-                  </select>
-                </div>
-              </div>
-            </div>
           </div>
         )}
 
