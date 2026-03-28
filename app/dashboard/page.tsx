@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, query, orderBy, Timestamp, doc, updateDoc, writeBatch } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, Timestamp, doc, updateDoc, writeBatch, setDoc, serverTimestamp } from 'firebase/firestore';
+import { initializeApp, deleteApp } from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { calcularPorCiclo, type RespuestaItem } from '@/lib/sst-items';
 import { type UserProfile } from '@/contexts/AuthContext';
 import {
@@ -36,6 +38,10 @@ export default function DashboardPage() {
   const [updatingRole, setUpdatingRole] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'evaluaciones' | 'usuarios'>('evaluaciones');
   const [deletingAll, setDeletingAll] = useState(false);
+  const [newAdmin, setNewAdmin] = useState({ nombre: '', email: '', password: '' });
+  const [creatingAdmin, setCreatingAdmin] = useState(false);
+  const [createError, setCreateError] = useState('');
+  const [createOk, setCreateOk] = useState(false);
 
   useEffect(() => {
     if (loading) return;
@@ -72,6 +78,47 @@ export default function DashboardPage() {
       setEvaluaciones([]);
     } finally {
       setDeletingAll(false);
+    }
+  }
+
+  async function createAdmin(e: React.FormEvent) {
+    e.preventDefault();
+    setCreateError('');
+    setCreateOk(false);
+    setCreatingAdmin(true);
+    try {
+      // Crear usuario en una app secundaria para no cerrar sesión del admin actual
+      const secondaryApp = initializeApp(
+        {
+          apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+          authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+          projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+          storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+          messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+          appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+        },
+        `secondary-${Date.now()}`
+      );
+      const secondaryAuth = getAuth(secondaryApp);
+      const { user: newUser } = await createUserWithEmailAndPassword(secondaryAuth, newAdmin.email, newAdmin.password);
+      await setDoc(doc(db, 'usuarios', newUser.uid), {
+        uid: newUser.uid,
+        email: newAdmin.email,
+        nombre: newAdmin.nombre,
+        role: 'admin',
+        createdAt: serverTimestamp(),
+      });
+      await secondaryAuth.signOut();
+      await deleteApp(secondaryApp);
+      setUsuarios((prev) => [...prev, { uid: newUser.uid, email: newAdmin.email, nombre: newAdmin.nombre, role: 'admin' }]);
+      setNewAdmin({ nombre: '', email: '', password: '' });
+      setCreateOk(true);
+      setTimeout(() => setCreateOk(false), 4000);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Error al crear usuario';
+      setCreateError(msg.includes('email-already-in-use') ? 'Ese correo ya está registrado.' : msg);
+    } finally {
+      setCreatingAdmin(false);
     }
   }
 
@@ -217,6 +264,38 @@ export default function DashboardPage() {
         </div>
 
         {activeTab === 'usuarios' && (
+          {/* Crear nuevo admin */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <UserCog className="w-5 h-5 text-violet-400" />
+              <h3 className="text-white font-semibold text-sm">Crear administrador</h3>
+            </div>
+            <form onSubmit={createAdmin} className="grid sm:grid-cols-4 gap-3">
+              <input
+                type="text" placeholder="Nombre" required value={newAdmin.nombre}
+                onChange={(e) => setNewAdmin((p) => ({ ...p, nombre: e.target.value }))}
+                className="bg-slate-800 border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:border-violet-500 transition-colors"
+              />
+              <input
+                type="email" placeholder="Correo electrónico" required value={newAdmin.email}
+                onChange={(e) => setNewAdmin((p) => ({ ...p, email: e.target.value }))}
+                className="bg-slate-800 border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:border-violet-500 transition-colors"
+              />
+              <input
+                type="password" placeholder="Contraseña (mín. 6)" required minLength={6} value={newAdmin.password}
+                onChange={(e) => setNewAdmin((p) => ({ ...p, password: e.target.value }))}
+                className="bg-slate-800 border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:border-violet-500 transition-colors"
+              />
+              <button type="submit" disabled={creatingAdmin}
+                className="flex items-center justify-center gap-2 px-4 py-2.5 bg-violet-600 hover:bg-violet-500 disabled:opacity-50 text-white text-sm font-semibold rounded-xl transition-colors">
+                {creatingAdmin ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserCog className="w-4 h-4" />}
+                Crear admin
+              </button>
+            </form>
+            {createError && <p className="mt-2 text-xs text-red-400">{createError}</p>}
+            {createOk && <p className="mt-2 text-xs text-green-400">Administrador creado correctamente.</p>}
+          </div>
+
           <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
             <div className="flex items-center gap-2 mb-5">
               <UserCog className="w-5 h-5 text-violet-400" />
