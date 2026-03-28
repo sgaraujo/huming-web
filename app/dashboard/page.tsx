@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
@@ -81,7 +81,7 @@ export default function DashboardPage() {
     }
   }
 
-  async function createAdmin(e: React.FormEvent) {
+  async function createAdmin(e: FormEvent) {
     e.preventDefault();
     setCreateError('');
     setCreateOk(false);

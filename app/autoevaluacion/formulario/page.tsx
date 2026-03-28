@@ -3,11 +3,14 @@
 import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import {
-  SST_ITEMS,
   CICLOS,
   calcularPuntaje,
   calcularNivel,
+  getTier,
+  getItemsByTier,
+  type SSTItem,
   type RespuestaItem,
+  type NivelRiesgo,
 } from '@/lib/sst-items';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
@@ -29,7 +32,7 @@ const TOTAL_STEPS = 6;
 
 // ─── Item row ─────────────────────────────────────────────────────────────────
 function ItemRow({ item, respuesta, onChange }: {
-  item: (typeof SST_ITEMS)[0];
+  item: SSTItem;
   respuesta: RespuestaItem | undefined;
   onChange: (id: string, r: RespuestaItem) => void;
 }) {
@@ -90,6 +93,8 @@ export default function FormularioPage() {
   const [respuestas, setRespuestas] = useState<Record<string, RespuestaItem>>({});
   const [enviado, setEnviado] = useState<{ id: string } | null>(null);
   const [envio, setEnvio] = useState<'email'|'whatsapp'|'ambos'>('email');
+  const [trabajadores, setTrabajadores] = useState('');
+  const [nivelRiesgo, setNivelRiesgo] = useState<NivelRiesgo | ''>('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -97,24 +102,31 @@ export default function FormularioPage() {
     setRespuestas((prev) => ({ ...prev, [id]: r }));
   }, []);
 
-  const puntaje = calcularPuntaje(respuestas);
+  const tier = trabajadores && nivelRiesgo
+    ? getTier(parseInt(trabajadores), nivelRiesgo as NivelRiesgo)
+    : 60;
+  const activeItems = getItemsByTier(tier);
+
+  const puntaje = calcularPuntaje(respuestas, activeItems);
   const nivel = calcularNivel(puntaje);
   const nivelColor = nivel === 'CRÍTICO' ? 'red' : nivel === 'MODERADO' ? 'yellow' : 'green';
 
   // steps 1-4 = ciclos PHVA
   const currentCiclo = step >= 1 && step <= 4 ? CICLOS[step - 1] : null;
-  const currentItems = currentCiclo ? SST_ITEMS.filter((i) => i.ciclo === currentCiclo) : [];
+  const currentItems = currentCiclo ? activeItems.filter((i) => i.ciclo === currentCiclo) : [];
   const answeredCount = currentItems.filter((i) => respuestas[i.id]?.estado).length;
   const itemsByEstandar = currentItems.reduce((acc, item) => {
     if (!acc[item.estandar]) acc[item.estandar] = [];
     acc[item.estandar].push(item);
     return acc;
-  }, {} as Record<string, typeof SST_ITEMS>);
+  }, {} as Record<string, SSTItem[]>);
 
   function validateStep(): string {
     if (step === 0) {
       if (!emailInicial) return 'Ingresa tu correo para continuar';
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInicial)) return 'Ingresa un correo válido';
+      if (!trabajadores || parseInt(trabajadores) < 1) return 'Ingresa el número de trabajadores';
+      if (!nivelRiesgo) return 'Selecciona el nivel de riesgo en ARL';
     }
     if (step >= 1 && step <= 4) {
       const left = currentItems.filter((i) => !respuestas[i.id]?.estado).length;
@@ -162,7 +174,8 @@ export default function FormularioPage() {
       // Merge email inicial con los datos de empresa
       const empresaFinal = { ...empresa, email: empresa.email || emailInicial };
       const docRef = await addDoc(collection(db, 'evaluaciones'), {
-        empresa: empresaFinal, respuestas, puntaje, nivel, envio,
+        empresa: { ...empresaFinal, trabajadores, nivelRiesgo },
+        respuestas, puntaje, nivel, envio, tier,
         leadId: leadId || null,
         createdAt: serverTimestamp(),
       });
@@ -361,6 +374,45 @@ export default function FormularioPage() {
                   className="w-full border-2 border-slate-200 rounded-xl px-4 py-3.5 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-50 transition-all text-base"
                 />
               </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    N° de trabajadores <span className="text-orange-500">*</span>
+                  </label>
+                  <input
+                    type="number" min="1"
+                    value={trabajadores}
+                    onChange={(e) => setTrabajadores(e.target.value)}
+                    placeholder="Ej: 25"
+                    className="w-full border-2 border-slate-200 rounded-xl px-4 py-3.5 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-50 transition-all text-base"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Nivel de riesgo ARL <span className="text-orange-500">*</span>
+                  </label>
+                  <select
+                    value={nivelRiesgo}
+                    onChange={(e) => setNivelRiesgo(e.target.value as NivelRiesgo)}
+                    className="w-full border-2 border-slate-200 rounded-xl px-4 py-3.5 text-slate-800 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-50 transition-all text-base bg-white"
+                  >
+                    <option value="">Seleccionar</option>
+                    {(['I','II','III','IV','V'] as NivelRiesgo[]).map((r) => (
+                      <option key={r} value={r}>Riesgo {r}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              {trabajadores && nivelRiesgo && (
+                <div className={`rounded-xl px-4 py-3 flex items-center gap-2 text-sm font-medium ${
+                  tier === 7 ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                  : tier === 21 ? 'bg-green-50 text-green-700 border border-green-200'
+                  : 'bg-orange-50 text-orange-700 border border-orange-200'
+                }`}>
+                  <span className="text-lg">{tier === 7 ? '🔵' : tier === 21 ? '🟢' : '🟠'}</span>
+                  Tu evaluación tiene <strong>{tier} estándares</strong> según la Res. 0312 de 2019
+                </div>
+              )}
               <p className="text-xs text-slate-400 flex items-start gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
                 Nunca compartimos tu información con terceros.

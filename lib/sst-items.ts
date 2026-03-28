@@ -94,6 +94,34 @@ export const SST_ITEMS: SSTItem[] = [
 
 export const CICLOS = ['I. PLANEAR', 'II. HACER', 'III. VERIFICAR', 'IV. ACTUAR'] as const;
 
+// ── Lógica de tiers por Res. 0312 de 2019 ────────────────────────────────────
+export type NivelRiesgo = 'I' | 'II' | 'III' | 'IV' | 'V';
+
+/** IDs de los ítems que aplican a cada tier */
+export const TIER_IDS: Record<7 | 21 | 60, string[]> = {
+  7: ['1.1.1', '1.1.2', '1.1.4', '1.2.1', '2.4.1', '3.1.4', '4.1.1', '4.2.1'],
+  21: [
+    '1.1.1', '1.1.2', '1.1.3', '1.1.4', '1.1.6', '1.1.8',
+    '1.2.1', '2.1.1', '2.4.1', '2.5.1',
+    '3.1.1', '3.1.2', '3.1.4', '3.1.6', '3.2.1', '3.2.2',
+    '4.1.1', '4.2.5', '4.2.6',
+    '5.1.1', '5.1.2', '6.1.4',
+  ],
+  60: [],
+};
+
+export function getTier(trabajadores: number, nivelRiesgo: NivelRiesgo): 7 | 21 | 60 {
+  const riesgoBajo = ['I', 'II', 'III'].includes(nivelRiesgo);
+  if (trabajadores <= 10 && riesgoBajo) return 7;
+  if (trabajadores <= 50 && riesgoBajo) return 21;
+  return 60;
+}
+
+export function getItemsByTier(tier: 7 | 21 | 60): SSTItem[] {
+  if (tier === 60) return SST_ITEMS;
+  return SST_ITEMS.filter((i) => TIER_IDS[tier].includes(i.id));
+}
+
 export const ESTANDARES_MAX: Record<string, number> = {
   'RECURSOS (10%)': 10,
   'GESTIÓN INTEGRAL DEL SG-SST (15%)': 15,
@@ -111,13 +139,16 @@ export const CICLOS_MAX: Record<string, number> = {
   'IV. ACTUAR': 10,
 };
 
-export function calcularPuntaje(respuestas: Record<string, RespuestaItem>): number {
-  return SST_ITEMS.reduce((total, item) => {
+export function calcularPuntaje(respuestas: Record<string, RespuestaItem>, items = SST_ITEMS): number {
+  const maxPosible = items.reduce((s, i) => s + i.valor, 0);
+  if (maxPosible === 0) return 0;
+  const obtenido = items.reduce((total, item) => {
     const r = respuestas[item.id];
     if (!r) return total;
     if (r.estado === 'cumple' || r.estado === 'no_aplica_j') return total + item.valor;
     return total;
   }, 0);
+  return (obtenido / maxPosible) * 100;
 }
 
 export function calcularNivel(puntaje: number): 'CRÍTICO' | 'MODERADO' | 'ACEPTABLE' {
@@ -126,33 +157,36 @@ export function calcularNivel(puntaje: number): 'CRÍTICO' | 'MODERADO' | 'ACEPT
   return 'ACEPTABLE';
 }
 
-export function calcularPorCiclo(respuestas: Record<string, RespuestaItem>) {
+export function calcularPorCiclo(respuestas: Record<string, RespuestaItem>, items = SST_ITEMS) {
   const result: Record<string, { obtenido: number; maximo: number }> = {};
   for (const ciclo of CICLOS) {
-    const items = SST_ITEMS.filter((i) => i.ciclo === ciclo);
-    const obtenido = items.reduce((acc, item) => {
+    const cicloItems = items.filter((i) => i.ciclo === ciclo);
+    if (cicloItems.length === 0) continue;
+    const obtenido = cicloItems.reduce((acc, item) => {
       const r = respuestas[item.id];
       if (!r) return acc;
       if (r.estado === 'cumple' || r.estado === 'no_aplica_j') return acc + item.valor;
       return acc;
     }, 0);
-    result[ciclo] = { obtenido, maximo: CICLOS_MAX[ciclo] };
+    const maximo = cicloItems.reduce((s, i) => s + i.valor, 0);
+    result[ciclo] = { obtenido, maximo };
   }
   return result;
 }
 
-export function calcularPorEstandar(respuestas: Record<string, RespuestaItem>) {
-  const estandares = [...new Set(SST_ITEMS.map((i) => i.estandar))];
+export function calcularPorEstandar(respuestas: Record<string, RespuestaItem>, items = SST_ITEMS) {
+  const estandares = [...new Set(items.map((i) => i.estandar))];
   const result: Record<string, { obtenido: number; maximo: number }> = {};
   for (const est of estandares) {
-    const items = SST_ITEMS.filter((i) => i.estandar === est);
-    const obtenido = items.reduce((acc, item) => {
+    const estItems = items.filter((i) => i.estandar === est);
+    const obtenido = estItems.reduce((acc, item) => {
       const r = respuestas[item.id];
       if (!r) return acc;
       if (r.estado === 'cumple' || r.estado === 'no_aplica_j') return acc + item.valor;
       return acc;
     }, 0);
-    result[est] = { obtenido, maximo: ESTANDARES_MAX[est] ?? items.reduce((a, i) => a + i.valor, 0) };
+    const maximo = estItems.reduce((s, i) => s + i.valor, 0);
+    result[est] = { obtenido, maximo };
   }
   return result;
 }
