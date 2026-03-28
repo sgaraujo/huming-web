@@ -264,6 +264,7 @@ export default function DashboardPage() {
         </div>
 
         {activeTab === 'usuarios' && (
+          <>
           {/* Crear nuevo admin */}
           <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
             <div className="flex items-center gap-2 mb-4">
@@ -358,6 +359,7 @@ export default function DashboardPage() {
               </table>
             </div>
           </div>
+          </>
         )}
 
         {activeTab === 'evaluaciones' && <>
