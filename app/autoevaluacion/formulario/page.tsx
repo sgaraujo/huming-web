@@ -247,10 +247,6 @@ export default function FormularioPage() {
           <Link href="/" className="font-extrabold text-xl shrink-0 text-slate-800">
             Human<span className="text-violet-600">IA</span>
           </Link>
-          <Link href="/acceso" className="hidden sm:flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-violet-600 transition-colors shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-            Admin
-          </Link>
           <div className="flex-1">
             <div className="flex justify-between text-xs text-slate-400 mb-1.5">
               <span className="font-medium text-slate-600">
@@ -270,6 +266,10 @@ export default function FormularioPage() {
               {puntaje.toFixed(1)}%
             </div>
           )}
+          <Link href="/acceso" className="shrink-0 flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-200 text-slate-500 hover:border-violet-400 hover:text-violet-600 hover:bg-violet-50 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg>
+            <span className="hidden sm:inline">Administrador</span>
+          </Link>
         </div>
 
         {/* Step pills */}

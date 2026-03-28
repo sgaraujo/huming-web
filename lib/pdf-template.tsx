@@ -82,11 +82,11 @@ const styles = StyleSheet.create({
   tableCellPct: { flex: 1, fontSize: 7, fontFamily: 'Helvetica-Bold', textAlign: 'right' },
 
   // Plan mejora
-  mejorItem: { flexDirection: 'row', gap: 8, paddingVertical: 5, borderBottomWidth: 1, borderBottomColor: C.slate100 },
-  mejorBullet: { width: 14, height: 14, borderRadius: 7, backgroundColor: C.rojoLight, alignItems: 'center', justifyContent: 'center', marginTop: 1, flexShrink: 0 },
+  mejorItem: { flexDirection: 'row', gap: 8, paddingVertical: 6, paddingHorizontal: 4, borderBottomWidth: 1, borderBottomColor: C.slate100, alignItems: 'flex-start' },
+  mejorBullet: { width: 16, height: 16, borderRadius: 8, backgroundColor: C.rojoLight, alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 },
   mejorBulletText: { fontSize: 6, fontFamily: 'Helvetica-Bold', color: C.rojo },
-  mejorDesc: { flex: 1, fontSize: 7, color: C.slate700, lineHeight: 1.5 },
-  mejorVal: { fontSize: 7, color: C.slate500, width: 30, textAlign: 'right' },
+  mejorDesc: { fontSize: 7, color: C.slate500, marginTop: 2, lineHeight: 1.4 },
+  mejorVal: { fontSize: 7, color: C.slate500, width: 32, textAlign: 'right', flexShrink: 0, marginTop: 1 },
 
   // Resumen respuestas
   statBox: { flex: 1, borderRadius: 8, padding: '10 12', alignItems: 'center' },
@@ -316,23 +316,20 @@ export function EvaluacionPDF({ empresa, respuestas, puntaje, nivel, fecha, eval
             {noConformes.map((item, idx) => {
               const r = respuestas[item.id];
               return (
-                <View key={item.id} style={styles.mejorItem}>
+                <View key={item.id} style={styles.mejorItem} wrap={false}>
                   <View style={styles.mejorBullet}>
                     <Text style={styles.mejorBulletText}>{idx + 1}</Text>
                   </View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={[{ fontSize: 7, fontFamily: 'Helvetica-Bold', color: C.slate700, marginBottom: 2 }]}>
+                  <View style={{ flexGrow: 1, flexShrink: 1 }}>
+                    <Text style={{ fontSize: 7, fontFamily: 'Helvetica-Bold', color: C.slate700 }}>
                       {item.id} · {item.estandar.split('(')[0].trim()}
                     </Text>
                     <Text style={styles.mejorDesc}>{item.descripcion}</Text>
                     {r?.observacion && (
-                      <Text style={[{ fontSize: 6, color: C.slate500, marginTop: 2 }]}>
-                        Observación: {r.observacion}
+                      <Text style={{ fontSize: 6, color: C.slate500, marginTop: 2 }}>
+                        Obs: {r.observacion}
                       </Text>
                     )}
-                    <Text style={[{ fontSize: 6, color: C.slate500, marginTop: 2 }]}>
-                      Estado: {r?.estado === 'no_cumple' ? 'No cumple' : 'N/A sin justificar'} · Ciclo: {item.ciclo}
-                    </Text>
                   </View>
                   <Text style={styles.mejorVal}>{item.valor} pts</Text>
                 </View>
