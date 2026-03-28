@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
@@ -45,6 +46,7 @@ interface Evaluacion {
 
 export default function ResultadoPage() {
   const { id } = useParams<{ id: string }>();
+  const { isAdmin } = useAuth();
   const [data, setData] = useState<Evaluacion | null>(null);
   const [fetching, setFetching] = useState(true);
   const [downloadingPdf, setDownloadingPdf] = useState(false);
@@ -140,7 +142,7 @@ export default function ResultadoPage() {
       {/* Header */}
       <header className="sticky top-0 z-10 bg-slate-950/90 backdrop-blur border-b border-white/10">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-4">
-          <Link href="/autoevaluacion/formulario" className="text-slate-400 hover:text-white transition-colors">
+          <Link href={isAdmin ? '/dashboard' : '/autoevaluacion/formulario'} className="text-slate-400 hover:text-white transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <Link href="/" className="text-white font-bold text-lg tracking-tight">

@@ -5,14 +5,14 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, query, orderBy, Timestamp, doc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, Timestamp, doc, updateDoc, writeBatch } from 'firebase/firestore';
 import { calcularPorCiclo, type RespuestaItem } from '@/lib/sst-items';
 import { type UserProfile } from '@/contexts/AuthContext';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line,
 } from 'recharts';
-import { Loader2, LogOut, Search, ExternalLink, Users, TrendingUp, ShieldCheck, AlertTriangle, Shield, UserCog } from 'lucide-react';
+import { Loader2, LogOut, Search, ExternalLink, Users, TrendingUp, ShieldCheck, AlertTriangle, Shield, UserCog, Trash2 } from 'lucide-react';
 
 interface Evaluacion {
   id: string;
@@ -35,6 +35,7 @@ export default function DashboardPage() {
   const [usuarios, setUsuarios] = useState<UserProfile[]>([]);
   const [updatingRole, setUpdatingRole] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'evaluaciones' | 'usuarios'>('evaluaciones');
+  const [deletingAll, setDeletingAll] = useState(false);
 
   useEffect(() => {
     if (loading) return;
@@ -59,6 +60,20 @@ export default function DashboardPage() {
       }
     })();
   }, [user, loading]);
+
+  async function deleteAllEvaluaciones() {
+    if (!confirm('¿Seguro que deseas borrar TODAS las evaluaciones? Esta acción no se puede deshacer.')) return;
+    setDeletingAll(true);
+    try {
+      const snap = await getDocs(collection(db, 'evaluaciones'));
+      const batch = writeBatch(db);
+      snap.docs.forEach((d) => batch.delete(d.ref));
+      await batch.commit();
+      setEvaluaciones([]);
+    } finally {
+      setDeletingAll(false);
+    }
+  }
 
   async function toggleRole(uid: string, currentRole: 'empresa' | 'admin') {
     if (uid === user?.uid) return; // no auto-degradarse
@@ -370,6 +385,14 @@ export default function DashboardPage() {
         <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
           <div className="flex flex-col sm:flex-row gap-3 mb-5 items-start sm:items-center">
             <h3 className="text-white font-semibold text-sm flex-1">Empresas evaluadas</h3>
+            <button
+              onClick={deleteAllEvaluaciones}
+              disabled={deletingAll || evaluaciones.length === 0}
+              className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border border-red-800/50 text-red-400 hover:bg-red-950/40 disabled:opacity-40 transition-all"
+            >
+              {deletingAll ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
+              Borrar todo
+            </button>
             {/* Search */}
             <div className="relative">
               <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
