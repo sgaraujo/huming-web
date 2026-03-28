@@ -247,6 +247,10 @@ export default function FormularioPage() {
           <Link href="/" className="font-extrabold text-xl shrink-0 text-slate-800">
             Human<span className="text-violet-600">IA</span>
           </Link>
+          <Link href="/acceso" className="hidden sm:flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-violet-600 transition-colors shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            Admin
+          </Link>
           <div className="flex-1">
             <div className="flex justify-between text-xs text-slate-400 mb-1.5">
               <span className="font-medium text-slate-600">

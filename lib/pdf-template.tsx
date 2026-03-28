@@ -11,8 +11,8 @@ import { calcularPorCiclo, calcularPorEstandar, SST_ITEMS, type RespuestaItem } 
 const C = {
   naranja: '#f97316',
   naranjaLight: '#fff7ed',
-  azul: '#1e40af',
-  azulLight: '#eff6ff',
+  violeta: '#7c3aed',
+  violetaLight: '#f5f3ff',
   slate900: '#0f172a',
   slate700: '#334155',
   slate500: '#64748b',
@@ -40,15 +40,15 @@ const styles = StyleSheet.create({
   headerTag: { fontSize: 7, color: C.slate300, backgroundColor: '#ffffff15', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 4 },
 
   // Body
-  body: { padding: '24 36' },
+  body: { padding: '20 36', paddingBottom: 56 },
 
   // Score hero
-  scoreCard: { flexDirection: 'row', borderRadius: 12, marginBottom: 20, overflow: 'hidden' },
-  scoreLeft: { flex: 1, padding: '20 24', justifyContent: 'center' },
-  scoreRight: { width: 160, padding: '20 24', alignItems: 'center', justifyContent: 'center' },
-  scoreNumber: { fontSize: 56, fontFamily: 'Helvetica-Bold', lineHeight: 1 },
-  scoreDivider: { fontSize: 22, color: C.slate500, marginLeft: 6 },
-  scoreLabel: { fontSize: 8, color: C.slate500, marginTop: 4, marginBottom: 8 },
+  scoreCard: { flexDirection: 'row', borderRadius: 12, marginBottom: 16, overflow: 'hidden' },
+  scoreLeft: { flex: 1, padding: '16 20', justifyContent: 'center' },
+  scoreRight: { width: 140, padding: '16 20', alignItems: 'center', justifyContent: 'center' },
+  scoreNumber: { fontSize: 48, fontFamily: 'Helvetica-Bold', lineHeight: 1 },
+  scoreDivider: { fontSize: 13, color: C.slate500, marginTop: 4 },
+  scoreLabel: { fontSize: 8, color: C.slate500, marginTop: 2, marginBottom: 8 },
   nivelBadge: { fontSize: 11, fontFamily: 'Helvetica-Bold', paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20 },
   empresaNombre: { fontSize: 15, fontFamily: 'Helvetica-Bold', color: C.slate900, marginBottom: 4 },
   empresaSub: { fontSize: 8, color: C.slate500, marginBottom: 2 },
@@ -58,10 +58,10 @@ const styles = StyleSheet.create({
   progressLabel: { fontSize: 6, color: C.slate500 },
 
   // Section
-  sectionTitle: { fontSize: 10, fontFamily: 'Helvetica-Bold', color: C.slate900, marginBottom: 10, marginTop: 18, paddingBottom: 4, borderBottomWidth: 1, borderBottomColor: C.slate300, textTransform: 'uppercase', letterSpacing: 0.8 },
+  sectionTitle: { fontSize: 10, fontFamily: 'Helvetica-Bold', color: C.slate900, marginBottom: 8, marginTop: 14, paddingBottom: 4, borderBottomWidth: 1, borderBottomColor: C.slate300, textTransform: 'uppercase', letterSpacing: 0.8 },
 
   // Grid 2 cols
-  row2: { flexDirection: 'row', gap: 12, marginBottom: 12 },
+  row2: { flexDirection: 'row', gap: 10, marginBottom: 10 },
   col: { flex: 1 },
 
   // Ciclo bars
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   cicloRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 4 },
   cicloLabel: { fontSize: 7, color: C.slate500, width: 70 },
   cicloBarBg: { flex: 1, height: 7, backgroundColor: '#e2e8f0', borderRadius: 3 },
-  cicloBarFill: { height: 7, borderRadius: 3, backgroundColor: C.azul },
+  cicloBarFill: { height: 7, borderRadius: 3, backgroundColor: C.violeta },
   cicloValue: { fontSize: 7, fontFamily: 'Helvetica-Bold', color: C.slate700, width: 35, textAlign: 'right' },
 
   // Estandar table
@@ -94,12 +94,12 @@ const styles = StyleSheet.create({
   statLabel: { fontSize: 6, color: C.slate500, marginTop: 2, textAlign: 'center' },
 
   // Footer
-  footer: { backgroundColor: C.slate900, padding: '14 36', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 24 },
+  footer: { backgroundColor: C.slate900, padding: '12 36', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', position: 'absolute', bottom: 0, left: 0, right: 0 },
   footerText: { fontSize: 7, color: C.slate500 },
   footerBrand: { fontSize: 8, fontFamily: 'Helvetica-Bold', color: C.white },
 
   // Action box
-  actionBox: { borderRadius: 10, padding: '14 16', marginTop: 16 },
+  actionBox: { borderRadius: 10, padding: '12 14', marginTop: 12 },
   actionTitle: { fontSize: 9, fontFamily: 'Helvetica-Bold', marginBottom: 4 },
   actionText: { fontSize: 7, lineHeight: 1.6 },
 });
@@ -176,9 +176,15 @@ export function EvaluacionPDF({ empresa, respuestas, puntaje, nivel, fecha, eval
           {/* ── SCORE HERO ── */}
           <View style={[styles.scoreCard, { backgroundColor: nc.cardBg, borderWidth: 1, borderColor: nc.bar + '40' }]}>
             <View style={styles.scoreLeft}>
-              <Text style={styles.empresaNombre}>{empresa.nombre}</Text>
-              <Text style={styles.empresaSub}>NIT: {empresa.nit} · Sector: {empresa.sector}</Text>
-              <Text style={styles.empresaSub}>Responsable: {empresa.responsable}{empresa.cargo ? ` · ${empresa.cargo}` : ''}</Text>
+              <Text style={styles.empresaNombre}>{empresa.nombre || 'Sin nombre'}</Text>
+              {(empresa.nit || empresa.sector) && (
+                <Text style={styles.empresaSub}>
+                  {[empresa.nit && `NIT: ${empresa.nit}`, empresa.sector && `Sector: ${empresa.sector}`].filter(Boolean).join(' · ')}
+                </Text>
+              )}
+              {empresa.responsable && (
+                <Text style={styles.empresaSub}>Responsable: {empresa.responsable}{empresa.cargo ? ` · ${empresa.cargo}` : ''}</Text>
+              )}
               <Text style={styles.empresaSub}>{empresa.email}{empresa.telefono ? ` · ${empresa.telefono}` : ''}</Text>
               {empresa.trabajadores && <Text style={styles.empresaSub}>Trabajadores: {empresa.trabajadores}</Text>}
 
@@ -195,10 +201,8 @@ export function EvaluacionPDF({ empresa, respuestas, puntaje, nivel, fecha, eval
             </View>
 
             <View style={[styles.scoreRight, { backgroundColor: nc.bg }]}>
-              <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-                <Text style={[styles.scoreNumber, { color: nc.bar }]}>{puntaje.toFixed(1)}</Text>
-                <Text style={styles.scoreDivider}>/100</Text>
-              </View>
+              <Text style={[styles.scoreNumber, { color: nc.bar }]}>{puntaje.toFixed(1)}</Text>
+              <Text style={styles.scoreDivider}>/ 100 puntos</Text>
               <Text style={styles.scoreLabel}>Puntaje obtenido</Text>
               <View style={[styles.nivelBadge, { backgroundColor: nc.bg, borderWidth: 1, borderColor: nc.bar }]}>
                 <Text style={[{ fontSize: 11, fontFamily: 'Helvetica-Bold', color: nc.text }]}>{nivel}</Text>
@@ -266,8 +270,8 @@ export function EvaluacionPDF({ empresa, respuestas, puntaje, nivel, fecha, eval
               <Text style={[styles.statNum, { color: C.rojo }]}>{noCumple}</Text>
               <Text style={styles.statLabel}>No cumple</Text>
             </View>
-            <View style={[styles.statBox, { backgroundColor: C.azulLight }]}>
-              <Text style={[styles.statNum, { color: C.azul }]}>{noAplicaJ}</Text>
+            <View style={[styles.statBox, { backgroundColor: C.violetaLight }]}>
+              <Text style={[styles.statNum, { color: C.violeta }]}>{noAplicaJ}</Text>
               <Text style={styles.statLabel}>N/A Justificado</Text>
             </View>
             <View style={[styles.statBox, { backgroundColor: C.amarilloLight }]}>
@@ -336,8 +340,8 @@ export function EvaluacionPDF({ empresa, respuestas, puntaje, nivel, fecha, eval
             })}
 
             {/* CTA HumanIA */}
-            <View style={[styles.actionBox, { backgroundColor: C.azulLight, borderWidth: 1, borderColor: C.azul + '30', marginTop: 20 }]}>
-              <Text style={[styles.actionTitle, { color: C.azul }]}>¿Necesitas apoyo en tu Plan de Mejoramiento?</Text>
+            <View style={[styles.actionBox, { backgroundColor: C.violetaLight, borderWidth: 1, borderColor: C.violeta + '30', marginTop: 20 }]}>
+              <Text style={[styles.actionTitle, { color: C.violeta }]}>¿Necesitas apoyo en tu Plan de Mejoramiento?</Text>
               <Text style={[styles.actionText, { color: C.slate700 }]}>
                 El equipo de HumanIA te acompaña desde el diagnóstico hasta la implementación completa del SG-SST.
                 Contáctanos en comercial@humania.com.co o al +57 310 236 5931.

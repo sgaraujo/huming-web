@@ -5,13 +5,14 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, Timestamp, doc, updateDoc } from 'firebase/firestore';
 import { calcularPorCiclo, type RespuestaItem } from '@/lib/sst-items';
+import { type UserProfile } from '@/contexts/AuthContext';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line,
 } from 'recharts';
-import { Loader2, LogOut, Search, ExternalLink, Users, TrendingUp, ShieldCheck, AlertTriangle, Shield } from 'lucide-react';
+import { Loader2, LogOut, Search, ExternalLink, Users, TrendingUp, ShieldCheck, AlertTriangle, Shield, UserCog } from 'lucide-react';
 
 interface Evaluacion {
   id: string;
@@ -31,6 +32,9 @@ export default function DashboardPage() {
   const [fetching, setFetching] = useState(true);
   const [search, setSearch] = useState('');
   const [filtroNivel, setFiltroNivel] = useState<string>('todos');
+  const [usuarios, setUsuarios] = useState<UserProfile[]>([]);
+  const [updatingRole, setUpdatingRole] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'evaluaciones' | 'usuarios'>('evaluaciones');
 
   useEffect(() => {
     if (loading) return;
@@ -42,10 +46,12 @@ export default function DashboardPage() {
     if (!user || loading) return;
     (async () => {
       try {
-        const q = query(collection(db, 'evaluaciones'), orderBy('createdAt', 'desc'));
-        const snap = await getDocs(q);
-        const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() })) as Evaluacion[];
-        setEvaluaciones(docs);
+        const [evalSnap, userSnap] = await Promise.all([
+          getDocs(query(collection(db, 'evaluaciones'), orderBy('createdAt', 'desc'))),
+          getDocs(collection(db, 'usuarios')),
+        ]);
+        setEvaluaciones(evalSnap.docs.map((d) => ({ id: d.id, ...d.data() })) as Evaluacion[]);
+        setUsuarios(userSnap.docs.map((d) => d.data() as UserProfile));
       } catch {
         // Sin permisos aún — igual mostrar dashboard vacío
       } finally {
@@ -53,6 +59,18 @@ export default function DashboardPage() {
       }
     })();
   }, [user, loading]);
+
+  async function toggleRole(uid: string, currentRole: 'empresa' | 'admin') {
+    if (uid === user?.uid) return; // no auto-degradarse
+    const newRole: 'empresa' | 'admin' = currentRole === 'admin' ? 'empresa' : 'admin';
+    setUpdatingRole(uid);
+    try {
+      await updateDoc(doc(db, 'usuarios', uid), { role: newRole });
+      setUsuarios((prev) => prev.map((u) => u.uid === uid ? { ...u, role: newRole } : u));
+    } finally {
+      setUpdatingRole(null);
+    }
+  }
 
   if (loading || fetching) {
     return (
@@ -163,6 +181,92 @@ export default function DashboardPage() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+        {/* Tabs */}
+        <div className="flex gap-2 border-b border-white/10 pb-0">
+          {([
+            { id: 'evaluaciones', label: 'Evaluaciones', icon: ShieldCheck },
+            { id: 'usuarios', label: 'Usuarios y roles', icon: UserCog },
+          ] as const).map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              onClick={() => setActiveTab(id)}
+              className={`flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-t-xl border-b-2 transition-colors ${
+                activeTab === id
+                  ? 'border-violet-500 text-violet-400 bg-violet-500/10'
+                  : 'border-transparent text-slate-500 hover:text-slate-300'
+              }`}
+            >
+              <Icon className="w-4 h-4" /> {label}
+            </button>
+          ))}
+        </div>
+
+        {activeTab === 'usuarios' && (
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+            <div className="flex items-center gap-2 mb-5">
+              <UserCog className="w-5 h-5 text-violet-400" />
+              <h3 className="text-white font-semibold text-sm">Gestión de usuarios</h3>
+              <span className="ml-auto text-xs text-slate-500">{usuarios.length} usuarios registrados</span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-white/10">
+                    {['Nombre', 'Correo', 'Empresa', 'Rol actual', 'Acción'].map((h) => (
+                      <th key={h} className="text-left text-slate-500 font-medium text-xs py-2 px-3">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {usuarios.length === 0 && (
+                    <tr>
+                      <td colSpan={5} className="py-8 text-center text-slate-500 text-sm">Sin usuarios registrados.</td>
+                    </tr>
+                  )}
+                  {usuarios.map((u) => (
+                    <tr key={u.uid} className="border-b border-white/5 hover:bg-white/3 transition-colors">
+                      <td className="py-3 px-3 text-white font-medium">{u.nombre || '—'}</td>
+                      <td className="py-3 px-3 text-slate-400">{u.email}</td>
+                      <td className="py-3 px-3 text-slate-400">{u.empresa || '—'}</td>
+                      <td className="py-3 px-3">
+                        <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                          u.role === 'admin'
+                            ? 'bg-violet-950/60 text-violet-400'
+                            : 'bg-slate-800 text-slate-400'
+                        }`}>
+                          {u.role === 'admin' ? 'Administrador' : 'Empresa'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-3">
+                        {u.uid === user?.uid ? (
+                          <span className="text-xs text-slate-600 italic">Tu cuenta</span>
+                        ) : (
+                          <button
+                            onClick={() => toggleRole(u.uid, u.role)}
+                            disabled={updatingRole === u.uid}
+                            className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all disabled:opacity-50 ${
+                              u.role === 'admin'
+                                ? 'bg-slate-700 hover:bg-slate-600 text-slate-300'
+                                : 'bg-violet-600/20 hover:bg-violet-600/40 text-violet-400'
+                            }`}
+                          >
+                            {updatingRole === u.uid
+                              ? <Loader2 className="w-3 h-3 animate-spin" />
+                              : <UserCog className="w-3 h-3" />
+                            }
+                            {u.role === 'admin' ? 'Quitar admin' : 'Hacer admin'}
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'evaluaciones' && <>
         {/* KPIs */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
@@ -347,6 +451,7 @@ export default function DashboardPage() {
             </table>
           </div>
         </div>
+        </>}
       </div>
     </main>
   );

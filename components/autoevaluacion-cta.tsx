@@ -119,7 +119,7 @@ export default function AutoevaluacionCta() {
                 {/* Mini stats */}
                 <div className="grid grid-cols-3 gap-3">
                   {[
-                    { value: '7, 21 ó 60', label: 'ítems evaluados', small: true },
+                    { value: '7, 21 o 60', label: 'ítems evaluados', small: true },
                     { value: '4', label: 'ciclos PHVA', small: false },
                     { value: '100', label: 'puntos máximos', small: false },
                   ].map((s) => (
