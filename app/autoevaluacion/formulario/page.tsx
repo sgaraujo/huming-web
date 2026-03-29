@@ -27,8 +27,10 @@ const SECTORES = [
 ];
 
 const CICLO_ICONS = ['📋','⚙️','✅','🔄'];
-// Steps: 0=email, 1-4=ciclos PHVA, 5=resultados+registro
-const TOTAL_STEPS = 6;
+const CICLO_NAMES: Record<string, string> = {
+  'I. PLANEAR': 'PLANEAR', 'II. HACER': 'HACER',
+  'III. VERIFICAR': 'VERIFICAR', 'IV. ACTUAR': 'ACTUAR',
+};
 
 // ─── Item row ─────────────────────────────────────────────────────────────────
 function ItemRow({ item, respuesta, onChange }: {
@@ -107,12 +109,18 @@ export default function FormularioPage() {
     : 60;
   const activeItems = getItemsByTier(tier);
 
+  // Solo los ciclos que tienen ítems para este tier
+  const activeCiclos = CICLOS.filter((c) => activeItems.some((i) => i.ciclo === c));
+  // Steps: 0=datos, 1..N=ciclos activos, N+1=resultados
+  const TOTAL_STEPS = 1 + activeCiclos.length + 1;
+  const resultStep = activeCiclos.length + 1;
+
   const puntaje = calcularPuntaje(respuestas, activeItems);
   const nivel = calcularNivel(puntaje);
   const nivelColor = nivel === 'CRÍTICO' ? 'red' : nivel === 'MODERADO' ? 'yellow' : 'green';
 
-  // steps 1-4 = ciclos PHVA
-  const currentCiclo = step >= 1 && step <= 4 ? CICLOS[step - 1] : null;
+  // El ciclo actual según posición en activeCiclos
+  const currentCiclo = step >= 1 && step <= activeCiclos.length ? activeCiclos[step - 1] : null;
   const currentItems = currentCiclo ? activeItems.filter((i) => i.ciclo === currentCiclo) : [];
   const answeredCount = currentItems.filter((i) => respuestas[i.id]?.estado).length;
   const itemsByEstandar = currentItems.reduce((acc, item) => {
@@ -128,11 +136,11 @@ export default function FormularioPage() {
       if (!trabajadores || parseInt(trabajadores) < 1) return 'Ingresa el número de trabajadores';
       if (!nivelRiesgo) return 'Selecciona el nivel de riesgo en ARL';
     }
-    if (step >= 1 && step <= 4) {
+    if (step >= 1 && step <= activeCiclos.length) {
       const left = currentItems.filter((i) => !respuestas[i.id]?.estado).length;
       if (left > 0) return `Faltan ${left} ítem${left > 1 ? 's' : ''} por responder`;
     }
-    if (step === 5) {
+    if (step === resultStep) {
       if (envio !== 'email' && !empresa.telefono) return 'Ingresa el teléfono de WhatsApp';
     }
     return '';
@@ -263,7 +271,7 @@ export default function FormularioPage() {
           <div className="flex-1">
             <div className="flex justify-between text-xs text-slate-400 mb-1.5">
               <span className="font-medium text-slate-600">
-                {step === 0 ? '✉️ Tu correo' : step <= 4 ? `${CICLO_ICONS[step-1]} ${CICLOS[step-1]}` : '📊 Tus resultados'}
+                {step === 0 ? '✉️ Tu correo' : step <= activeCiclos.length ? `${CICLO_ICONS[CICLOS.indexOf(activeCiclos[step-1])]} ${activeCiclos[step-1]}` : '📊 Tus resultados'}
               </span>
               <span className="font-semibold text-violet-600">{progressPct}%</span>
             </div>
@@ -287,7 +295,7 @@ export default function FormularioPage() {
 
         {/* Step pills */}
         <div className="max-w-3xl mx-auto px-4 pb-2 flex gap-1.5 overflow-x-auto scrollbar-hide">
-          {['Correo','PLANEAR','HACER','VERIFICAR','ACTUAR','Resultados'].map((s, i) => (
+          {['Correo', ...activeCiclos.map((c) => CICLO_NAMES[c] ?? c), 'Resultados'].map((s, i) => (
             <div key={i} className={`shrink-0 text-xs px-3 py-1 rounded-full font-medium transition-all ${
               i === step ? 'bg-violet-600 text-white shadow-sm' : i < step ? 'bg-violet-100 text-violet-700' : 'bg-slate-100 text-slate-400'
             }`}>
@@ -422,7 +430,7 @@ export default function FormularioPage() {
         )}
 
         {/* Ciclos PHVA */}
-        {step >= 1 && step <= 4 && currentCiclo && (
+        {step >= 1 && step <= activeCiclos.length && currentCiclo && (
           <div>
             {/* Ciclo header */}
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6 flex items-center justify-between">
@@ -465,7 +473,7 @@ export default function FormularioPage() {
         )}
 
         {/* Paso final: Resultados + envío + registro */}
-        {step === 5 && (
+        {step === resultStep && (
           <div className="space-y-5">
             <div className="text-center py-4">
               <div className="inline-flex items-center gap-2 bg-violet-50 text-violet-700 text-sm font-semibold px-4 py-2 rounded-full border border-violet-200 mb-4">
@@ -539,13 +547,13 @@ export default function FormularioPage() {
             </button>
           ) : <div />}
           <div className="flex-1" />
-          {step < 5 && (
+          {step < resultStep && (
             <button onClick={next}
               className="flex items-center gap-2 px-8 py-3.5 bg-violet-600 hover:bg-violet-700 active:scale-95 text-white font-bold rounded-2xl transition-all shadow-lg shadow-violet-200 text-base">
-              {step === 4 ? 'Ver mis resultados' : 'Continuar'} <ArrowRight className="w-5 h-5" />
+              {step === activeCiclos.length ? 'Ver mis resultados' : 'Continuar'} <ArrowRight className="w-5 h-5" />
             </button>
           )}
-          {step === 5 && (
+          {step === resultStep && (
             <button onClick={handleSubmit} disabled={submitting}
               className="flex items-center gap-2 px-8 py-3.5 bg-orange-500 hover:bg-orange-600 active:scale-95 disabled:opacity-60 text-white font-bold rounded-2xl transition-all shadow-lg shadow-orange-200 text-base">
               {submitting ? <><Loader2 className="w-5 h-5 animate-spin" /> Enviando...</> : <><CheckCircle2 className="w-5 h-5" /> Recibir mis resultados</>}

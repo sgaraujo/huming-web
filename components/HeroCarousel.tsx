@@ -43,23 +43,23 @@ export const HeroCarousel = () => {
       <CarouselContent>
         {/* Slide CTA — Autoevaluación SG-SST */}
         <CarouselItem>
-          <div className="w-full h-[220px] sm:h-[300px] lg:h-[400px] rounded-lg bg-gradient-to-br from-violet-900 via-violet-700 to-slate-900 flex flex-col justify-center items-center text-center px-8 gap-4">
-              <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 text-white text-xs font-semibold tracking-wide">
-                <ClipboardList className="w-3.5 h-3.5" /> Res. 0312 de 2019 · Gratis
+          <div className="w-full h-[220px] sm:h-[300px] lg:h-[400px] rounded-lg bg-gradient-to-br from-violet-900 via-violet-700 to-slate-900 flex flex-col justify-center items-center text-center px-6 gap-3">
+              <div className="inline-flex items-center gap-1.5 bg-white/15 border border-white/20 rounded-full px-3 py-1 text-white text-[10px] sm:text-xs font-semibold tracking-wide">
+                <ClipboardList className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> Res. 0312 de 2019 · Gratis
               </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight">
+              <h2 className="text-lg sm:text-2xl lg:text-4xl font-bold text-white leading-tight">
                 ¿Cómo está tu empresa<br />en Seguridad y Salud?
               </h2>
-              <p className="text-white/80 text-sm sm:text-base max-w-xs">
+              <p className="text-white/75 text-xs sm:text-sm max-w-xs hidden sm:block">
                 Conoce tu nivel — Crítico, Moderado o Aceptable — en minutos y recibe tu informe gratis.
               </p>
               <Link
                 href="/autoevaluacion/formulario"
-                className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-400 active:scale-95 text-white font-bold px-7 py-3 rounded-xl shadow-lg shadow-orange-500/30 transition-all text-sm sm:text-base"
+                className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-400 active:scale-95 text-white font-bold px-5 py-2.5 sm:px-7 sm:py-3 rounded-xl shadow-lg shadow-orange-500/30 transition-all text-xs sm:text-sm"
               >
-                <ClipboardList className="w-4 h-4" />
+                <ClipboardList className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 Evalúa tu empresa — Gratis
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </Link>
           </div>
         </CarouselItem>
