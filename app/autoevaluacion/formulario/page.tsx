@@ -412,13 +412,39 @@ export default function FormularioPage() {
                 </div>
               </div>
               {trabajadores && nivelRiesgo && (
-                <div className={`rounded-xl px-4 py-3 flex items-center gap-2 text-sm font-medium ${
-                  tier === 7 ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                  : tier === 21 ? 'bg-green-50 text-green-700 border border-green-200'
-                  : 'bg-orange-50 text-orange-700 border border-orange-200'
+                <div className={`rounded-2xl border-2 overflow-hidden ${
+                  tier === 7 ? 'border-blue-200'
+                  : tier === 21 ? 'border-emerald-200'
+                  : 'border-orange-200'
                 }`}>
-                  <span className="text-lg">{tier === 7 ? '🔵' : tier === 21 ? '🟢' : '🟠'}</span>
-                  Tu evaluación tiene <strong>{tier} estándares</strong> según la Res. 0312 de 2019
+                  {/* Header de color */}
+                  <div className={`px-4 py-2.5 flex items-center gap-2 ${
+                    tier === 7 ? 'bg-blue-500' : tier === 21 ? 'bg-emerald-500' : 'bg-orange-500'
+                  }`}>
+                    <span className="text-base">{tier === 7 ? '🔵' : tier === 21 ? '🟢' : '🟠'}</span>
+                    <span className="text-white font-bold text-sm">
+                      Evaluación de <strong>{tier} estándares</strong>
+                    </span>
+                  </div>
+                  {/* Detalle */}
+                  <div className={`px-4 py-3 flex flex-col gap-1.5 text-xs ${
+                    tier === 7 ? 'bg-blue-50 text-blue-800'
+                    : tier === 21 ? 'bg-emerald-50 text-emerald-800'
+                    : 'bg-orange-50 text-orange-800'
+                  }`}>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-semibold">Tipo:</span>
+                      <span>
+                        {tier === 7 && `≤10 trabajadores, Riesgo I/II/III`}
+                        {tier === 21 && `11–50 trabajadores, Riesgo I/II/III`}
+                        {tier === 60 && `>50 trabajadores o Riesgo IV/V`}
+                      </span>
+                    </div>
+                    <div className="border-t border-current/20 pt-1.5 flex items-center gap-1.5">
+                      <span className="font-semibold">Norma:</span>
+                      <span>Resolución 0312 de 2019 — SG-SST Colombia</span>
+                    </div>
+                  </div>
                 </div>
               )}
               <p className="text-xs text-slate-400 flex items-start gap-1.5">

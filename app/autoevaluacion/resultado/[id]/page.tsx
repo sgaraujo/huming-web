@@ -8,25 +8,10 @@ import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import {
   calcularPorCiclo,
-  calcularPorEstandar,
   SST_ITEMS,
   type RespuestaItem,
 } from '@/lib/sst-items';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  Radar,
-  Legend,
-} from 'recharts';
-import { Loader2, CheckCircle2, XCircle, MinusCircle, ArrowLeft, Download } from 'lucide-react';
+import { Loader2, CheckCircle2, XCircle, ArrowLeft, Download } from 'lucide-react';
 
 interface Evaluacion {
   empresa: {
@@ -54,9 +39,14 @@ export default function ResultadoPage() {
   useEffect(() => {
     if (!id) return;
     (async () => {
-      const snap = await getDoc(doc(db, 'evaluaciones', id));
-      if (snap.exists()) setData(snap.data() as Evaluacion);
-      setFetching(false);
+      try {
+        const snap = await getDoc(doc(db, 'evaluaciones', id));
+        if (snap.exists()) setData(snap.data() as Evaluacion);
+      } catch {
+        // permission denied or network error — setData stays null
+      } finally {
+        setFetching(false);
+      }
     })();
   }, [id]);
 
@@ -109,19 +99,6 @@ export default function ResultadoPage() {
   const nivelColor = nivel === 'CRÍTICO' ? 'red' : nivel === 'MODERADO' ? 'yellow' : 'green';
 
   const porCiclo = calcularPorCiclo(respuestas);
-  const porEstandar = calcularPorEstandar(respuestas);
-
-  const cicloData = Object.entries(porCiclo).map(([ciclo, v]) => ({
-    ciclo: ciclo.replace('I. ', '').replace('II. ', '').replace('III. ', '').replace('IV. ', ''),
-    Obtenido: Math.round(v.obtenido * 10) / 10,
-    Máximo: v.maximo,
-  }));
-
-  const estandarData = Object.entries(porEstandar).map(([est, v]) => ({
-    subject: est.split('(')[0].trim().slice(0, 20),
-    Obtenido: Math.round(v.obtenido * 10) / 10,
-    Máximo: v.maximo,
-  }));
 
   const fecha = data.createdAt
     ? new Date(data.createdAt.seconds * 1000).toLocaleDateString('es-CO', {
@@ -238,59 +215,67 @@ export default function ResultadoPage() {
           </div>
         </div>
 
-        {/* Charts */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Por ciclo */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-            <h3 className="text-white font-semibold mb-4">Puntaje por Ciclo PHVA</h3>
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={cicloData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
-                <XAxis dataKey="ciclo" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                <Tooltip
-                  contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: 8 }}
-                  labelStyle={{ color: '#e2e8f0' }}
-                />
-                <Legend wrapperStyle={{ color: '#94a3b8', fontSize: 12 }} />
-                <Bar dataKey="Obtenido" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="Máximo" fill="#1e3a5f" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+        {/* Ciclo PHVA — tabla visual con barras */}
+        <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+          {/* Header */}
+          <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between">
+            <h3 className="text-white font-semibold">Resultado por Ciclo PHVA</h3>
+            <span className="text-xs text-slate-500">obtenido / máximo</span>
           </div>
-
-          {/* Por estándar radar */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-            <h3 className="text-white font-semibold mb-4">Puntaje por Estándar</h3>
-            <ResponsiveContainer width="100%" height={220}>
-              <RadarChart data={estandarData}>
-                <PolarGrid stroke="#ffffff15" />
-                <PolarAngleAxis dataKey="subject" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-                <Radar name="Obtenido" dataKey="Obtenido" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.3} />
-                <Radar name="Máximo" dataKey="Máximo" stroke="#1e3a5f" fill="#1e3a5f" fillOpacity={0.2} />
-                <Legend wrapperStyle={{ color: '#94a3b8', fontSize: 12 }} />
-                <Tooltip
-                  contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: 8 }}
-                />
-              </RadarChart>
-            </ResponsiveContainer>
+          {/* Filas */}
+          <div className="divide-y divide-white/[0.06]">
+            {Object.entries(porCiclo).map(([ciclo, v], idx) => {
+              const pct = v.maximo > 0 ? (v.obtenido / v.maximo) * 100 : 0;
+              const icons = ['📋', '⚙️', '✅', '🔄'];
+              const names = ['PLANEAR', 'HACER', 'VERIFICAR', 'ACTUAR'];
+              const colorBar = pct >= 85 ? 'bg-emerald-500' : pct >= 60 ? 'bg-yellow-500' : 'bg-red-500';
+              return (
+                <div key={ciclo} className="px-6 py-4 flex items-center gap-4">
+                  <span className="text-xl shrink-0">{icons[idx] ?? '📌'}</span>
+                  <div className="w-24 shrink-0">
+                    <p className="text-white text-sm font-semibold">{names[idx] ?? ciclo}</p>
+                    <p className="text-slate-500 text-xs">{ciclo.split('. ')[0]}</p>
+                  </div>
+                  <div className="flex-1">
+                    <div className="h-2.5 bg-white/10 rounded-full overflow-hidden">
+                      <div className={`h-full ${colorBar} rounded-full transition-all`} style={{ width: `${pct}%` }} />
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0 w-24">
+                    <span className="text-white font-bold text-sm">{v.obtenido.toFixed(1)}</span>
+                    <span className="text-slate-500 text-xs"> / {v.maximo}</span>
+                    <p className={`text-xs font-semibold mt-0.5 ${pct >= 85 ? 'text-emerald-400' : pct >= 60 ? 'text-yellow-400' : 'text-red-400'}`}>{pct.toFixed(0)}%</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* Detalle por ciclo */}
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-          <h3 className="text-white font-semibold mb-4">Detalle por ciclo</h3>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {Object.entries(porCiclo).map(([ciclo, v]) => {
-              const pct = v.maximo > 0 ? (v.obtenido / v.maximo) * 100 : 0;
+        {/* Resumen de respuestas */}
+        <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+          <div className="px-6 py-4 border-b border-white/10">
+            <h3 className="text-white font-semibold">Resumen de respuestas</h3>
+          </div>
+          <div className="divide-y divide-white/[0.06]">
+            {[
+              { label: 'Cumple', icon: CheckCircle2, color: 'text-emerald-400', bg: 'bg-emerald-500/10', estado: 'cumple' },
+              { label: 'No cumple', icon: XCircle, color: 'text-red-400', bg: 'bg-red-500/10', estado: 'no_cumple' },
+            ].map(({ label, icon: Icon, color, bg, estado }) => {
+              const count = SST_ITEMS.filter((i) => respuestas[i.id]?.estado === estado).length;
+              const pct = SST_ITEMS.length > 0 ? Math.round((count / SST_ITEMS.length) * 100) : 0;
               return (
-                <div key={ciclo} className="bg-white/5 rounded-xl p-4">
-                  <p className="text-slate-400 text-xs mb-1">{ciclo}</p>
-                  <p className="text-white font-bold text-lg">{v.obtenido.toFixed(1)} / {v.maximo}</p>
-                  <div className="mt-2 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-violet-500 rounded-full" style={{ width: `${pct}%` }} />
+                <div key={estado} className="px-6 py-4 flex items-center gap-4">
+                  <div className={`w-9 h-9 rounded-xl ${bg} flex items-center justify-center shrink-0`}>
+                    <Icon className={`w-5 h-5 ${color}`} />
                   </div>
-                  <p className="text-slate-500 text-xs mt-1">{pct.toFixed(0)}%</p>
+                  <span className="text-slate-300 text-sm flex-1">{label}</span>
+                  <div className="w-28 hidden sm:block">
+                    <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                      <div className={`h-full ${estado === 'cumple' ? 'bg-emerald-500' : 'bg-red-500'} rounded-full`} style={{ width: `${pct}%` }} />
+                    </div>
+                  </div>
+                  <span className="text-white font-bold text-lg w-10 text-right">{count}</span>
                 </div>
               );
             })}
@@ -299,54 +284,63 @@ export default function ResultadoPage() {
 
         {/* Plan de mejora */}
         {noConformes.length > 0 && (
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-            <h3 className="text-white font-semibold mb-1">
-              Ítems para Plan de Mejoramiento ({noConformes.length})
-            </h3>
-            <p className="text-slate-400 text-sm mb-4">
-              Estos ítems obtuvieron calificación de cero y requieren acción.
-            </p>
-            <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
-              {noConformes.map((item) => {
-                const r = respuestas[item.id];
-                return (
-                  <div key={item.id} className="flex items-start gap-3 py-2 border-b border-white/5 last:border-0">
-                    <XCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
-                    <div className="flex-1">
-                      <p className="text-slate-200 text-sm">{item.descripcion}</p>
-                      {r?.observacion && (
-                        <p className="text-slate-500 text-xs mt-0.5">Obs: {r.observacion}</p>
-                      )}
-                    </div>
-                    <span className="text-xs text-slate-500 shrink-0">{item.valor} pts</span>
-                  </div>
-                );
-              })}
+          <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+            {/* Header */}
+            <div className="px-6 py-4 border-b border-white/10 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-red-500/15 flex items-center justify-center shrink-0">
+                <XCircle className="w-4 h-4 text-red-400" />
+              </div>
+              <div>
+                <h3 className="text-white font-semibold">Plan de Mejoramiento</h3>
+                <p className="text-slate-500 text-xs">{noConformes.length} ítems requieren acción inmediata</p>
+              </div>
             </div>
-          </div>
-        )}
-
-        {/* Ítems cumplidos */}
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-          <h3 className="text-white font-semibold mb-4">Resumen de respuestas</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-            {[
-              { label: 'Cumple', icon: CheckCircle2, color: 'text-green-400', estado: 'cumple' },
-              { label: 'No cumple', icon: XCircle, color: 'text-red-400', estado: 'no_cumple' },
-              { label: 'N/A Justificado', icon: MinusCircle, color: 'text-violet-400', estado: 'no_aplica_j' },
-              { label: 'N/A Sin justificar', icon: MinusCircle, color: 'text-orange-400', estado: 'no_aplica_nj' },
-            ].map(({ label, icon: Icon, color, estado }) => {
-              const count = SST_ITEMS.filter((i) => respuestas[i.id]?.estado === estado).length;
+            {/* Agrupa por estándar */}
+            {(() => {
+              const byEstandar = noConformes.reduce((acc, item) => {
+                if (!acc[item.estandar]) acc[item.estandar] = [];
+                acc[item.estandar].push(item);
+                return acc;
+              }, {} as Record<string, typeof noConformes>);
               return (
-                <div key={estado} className="bg-white/5 rounded-xl p-4">
-                  <Icon className={`w-6 h-6 ${color} mx-auto mb-2`} />
-                  <p className="text-white font-bold text-2xl">{count}</p>
-                  <p className="text-slate-400 text-xs mt-1">{label}</p>
+                <div className="divide-y divide-white/[0.06] max-h-[520px] overflow-y-auto">
+                  {Object.entries(byEstandar).map(([estandar, items]) => (
+                    <div key={estandar}>
+                      {/* Separador de estándar */}
+                      <div className="px-6 py-2.5 bg-white/[0.03] flex items-center gap-2">
+                        <div className="h-px flex-1 bg-white/10" />
+                        <span className="text-[11px] font-bold text-violet-400 uppercase tracking-wider px-2 whitespace-nowrap">
+                          {estandar}
+                        </span>
+                        <div className="h-px flex-1 bg-white/10" />
+                      </div>
+                      {/* Ítems */}
+                      {items.map((item) => {
+                        const r = respuestas[item.id];
+                        return (
+                          <div key={item.id} className="px-6 py-3.5 flex items-start gap-3 hover:bg-white/[0.03] transition-colors">
+                            <span className="text-[11px] font-bold text-slate-600 bg-slate-800 px-2 py-0.5 rounded-md shrink-0 mt-0.5 font-mono">
+                              {item.id}
+                            </span>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-slate-200 text-sm leading-relaxed">{item.descripcion}</p>
+                              {r?.observacion && (
+                                <p className="text-slate-500 text-xs mt-1 italic">"{r.observacion}"</p>
+                              )}
+                            </div>
+                            <span className="text-xs font-semibold text-red-400 shrink-0 mt-0.5 bg-red-500/10 px-2 py-0.5 rounded-lg">
+                              -{item.valor} pts
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))}
                 </div>
               );
-            })}
+            })()}
           </div>
-        </div>
+        )}
 
         {/* CTA */}
         <div className="bg-violet-950/40 border border-violet-800/40 rounded-2xl p-6 text-center">
