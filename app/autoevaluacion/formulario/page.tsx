@@ -356,6 +356,44 @@ export default function FormularioPage() {
                   className="w-full border-2 border-slate-200 rounded-xl px-4 py-3.5 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-50 transition-all text-base"
                 />
               </div>
+
+              {/* Sector */}
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Sector económico
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { value: 'Droguería',     emoji: '💊' },
+                    { value: 'Salud',         emoji: '🏥' },
+                    { value: 'Comercio',      emoji: '🛒' },
+                    { value: 'Construcción',  emoji: '🏗️' },
+                    { value: 'Manufactura',   emoji: '🏭' },
+                    { value: 'Servicios',     emoji: '🤝' },
+                    { value: 'Educación',     emoji: '📚' },
+                    { value: 'Transporte',    emoji: '🚛' },
+                    { value: 'Tecnología',    emoji: '💻' },
+                    { value: 'Otro',          emoji: '🔷' },
+                  ].map(({ value, emoji }) => {
+                    const sel = empresa.sector === value;
+                    return (
+                      <button
+                        key={value}
+                        type="button"
+                        onClick={() => setEmpresa((p) => ({ ...p, sector: value }))}
+                        className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl border-2 text-sm font-semibold transition-all active:scale-95 ${
+                          sel
+                            ? 'border-violet-500 bg-violet-600 text-white shadow-md shadow-violet-100'
+                            : 'border-slate-200 text-slate-600 hover:border-violet-300 hover:text-violet-700 hover:bg-violet-50'
+                        }`}
+                      >
+                        <span>{emoji}</span>
+                        {value}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
                   Correo electrónico <span className="text-orange-500">*</span>

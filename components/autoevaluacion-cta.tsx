@@ -129,7 +129,7 @@ export default function AutoevaluacionCta() {
                     >
                       <p className={`font-black text-white ${s.small ? 'text-base leading-snug' : 'text-2xl'}`}>{s.value}</p>
                       <p className="mt-1 text-[11px] text-slate-400 leading-tight">{s.label}</p>
-                    </div>
+                      </div>
                   ))}
                 </div>
 

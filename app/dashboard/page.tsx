@@ -14,7 +14,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line,
 } from 'recharts';
-import { Loader2, LogOut, Search, ExternalLink, Users, TrendingUp, ShieldCheck, AlertTriangle, Shield, UserCog, Trash2 } from 'lucide-react';
+import { Loader2, LogOut, Search, ExternalLink, Users, TrendingUp, ShieldCheck, AlertTriangle, Shield, UserCog, Trash2, FileDown } from 'lucide-react';
 
 interface Evaluacion {
   id: string;
@@ -66,6 +66,30 @@ export default function DashboardPage() {
       }
     })();
   }, [user, loading]);
+
+  function downloadExcel() {
+    const headers = ['Empresa', 'NIT', 'Email', 'Sector', 'Trabajadores', 'Puntaje (%)', 'Nivel', 'Fecha'];
+    const rows = evaluaciones.map((ev) => [
+      ev.empresa.nombre ?? '',
+      ev.empresa.nit ?? '',
+      ev.empresa.email ?? '',
+      ev.empresa.sector ?? '',
+      ev.empresa.trabajadores ?? '',
+      ev.puntaje.toFixed(1),
+      ev.nivel,
+      ev.createdAt ? new Date(ev.createdAt.seconds * 1000).toLocaleDateString('es-CO') : '',
+    ]);
+    const csv = [headers, ...rows]
+      .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))
+      .join('\r\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `HumanIA-evaluaciones-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
 
   async function deleteAllEvaluaciones() {
     if (!confirm('¿Seguro que deseas borrar TODAS las evaluaciones? Esta acción no se puede deshacer.')) return;
@@ -466,6 +490,14 @@ export default function DashboardPage() {
         <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
           <div className="flex flex-col sm:flex-row gap-3 mb-5 items-start sm:items-center">
             <h3 className="text-white font-semibold text-sm flex-1">Empresas evaluadas</h3>
+            <button
+              onClick={downloadExcel}
+              disabled={evaluaciones.length === 0}
+              className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border border-emerald-700/50 text-emerald-400 hover:bg-emerald-950/40 disabled:opacity-40 transition-all"
+            >
+              <FileDown className="w-3.5 h-3.5" />
+              Descargar Excel
+            </button>
             <button
               onClick={deleteAllEvaluaciones}
               disabled={deletingAll || evaluaciones.length === 0}
