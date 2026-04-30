@@ -67,9 +67,9 @@ export default function DashboardPage() {
     })();
   }, [user, loading]);
 
-  function downloadExcel() {
+  function downloadExcel(data: Evaluacion[]) {
     const headers = ['Empresa', 'NIT', 'Email', 'Sector', 'Trabajadores', 'Puntaje (%)', 'Nivel', 'Fecha'];
-    const rows = evaluaciones.map((ev) => [
+    const rows = data.map((ev) => [
       ev.empresa.nombre ?? '',
       ev.empresa.nit ?? '',
       ev.empresa.email ?? '',
@@ -491,12 +491,12 @@ export default function DashboardPage() {
           <div className="flex flex-col sm:flex-row gap-3 mb-5 items-start sm:items-center">
             <h3 className="text-white font-semibold text-sm flex-1">Empresas evaluadas</h3>
             <button
-              onClick={downloadExcel}
-              disabled={evaluaciones.length === 0}
+              onClick={() => downloadExcel(filtered)}
+              disabled={filtered.length === 0}
               className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border border-emerald-700/50 text-emerald-400 hover:bg-emerald-950/40 disabled:opacity-40 transition-all"
             >
               <FileDown className="w-3.5 h-3.5" />
-              Descargar Excel
+              Descargar Excel ({filtered.length})
             </button>
             <button
               onClick={deleteAllEvaluaciones}

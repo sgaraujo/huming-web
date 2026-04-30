@@ -344,17 +344,31 @@ export default function FormularioPage() {
 
             {/* Datos */}
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Empresa / Razón social
-                </label>
-                <input
-                  type="text"
-                  value={empresa.nombre}
-                  onChange={(e) => setEmpresa((p) => ({ ...p, nombre: e.target.value }))}
-                  placeholder="Empresa S.A.S."
-                  className="w-full border-2 border-slate-200 rounded-xl px-4 py-3.5 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-50 transition-all text-base"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Empresa / Razón social
+                  </label>
+                  <input
+                    type="text"
+                    value={empresa.nombre}
+                    onChange={(e) => setEmpresa((p) => ({ ...p, nombre: e.target.value }))}
+                    placeholder="Empresa S.A.S."
+                    className="w-full border-2 border-slate-200 rounded-xl px-4 py-3.5 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-50 transition-all text-base"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    NIT
+                  </label>
+                  <input
+                    type="text"
+                    value={empresa.nit}
+                    onChange={(e) => setEmpresa((p) => ({ ...p, nit: e.target.value }))}
+                    placeholder="900.123.456-7"
+                    className="w-full border-2 border-slate-200 rounded-xl px-4 py-3.5 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-50 transition-all text-base"
+                  />
+                </div>
               </div>
 
               {/* Sector */}
