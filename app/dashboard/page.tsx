@@ -18,7 +18,7 @@ import { Loader2, LogOut, Search, ExternalLink, Users, TrendingUp, ShieldCheck, 
 
 interface Evaluacion {
   id: string;
-  empresa: { nombre: string; nit: string; sector: string; email: string; trabajadores?: string };
+  empresa: { nombre: string; nit: string; sector: string; email: string; telefono?: string; trabajadores?: string; nivelRiesgo?: string };
   puntaje: number;
   nivel: 'CRÍTICO' | 'MODERADO' | 'ACEPTABLE';
   respuestas: Record<string, RespuestaItem>;
@@ -68,13 +68,15 @@ export default function DashboardPage() {
   }, [user, loading]);
 
   function downloadExcel(data: Evaluacion[]) {
-    const headers = ['Empresa', 'NIT', 'Email', 'Sector', 'Trabajadores', 'Puntaje (%)', 'Nivel', 'Fecha'];
+    const headers = ['Empresa', 'NIT', 'Email', 'Teléfono', 'Sector', 'Trabajadores', 'Nivel Riesgo ARL', 'Puntaje (%)', 'Nivel', 'Fecha'];
     const rows = data.map((ev) => [
       ev.empresa.nombre ?? '',
       ev.empresa.nit ?? '',
       ev.empresa.email ?? '',
+      ev.empresa.telefono ?? '',
       ev.empresa.sector ?? '',
       ev.empresa.trabajadores ?? '',
+      ev.empresa.nivelRiesgo ?? '',
       ev.puntaje.toFixed(1),
       ev.nivel,
       ev.createdAt ? new Date(ev.createdAt.seconds * 1000).toLocaleDateString('es-CO') : '',
