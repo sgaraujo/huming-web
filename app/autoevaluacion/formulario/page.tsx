@@ -131,8 +131,12 @@ export default function FormularioPage() {
 
   function validateStep(): string {
     if (step === 0) {
+      if (!empresa.nombre.trim()) return 'Ingresa el nombre de la empresa';
+      if (!empresa.nit.trim()) return 'Ingresa el NIT de la empresa';
       if (!emailInicial) return 'Ingresa tu correo para continuar';
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInicial)) return 'Ingresa un correo válido';
+      if (!empresa.telefono.trim()) return 'Ingresa el teléfono o WhatsApp';
+      if (!empresa.sector) return 'Selecciona el sector económico';
       if (!trabajadores || parseInt(trabajadores) < 1) return 'Ingresa el número de trabajadores';
       if (!nivelRiesgo) return 'Selecciona el nivel de riesgo en ARL';
     }
@@ -208,6 +212,23 @@ export default function FormularioPage() {
         );
         window.open(`https://wa.me/573102365931?text=${msg}`, '_blank');
       }
+
+      // Notificación interna para droguerías
+      if (empresa.sector === 'Droguería') {
+        const alerta = encodeURIComponent(
+          `🔔 *Nueva evaluación SG-SST — Droguería*\n\n` +
+          `*Empresa:* ${empresa.nombre}\n` +
+          `*NIT:* ${empresa.nit}\n` +
+          `*Teléfono:* ${empresa.telefono}\n` +
+          `*Email:* ${emailInicial}\n` +
+          `*Puntaje:* ${puntaje.toFixed(1)}% — ${nivel}`
+        );
+        window.open(`https://wa.me/573002840921?text=${alerta}`, '_blank');
+        setTimeout(() => {
+          window.open(`https://wa.me/573225107266?text=${alerta}`, '_blank');
+        }, 800);
+      }
+
       setEnviado({ id: docRef.id });
     } catch {
       setError('Error al guardar. Intenta de nuevo.');
@@ -347,7 +368,7 @@ export default function FormularioPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Empresa / Razón social
+                    Empresa / Razón social <span className="text-orange-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -359,7 +380,7 @@ export default function FormularioPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    NIT
+                    NIT <span className="text-orange-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -374,7 +395,7 @@ export default function FormularioPage() {
               {/* Sector */}
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Sector económico
+                  Sector económico <span className="text-orange-500">*</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {[
@@ -424,7 +445,7 @@ export default function FormularioPage() {
               </div>
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Teléfono / WhatsApp {envio !== 'email' && <span className="text-orange-500">*</span>}
+                  Teléfono / WhatsApp <span className="text-orange-500">*</span>
                 </label>
                 <input
                   type="tel"
